@@ -2,18 +2,18 @@ version: '3'
 
 services:
   php-service:
-    image: php:8.1-cli
+    image: php:8.1-apache
     ports:
-      - "80:8080"
+      - "80:80"
     volumes:
-      - ./php-service:/var/www/html
+      - ./php-service:/var/www/html/
+
+  mysql-service:
+    image: mysql
+    ports:
+      - "3306:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=test
-      - MYSQL_USER=test
-      - MYSQL_PASSWORD=test
-    restart: always
-    depends_on:
-      - mysql-service
-    command:
-      - php index.php
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "test"
+      MYSQL_USER: "test"
+      MYSQL_PASSWORD: "test"
