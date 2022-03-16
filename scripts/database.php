@@ -23,9 +23,5 @@ function check_if_available($conn, $date, $time)
     $sql = "SELECT * FROM reservations WHERE date = '$date' AND time = '$time'";
     $result = $conn->query($sql);
 
-    if ($result->num_rows > 0) {
-        return false;
-    } else {
-        return true;
-    }
+    return $result->num_rows <= 0;
 }
