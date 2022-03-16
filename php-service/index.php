@@ -10,7 +10,7 @@
             padding: 20px;
         }
     </style>
-    <title>Kajak Verleihsystem</title>
+    <title>Kajak Verleihsystem von Coolen Typen</title>
 </head>
 <body>
 <h1>
