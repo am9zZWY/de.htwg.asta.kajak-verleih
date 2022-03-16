@@ -3,7 +3,7 @@ version: '3'
 services:
   php-service:
     build:
-      context: php-service
+      context: .
       dockerfile: Dockerfile
     ports:
       - "80:80"
