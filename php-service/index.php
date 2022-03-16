@@ -1,4 +1,4 @@
-<html>
+<html lang="de">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <style>
@@ -8,6 +8,7 @@
             padding: 20px;
         }
     </style>
+    <title>Kajak Verleihsystem</title>
 </head>
 <body>
 <h1>
