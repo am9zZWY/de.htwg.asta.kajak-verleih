@@ -1,8 +1,14 @@
+<?php
+require __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/scripts/database.php';
+?>
+
 <html lang="de">
 <html xmlns="http://www.w3.org/1999/html">
 <head>
-    <link rel="stylesheet" href="KajakStyle.css">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Kajak Verleihsystem des AStA der HTWG Konstanz">
     <style>
         div {
             border-radius: 5px;
@@ -10,6 +16,7 @@
             padding: 20px;
         }
     </style>
+    <link rel="stylesheet" href="KajakStyle.css">
     <title>Kajak Verleihsystem von Coolen Typen</title>
 </head>
 <body>
@@ -44,6 +51,9 @@ $max_days = 14;
         <input type="checkbox" id="time">13:15 - 18:00</input>
 
         <input type="submit" value="Anfrage senden"/>
+        <?php
+        connect_to_database();
+        ?>
     </form>
 </div>
 </html>
