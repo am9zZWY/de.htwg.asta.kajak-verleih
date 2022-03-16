@@ -17,6 +17,7 @@ require_once __DIR__ . '/scripts/database.php';
         }
     </style>
     <link rel="stylesheet" href="KajakStyle.css">
+    <link rel="stylesheet" href="resources/bootstrap.min.css">
     <title>Kajak Verleihsystem von Coolen Typen</title>
 </head>
 <body>
