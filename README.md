@@ -8,7 +8,7 @@
 php -S 127.0.0.1:8080
 ```
 
-Then call `127.0.0.1:8080/php-service`
+Then call `127.0.0.1:8080`
 
 ### Via Composer
 
@@ -16,7 +16,7 @@ Then call `127.0.0.1:8080/php-service`
 composer start
 ```
 
-Then call `127.0.0.1:8080/php-service`
+Then call `127.0.0.1:8080`
 
 ### Via docker-compose
 
