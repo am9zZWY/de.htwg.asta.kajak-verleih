@@ -1,3 +1,4 @@
+<html lang="de">
 <html xmlns="http://www.w3.org/1999/html">
 <head>
     <link rel="stylesheet" href="KajakStyle.css">
@@ -9,6 +10,7 @@
             padding: 20px;
         }
     </style>
+    <title>Kajak Verleihsystem</title>
 </head>
 <body>
 <h1>
@@ -26,7 +28,7 @@ $max_days = 14;
 <div>
     <form action="index.php">
         <!-- select dates -->
-        <label class="container" for="start_date">Startdatum:</label>
+        <label for="start_date">Startdatum:</label>
         <select id="start_date">
             <?php for ($day = 0; $day < $max_days; $day++) { ?>
                 <option value="<?php echo $day ?>">
@@ -37,9 +39,11 @@ $max_days = 14;
         </select>
 
         <!-- time slot-->
+        <label for="time">Zeitraum:</label>
+        <input type="checkbox" id="time">9:00 - 13:00</input>
+        <input type="checkbox" id="time">13:15 - 18:00</input>
 
         <input type="submit" value="Anfrage senden"/>
-
     </form>
 </div>
 </html>

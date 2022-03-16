@@ -7,9 +7,12 @@ services:
       - "80:80"
     volumes:
       - ./php-service:/var/www/html/
+    restart: always
+    depends_on:
+      - mysql-service
 
   mysql-service:
-    image: mysql
+    image: mysql/mysql-server
     ports:
       - "3306:3306"
     environment:
