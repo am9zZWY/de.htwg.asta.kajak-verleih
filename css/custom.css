@@ -14,9 +14,8 @@
 
 #booking {
     font-family: 'Montserrat', sans-serif;
-
-    background-size: cover;
-    background-position: center;
+    background: url(../resources/images/booking-bg.jpg) no-repeat center center fixed;
+    background-size: auto;
 }
 
 #booking::before {
@@ -26,14 +25,14 @@
     right: 0;
     bottom: 0;
     top: 0;
-    background: rgba(47, 103, 177, 0.6);
+    background: rgba(44, 101, 136, 0.6);
 }
 
 .booking-form {
     background-color: #fff;
     padding: 50px 20px;
-    -webkit-box-shadow: 0px 5px 20px -5px rgba(0, 0, 0, 0.3);
-    box-shadow: 0px 5px 20px -5px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0 5px 20px -5px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 5px 20px -5px rgba(0, 0, 0, 0.3);
     border-radius: 4px;
 }
 
@@ -133,6 +132,6 @@
 }
 
 .booking-cta p {
-    font-size: 16px;
+    font-size: 20px;
     color: rgba(255, 255, 255, 0.8);
 }
