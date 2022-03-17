@@ -18,6 +18,13 @@ $database = connect_to_database();
 <body>
 <div id="booking" class="section">
     <div class="section-center">
+        <div class="booking-cta">
+            <a href="index.php" class="link-primary text-decoration-none">
+                <h1>
+                    Powered by AStA HTWG
+                </h1>
+            </a>
+        </div>
         <div class="container">
             <div class="row">
                 <?php
@@ -35,7 +42,8 @@ $database = connect_to_database();
                 } else {
                 // configs
                 // all weekdays in german
-                $weekdays = array("Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag");
+                $newLocal = setlocale(LC_ALL, 'de_DE', 'de_DE.UTF-8');
+                $weekdays = array("Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag");
                 // start date is today
                 $date = date_create();
                 // add two days to start date
@@ -101,7 +109,7 @@ $database = connect_to_database();
                                 </div>
 
                                 <div class="col-sm-6">
-                                    Zeitslots
+                                    <b>Zeitslots</b><br>
                                     <!-- time slots -->
                                     <?php foreach ($timeslots as $timeslot) { ?>
                                         <label class="form-check-label">
@@ -122,7 +130,7 @@ $database = connect_to_database();
                 </div>
                 <div class="col-md-6">
                     <div class="booking-cta">
-                        <h1>Reserviere Kajaks</h1>
+                        <h2>Reserviere Kajaks</h2>
                         <p>
                             Wir bieten dir die Möglichkeit, kostenlos Kajaks zu reservieren.
                             Bitte fülle das Formular aus, damit wir überprüfen können, ob an deinem gewünschten Datum
