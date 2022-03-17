@@ -28,14 +28,19 @@ $database = connect_to_database();
                     $date = clean_string($_POST['date']);
                     $timeslots = clean_array($_POST['timeslots']);
 
-                    echo $date;
-                    var_dump($timeslots);
+                    $connection = connect_to_database();
+                    prepare_reservation_table($connection);
+                    insert_reservation($connection, $name, $email, $mobile, $date, $timeslots);
+
                 } else {
                 // configs
                 // all weekdays in german
                 $weekdays = array("Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag");
                 // start date is today
                 $date = date_create();
+                // add two days to start date
+                $min_day = 3;
+                date_add($date, new DateInterval("P${min_day}D"));
                 // max days for calendar
                 $max_days = 14;
                 // timeslots
@@ -80,11 +85,14 @@ $database = connect_to_database();
                                         <label class="form-label">
                                             Datum
                                             <select name="date" class="form-select" required>
-                                                <?php for ($day = 0; $day < $max_days; $day++) { ?>
-                                                    <option value="<?php echo $date->format('d-m-Y') ?>">
-                                                        <?php echo $date->format('d-m-Y') ?>
-                                                    </option>
-                                                    <?php
+                                                <?php for ($day = 0; $day < $max_days; $day++) {
+                                                    $weekday = (int)$date->format('w');
+                                                    if ($weekday !== 0 && $weekday !== 6) { ?>
+                                                        <option value="<?php echo $date->format('l d.m.Y') ?>">
+                                                            <?php echo $weekdays[$weekday] . ' ' . $date->format('d.m.Y') ?>
+                                                        </option>
+                                                        <?php
+                                                    }
                                                     date_add($date, new DateInterval('P1D'));
                                                 } ?>
                                             </select>
@@ -101,7 +109,7 @@ $database = connect_to_database();
                                                    value="<?php echo $timeslot ?>"
                                                    class="form-check-input">
                                             <?php echo $timeslot ?>
-                                        </label>
+                                        </label><br>
                                     <?php } ?>
                                 </div>
                             </div>
