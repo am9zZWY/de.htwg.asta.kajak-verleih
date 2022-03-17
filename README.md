@@ -18,6 +18,9 @@ Then call `localhost:8080`.
 
 #### 2.1.2 Via Composer
 
+**Important: MySQL must be started manually!**
+
+
 ```shell
 composer start
 ```
@@ -25,6 +28,8 @@ composer start
 Then call `localhost:8080`.
 
 #### 2.1.3 Via PHP
+
+**Important: MySQL must be started manually!**
 
 ```shell
 php -S 127.0.0.1:8080
