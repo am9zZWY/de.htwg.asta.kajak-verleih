@@ -129,6 +129,13 @@
     text-transform: uppercase;
     color: #fff;
     font-weight: 700;
+    text-align: center;
+}
+.booking-cta h2 {
+    font-size: 40px;
+    text-transform: uppercase;
+    color: #fff;
+    font-weight: 700;
 }
 
 .booking-cta p {
