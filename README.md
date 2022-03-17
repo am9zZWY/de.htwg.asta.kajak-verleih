@@ -1,25 +1,44 @@
 # Kajak Verleih
 
-## Development
+## 1. Requirements
 
-### Via PHP
+Install [PHP](https://www.php.net/manual/de/install.php) and [Composer](https://getcomposer.org/).
 
-```shell
-php -S 127.0.0.1:8080
+## 2. Development
+
+### 2.1 Start Development Server
+
+#### 2.1.1 Via Docker
+
+```
+docker-compose up
 ```
 
-Then call `127.0.0.1:8080/php-service`
+Then call `localhost:8080`.
 
-### Via Composer
+#### 2.1.2 Via Composer
+
+**Important: MySQL must be started manually!**
+
 
 ```shell
 composer start
 ```
 
-Then call `127.0.0.1:8080/php-service`
+Then call `localhost:8080`.
 
-### Via docker-compose
+#### 2.1.3 Via PHP
 
+**Important: MySQL must be started manually!**
+
+```shell
+php -S 127.0.0.1:8080
 ```
-docker-compose up
-```
+
+Then call `localhost:8080`.
+
+## 2.2 Development Environment
+
+### 2.2.1 MySQL
+
+When using `docker-compose up`, the database is created automatically. It can then be connected in the IDE or via [MySQL Workbench](https://dev.mysql.com/downloads/workbench/).

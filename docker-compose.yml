@@ -2,21 +2,25 @@ version: '3'
 
 services:
   php-service:
-    image: php:8.1-apache
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - "80:80"
+      - "8080:80"
     volumes:
-      - ./php-service:/var/www/html/
+      - .:/var/www/html/
     restart: always
     depends_on:
       - mysql-service
 
-  mysql-service:
+  mysql-test-service:
     image: mysql/mysql-server
     ports:
       - "3306:3306"
+    expose:
+      - '3306'
     environment:
-      MYSQL_ROOT_PASSWORD: "root"
-      MYSQL_DATABASE: "test"
-      MYSQL_USER: "test"
-      MYSQL_PASSWORD: "test"
+      MYSQL_DATABASE: "db"
+      MYSQL_USER: "user"
+      MYSQL_PASSWORD: "password"
+      MYSQL_ROOT_PASSWORD: "password"
