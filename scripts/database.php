@@ -18,7 +18,19 @@ function connect_to_database()
     return $conn;
 }
 
-function check_if_available($conn, $date, $time)
+function prepare_reservation_table($conn)
+{
+    $sql = "CREATE TABLE IF NOT EXISTS reservations (
+        id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(30) NOT NULL,
+        email VARCHAR(50) NOT NULL,
+        phone VARCHAR(20) NOT NULL,
+        data DATE NOT NULL
+    )";
+    $conn->query($sql);
+}
+
+function check_if_reservation_available($conn, $date, $time): bool
 {
     $sql = "SELECT * FROM reservations WHERE date = '$date' AND time = '$time'";
     $result = $conn->query($sql);
