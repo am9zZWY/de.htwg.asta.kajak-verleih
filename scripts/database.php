@@ -25,3 +25,9 @@ function check_if_available($conn, $date, $time)
 
     return $result->num_rows <= 0;
 }
+
+function insert_reservation($conn, $date, $time, $name, $email, $phone)
+{
+    $sql = "INSERT INTO reservations (date, time, name, email, phone) VALUES ('$date', '$time', '$name', '$email', '$phone')";
+    $conn->query($sql);
+}
