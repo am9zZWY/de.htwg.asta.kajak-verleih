@@ -24,9 +24,20 @@ function prepare_reservation_table($conn)
         id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(30) NOT NULL,
         email VARCHAR(50) NOT NULL,
-        phone VARCHAR(20) NOT NULL,
-        data DATE NOT NULL
+        phone VARCHAR(20) NOT NULL, 
+        date DATE NOT NULL,
+        from TIME NOT NULL,
+        to TIME NOT NULL,
+        single_kajak NUMERIC NOT NULL,
+        double_kajak NUMERIC NOT NULL,
+        CONSTRAINT NAME_CHECK   CHECK(REGEXP_LIKE (name, '^[A-Za-z ]+'))
     )";
+    $conn->query($sql);
+}
+
+function drop_table($conn)
+{
+    $sql = "DROP TABLE reservations";
     $conn->query($sql);
 }
 
@@ -38,8 +49,14 @@ function check_if_reservation_available($conn, $date, $time): bool
     return $result->num_rows <= 0;
 }
 
-function insert_reservation($conn, $date, $time, $name, $email, $phone)
+function insert_reservation($conn, $name, $email, $phone, $date, $timeslots, $kajaks)
 {
-    $sql = "INSERT INTO reservations (date, time, name, email, phone) VALUES ('$date', '$time', '$name', '$email', '$phone')";
-    $conn->query($sql);
+    $sql = "INSERT INTO reservations (name, email, phone, date, from, to, single_kajak, double_kajak)
+    VALUES ('$name', '$email', '$phone', '$date', '$timeslots[0]', '$timeslots[1]', '$kajaks[0]', '$kajaks[1]')";
+
+    if ($conn->query($sql) === TRUE) {
+        echo "New reservation created successfully";
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
 }
