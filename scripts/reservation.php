@@ -15,8 +15,8 @@ $min_day = 3;
 $max_days = 14;
 // timeslots
 $timeslots = array("9:00 - 13:00", "13:00 - 18:00");
-// kayaks for each kayak type
-$amount_kayaks = array("single_kayak" => 7, "double_kayak" => 3);
+// kajaks for each kajak type
+$amount_kajaks = array("single_kajak" => 7, "double_kajak" => 3);
 
 
 $weekdays = array("Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag");
@@ -37,7 +37,7 @@ function get_days(): array
     for ($i = 0; $i < $max_days; $i++) {
         $weekday = (int)$date->format('w');
         if ($weekday !== 0 && $weekday !== 6) {
-            $days[$i] = array($weekdays[$weekday], $date->format('d.m.Y'));
+            $days[$i] = array($weekdays[$weekday] . ' ' . $date->format('d.m.Y'), $date->format('Y-m-d'));
         }
         date_add($date, new DateInterval("P1D"));
     }
@@ -72,18 +72,20 @@ function connect_to_database()
  */
 function prepare_reservation_table($conn)
 {
-    $sql = $conn->prepare("CREATE TABLE IF NOT EXISTS reservations (
-        id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-        name VARCHAR(30) NOT NULL,
-        email VARCHAR(50) NOT NULL,
-        phone VARCHAR(20) NOT NULL, 
-        date DATE NOT NULL,
-        from TIME NOT NULL,
-        to TIME NOT NULL,
-        single_kajak NUMERIC NOT NULL,
-        double_kajak NUMERIC NOT NULL,
-        CONSTRAINT NAME_CHECK   CHECK(REGEXP_LIKE (name, '^[A-Za-z ]+'))
-    )");
+    $sql = $conn->prepare("
+CREATE TABLE IF NOT EXISTS reservations
+(
+    id           INT(6) ZEROFILL NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name         VARCHAR(30)     NOT NULL,
+    email        VARCHAR(50)     NOT NULL,
+    phone        VARCHAR(20)     NOT NULL,
+    date         DATE            NOT NULL,
+    from_time    TIME            NOT NULL,
+    to_time      TIME            NOT NULL,
+    single_kajak NUMERIC         NOT NULL,
+    double_kajak NUMERIC         NOT NULL,
+    CONSTRAINT NAME_CHECK CHECK (REGEXP_LIKE(name, '^[A-Za-z ]+'))
+)");
     $sql->execute();
 }
 
@@ -102,15 +104,17 @@ function drop_table($conn)
 }
 
 /**
- * Returns the amount of kayaks of a kayak type
+ * Returns the amount of kajaks of a kajak type
  * @param $conn
  * @param $date
  * @param $timeslot
- * @param string $kayak
+ * @param string $kajak
  * @return bool
  */
-function check_if_reservation_available($conn, $date, $timeslot, string $kayak): bool
+function check_if_reservation_available($conn, $date, $timeslot, string $kajak): bool
 {
+    global $amount_kajaks;
+
     /* Convert date to DateTime to be able to subtract one second */
     try {
         $timeslot[1] = new DateTime($timeslot[1]);
@@ -125,22 +129,23 @@ function check_if_reservation_available($conn, $date, $timeslot, string $kayak):
 
     /* Prepare statement */
     $sql = $conn->prepare("
-        SELECT COUNT(?) FROM reservations
-        WHERE date = ? AND single_kajak > 0
+        SELECT SUM($kajak) as amount FROM reservations
+        WHERE date = '2023-03-20'
           AND reservations.from_time BETWEEN ? AND ?
           OR reservations.to_time BETWEEN ? AND ?
     ");
-    $sql->bind_param('ssssss', $kayak, $date, $timeslots[0], $timeslots[1], $timeslots[0], $timeslots[1]);
+    $sql->bind_param('ssss', $timeslots[0], $timeslots[1], $timeslots[0], $timeslots[1]);
 
     $sql->execute();
     $result = $sql->get_result();
 
-    /* Check if there are more than 0 kayaks available */
-    return mysqli_num_rows($result) > 0;
+    /* Check if there are more than 0 kajaks available */
+    $amount = $result->fetch_assoc()["amount"];
+    return (int)$amount < $amount_kajaks[$kajak];
 }
 
 /**
- * Reservate a kayak
+ * Reservate a kajak
  *
  * @param $conn
  * @param $name
@@ -153,7 +158,7 @@ function check_if_reservation_available($conn, $date, $timeslot, string $kayak):
  */
 function insert_reservation($conn, $name, $email, $phone, $date, $timeslot, $kajaks): mixed
 {
-    /* Check if reservation is available for both kayaks */
+    /* Check if reservation is available for both kajaks */
     if (!check_if_reservation_available($conn, $date, $timeslot, "single_kajak") || !check_if_reservation_available($conn, $date, $timeslot, "double_kajak")) {
         return false;
     }
@@ -166,13 +171,13 @@ function insert_reservation($conn, $name, $email, $phone, $date, $timeslot, $kaj
 }
 
 /**
- * Main function to reservate a kayak
+ * Main function to reservate a kajak
  *
  * @param $conn
  * @param $fields
  * @return false|mixed
  */
-function reservate_kayak($conn, $fields): mixed
+function reservate_kajak($conn, $fields): mixed
 {
     global $timeslots;
 
