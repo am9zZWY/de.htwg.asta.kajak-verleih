@@ -66,19 +66,26 @@
     margin-bottom: 30px;
 }
 
-.booking-cta h1 {
-    font-size: 52px;
+.primary {
+    color: white !important;
+}
+
+.danger {
+    color: #ff8833 !important;
+}
+
+.booking-cta h1, .booking-cta h2 {
     text-transform: uppercase;
-    color: #fff;
     font-weight: 700;
     text-align: center;
 }
 
+.booking-cta h1 {
+    font-size: 52px;
+}
+
 .booking-cta h2 {
     font-size: 40px;
-    text-transform: uppercase;
-    color: #fff;
-    font-weight: 700;
 }
 
 .booking-cta p {
