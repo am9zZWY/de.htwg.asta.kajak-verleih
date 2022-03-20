@@ -130,11 +130,11 @@ function check_if_reservation_available($conn, $date, $timeslot, string $kajak):
     /* Prepare statement */
     $sql = $conn->prepare("
         SELECT SUM($kajak) as amount FROM reservations
-        WHERE date = '2023-03-20'
+        WHERE date = ?
           AND reservations.from_time BETWEEN ? AND ?
           OR reservations.to_time BETWEEN ? AND ?
     ");
-    $sql->bind_param('ssss', $timeslots[0], $timeslots[1], $timeslots[0], $timeslots[1]);
+    $sql->bind_param('sssss', $date, $timeslots[0], $timeslots[1], $timeslots[0], $timeslots[1]);
 
     $sql->execute();
     $result = $sql->get_result();
