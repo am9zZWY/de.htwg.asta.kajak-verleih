@@ -30,7 +30,7 @@ prepare_reservation_table($connection);
         <?php
         global $timeslots;
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $success = reservate_kayak($connection, $_POST);
+            $success = reservate_kajak($connection, $_POST);
             if ($success) {
                 ?>
                 <div class="booking-cta">
@@ -103,7 +103,7 @@ prepare_reservation_table($connection);
                                                 foreach (get_days() as $day) {
                                                     ?>
                                                     <option value=" <?php echo $day[1] ?>">
-                                                        <?php echo $day[0] . " "  . $day[1] ?>
+                                                        <?php echo $day[0] ?>
                                                     </option>
                                                 <?php } ?>
 
