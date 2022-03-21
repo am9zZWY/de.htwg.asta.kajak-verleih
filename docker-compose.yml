@@ -11,7 +11,7 @@ services:
       - .:/var/www/html/
     restart: always
     depends_on:
-      - mysql-service
+      - mysql-test-service
 
   mysql-test-service:
     image: mysql/mysql-server
