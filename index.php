@@ -1,24 +1,19 @@
 <?php
 require __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/scripts/reservation.php';
+require __DIR__ . '/scripts/reservation.php';
 require_once __DIR__ . '/scripts/helpers.php';
 
 /* Setup the database connection and the reservation table */
 $connection = connect_to_database();
 prepare_reservation_table($connection);
-?>
 
+include 'templates/head.php'
+?>
 <html lang="de" xmlns="http://www.w3.org/1999/html">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Kajak Verleihsystem des AStA der HTWG Konstanz">
-    <link rel="stylesheet" href="css/custom.css">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <title>Kajak Verleihsystem von Coolen Typen</title>
-</head>
 <body>
+<?php include 'templates/sidebar.php' ?>
 <div class="section" id="booking">
+
     <div class="section-center">
         <div class="booking-cta">
             <a href="index.php" class="primary text-decoration-none">
@@ -166,7 +161,7 @@ prepare_reservation_table($connection);
                         <div class="booking-cta">
                             <h2 class="primary">Reserviere Kajaks</h2>
                             <p>
-                                Wir bieten dir die Möglichkeit, kostenlos Kajaks zu reservieren.
+                                Wir bieten für die HTWG Konstanz und für Universität Konstanz die Möglichkeit, Kajaks zu reservieren.
                                 Bitte fülle das Formular aus, damit wir überprüfen können, ob an deinem gewünschten
                                 Datum
                                 und Zeit Kajaks frei sind.

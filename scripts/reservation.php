@@ -16,7 +16,7 @@ $max_days = 14;
 // timeslots
 $timeslots = array("9:00 - 13:00", "13:00 - 18:00");
 // kajaks for each kajak type
-$amount_kajaks = array("single_kajak" => 7, "double_kajak" => 3);
+$amount_kajaks = array("single_kajak" => 4, "double_kajak" => 2);
 
 
 $weekdays = array("Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag");
