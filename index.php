@@ -23,10 +23,10 @@ include 'templates/head.php'
             </a>
         </div>
         <?php
-        global $timeslots;
+        global $timeslots_field;
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $success = reservate_kajak($connection, $_POST);
-            if ($success) {
+            $ret_val = reservate_kajak($connection, $_POST);
+            if ($ret_val === true) {
                 ?>
                 <div class="booking-cta">
                     <a href="index.php" class="primary text-decoration-none">
@@ -41,7 +41,7 @@ include 'templates/head.php'
                 <div class="booking-cta">
                     <a href="index.php" class="danger text-decoration-none">
                         <h2>
-                            Reservierung fehlgeschlagen
+                            <?php echo $ret_val ?>
                         </h2>
                     </a>
                 </div>
@@ -113,10 +113,12 @@ include 'templates/head.php'
                                         <div class="form-group form-floating">
                                             <span class="form-label">Zeitslots</span><br>
                                             <!-- time slots -->
-                                            <?php foreach ($timeslots as $timeslot) { ?>
+                                            <?php
+                                            global $timeslots_formatted;
+                                            foreach ($timeslots_formatted as $index => $timeslot) { ?>
                                                 <span class="form-check-label">
                                                 <input type="checkbox" name="timeslots[]"
-                                                       value="<?php echo $timeslot ?>"
+                                                       value="<?php echo $index ?>"
                                                        class="form-check-input">
                                                 <?php echo $timeslot ?>
                                             </span>
@@ -161,7 +163,8 @@ include 'templates/head.php'
                         <div class="booking-cta">
                             <h2 class="primary">Reserviere Kajaks</h2>
                             <p>
-                                Wir bieten für die HTWG Konstanz und für Universität Konstanz die Möglichkeit, Kajaks zu reservieren.
+                                Wir bieten für die HTWG Konstanz und für Universität Konstanz die Möglichkeit, Kajaks zu
+                                reservieren.
                                 Bitte fülle das Formular aus, damit wir überprüfen können, ob an deinem gewünschten
                                 Datum
                                 und Zeit Kajaks frei sind.
