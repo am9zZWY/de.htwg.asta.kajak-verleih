@@ -1,7 +1,6 @@
 <?php
 include '../templates/head.php'
 ?>
-<html lang="de" xmlns="http://www.w3.org/1999/html">
 <body>
 <?php include '../templates/sidebar.php' ?>
 
@@ -12,7 +11,7 @@ include '../templates/head.php'
                 <div class="row">
                     <h2 class="primary">Info </h2>
                 </div>
-                <div class="container" style="border: white solid;bo" >
+                <div class="container" style="border: white solid;bo">
                     <div class="row">
                         <h3 class="primary">Mietsachen</3>
                     </div>
@@ -21,19 +20,19 @@ include '../templates/head.php'
                     </p>
                     <div class="row">
                         <button class="accordion">Haftung</button>
-                            <div class="panel">
-                              <p>Lorem ipsum..</p>
-                            </div>
-                            <button class="accordion">Rechtliches</button>
-                            <div class="panel">
-                                <p>test ipsum..</p>
-                            </div>
+                        <div class="panel">
+                            <p>Lorem ipsum..</p>
+                        </div>
+                        <button class="accordion">Rechtliches</button>
+                        <div class="panel">
+                            <p>test ipsum..</p>
+                        </div>
                         <script>
                             var acc = document.getElementsByClassName("accordion");
                             var i;
 
                             for (i = 0; i < acc.length; i++) {
-                                acc[i].addEventListener("click", function() {
+                                acc[i].addEventListener("click", function () {
                                     this.classList.toggle("active");
                                     var panel = this.nextElementSibling;
                                     if (panel.style.maxHeight) {
@@ -46,7 +45,6 @@ include '../templates/head.php'
                         </script>
                     </div>
                 </div>
-            </div>
             </div>
         </div>
     </div>
