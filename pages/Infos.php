@@ -28,20 +28,14 @@ include '../templates/head.php'
                             <p>test ipsum..</p>
                         </div>
                         <script>
-                            var acc = document.getElementsByClassName("accordion");
-                            var i;
-
-                            for (i = 0; i < acc.length; i++) {
-                                acc[i].addEventListener("click", function () {
-                                    this.classList.toggle("active");
-                                    var panel = this.nextElementSibling;
-                                    if (panel.style.maxHeight) {
-                                        panel.style.maxHeight = null;
-                                    } else {
-                                        panel.style.maxHeight = panel.scrollHeight + "px";
-                                    }
+                            const acc = document.getElementsByClassName("accordion");
+                            Array.from(acc).forEach((item) => {
+                                item.addEventListener("click", function () {
+                                    item.classList.toggle("active");
+                                    const panel = item.nextElementSibling;
+                                    panel.style.maxHeight = panel.style.maxHeight ? null : panel.scrollHeight + "px";
                                 });
-                            }
+                            })
                         </script>
                     </div>
                 </div>
