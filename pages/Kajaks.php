@@ -1,7 +1,6 @@
 <?php
 include '../templates/head.php'
 ?>
-<html lang="de" xmlns="http://www.w3.org/1999/html">
 <body>
 <?php include '../templates/sidebar.php' ?>
 
