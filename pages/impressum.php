@@ -1,7 +1,6 @@
 <?php
 include '../templates/head.php'
 ?>
-<html lang="de" xmlns="http://www.w3.org/1999/html">
 <body>
 <?php include '../templates/sidebar.php' ?>
 
@@ -10,22 +9,21 @@ include '../templates/head.php'
         <div class="booking-cta">
             <div class="container">
                 <div class="row">
-                  <h2 class="primary">Impressum </h2>
+                    <h2 class="primary">Impressum </h2>
                 </div>
-                    <div class="container" style="border: white solid;bo" >
-                        <div class="row">
+                <div class="container" style="border: white solid;bo">
+                    <div class="row">
                         <h3 class="primary">AStA HTWG</3>
-                        </div>
-                        <p><b>Hochschule Konstanz <b></b><br>
+                    </div>
+                    <p><b>Hochschule Konstanz <b></b><br>
                             Alfred-Wachtelstraße 8 <br>
                             78462 Konstanz<br>
                             Gebäude D<br><br><br>
-                                <b>Kontaktaufnahme</b><br>
-                                Tel.: 07531 206-431/-122<br>
-                                E-mail: asta@htwg-konstanz.de
-                        </p>
-                        </div>
-                    </div>
+                            <b>Kontaktaufnahme</b><br>
+                            Tel.: 07531 206-431/-122<br>
+                            E-mail: asta@htwg-konstanz.de
+                    </p>
+                </div>
             </div>
         </div>
     </div>
