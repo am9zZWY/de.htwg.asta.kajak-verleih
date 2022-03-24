@@ -14,12 +14,25 @@ $min_day = 3;
 // max days for calendar
 $max_days = 14;
 // timeslots
-$timeslots = array("9:00 - 13:00", "13:00 - 18:00");
+$timeslots = array(array("09:00:00", "13:00:00"), array("13:00:00", "18:00:00"));
+// converts timeslots to e.g. "09:00 - 13:00"
+$timeslots_formatted = array_map(static function ($array) {
+    $timeslot = array_map(static function ($time) {
+        return date('H:i', strtotime($time));
+    }, $array);
+    return implode(' - ', $timeslot);
+}, $timeslots);
 // kajaks for each kajak type
 $amount_kajaks = array("single_kajak" => 4, "double_kajak" => 2);
-
-
+// weekdays in german
 $weekdays = array("Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag");
+
+// Error messages
+$ERROR_TIMESLOT_NOT_SELECTED = "Bitte wähle eine Zeit aus.";
+$ERROR_KAJAK_TYPE_NOT_FOUND = "Kajaktyp nicht gefunden";
+$ERROR_SINGLE_KAJAK_NOT_AVAILABLE = "Einzelkajak nicht verfügbar";
+$ERROR_DOUBLE_KAJAK_NOT_AVAILABLE = "Doppelkajak nicht verfügbar";
+$ERROR_GENERAL = "Ein Fehler ist aufgetreten.";
 
 /**
  * Returns the next max_days weekdays in a string
@@ -145,7 +158,7 @@ function check_if_reservation_available($conn, $date, $timeslot, string $kajak):
 }
 
 /**
- * Reservate a kajak
+ * Insert reservation into database
  *
  * @param $conn
  * @param $name
@@ -154,20 +167,14 @@ function check_if_reservation_available($conn, $date, $timeslot, string $kajak):
  * @param $date
  * @param $timeslot
  * @param $kajaks
- * @return false|mixed
+ * @return bool
  */
-function insert_reservation($conn, $name, $email, $phone, $date, $timeslot, $kajaks): mixed
+function insert_reservation($conn, $name, $email, $phone, $date, $timeslot, $kajaks): bool
 {
-    /* Check if reservation is available for both kajaks */
-    if (!check_if_reservation_available($conn, $date, $timeslot, "single_kajak") || !check_if_reservation_available($conn, $date, $timeslot, "double_kajak")) {
-        return false;
-    }
-
-    $sql = "INSERT INTO reservations (name, email, phone, date, from_time, to_time, single_kajak, double_kajak)
-    VALUES ('$name', '$email', '$phone', '$date', '$timeslot[0]', '$timeslot[1]', '$kajaks[0]', '$kajaks[1]')";
-
-    // TODO: replace with prepared statement
-    return $conn->query($sql);
+    $sql = $conn->prepare("INSERT INTO reservations (name, email, phone, date, from_time, to_time, single_kajak, double_kajak)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    $sql->bind_param('ssssssss', $name, $email, $phone, $date, $timeslot[0], $timeslot[1], $kajaks[0], $kajaks[1]);
+    return $sql->execute();
 }
 
 /**
@@ -175,32 +182,48 @@ function insert_reservation($conn, $name, $email, $phone, $date, $timeslot, $kaj
  *
  * @param $conn
  * @param $fields
- * @return false|mixed
+ * @return true | string
  */
-function reservate_kajak($conn, $fields): mixed
+function reservate_kajak($conn, $fields): bool|string
 {
     global $timeslots;
+    global $ERROR_GENERAL, $ERROR_SINGLE_KAJAK_NOT_AVAILABLE, $ERROR_DOUBLE_KAJAK_NOT_AVAILABLE, $ERROR_TIMESLOT_NOT_SELECTED;
 
-    // TODO: Refactor this
-    // THATS REALLY UGLY CODE :(
-    $_POST_name = clean_string($fields['name']);
-    $_POST_email = clean_string($fields['email']);
-    $_POST_phone = clean_string($fields['phone']);
-    $_POST_message = clean_string($fields['date']);
-    $_POST_timeslots = clean_array($fields['timeslots']);
-    if (count($_POST_timeslots) === 1) {
-        if ($_POST_timeslots[0] === $timeslots[0]) {
-            $_POST_timeslots = array("9:00:00", "13:00:00");
-        } else if ($_POST_timeslots[0] === $timeslots[1]) {
-            $_POST_timeslots = array("13:00:00", "18:00:00");
-        }
-    } else if (count($_POST_timeslots) === 2) {
-        $_POST_timeslots = array("9:00:00", "18:00:00");
+    $name = clean_string($fields['name']);
+    $email = clean_string($fields['email']);
+    $phone = clean_string($fields['phone']);
+    $date = clean_string($fields['date']);
+
+    $timeslot = clean_array($fields['timeslots'] ?? []);
+
+    /* Check if timeslot is selected */
+    if (count($timeslot) === 0) {
+        return $ERROR_TIMESLOT_NOT_SELECTED;
     }
 
-    $_POST_single_kajak = clean_string($_POST['single-kajak']);
-    $_POST_double_kajak = clean_string($_POST['double-kajak']);
-    $_POST_kajaks = array((int)$_POST_single_kajak, (int)$_POST_double_kajak);
+    /* Prepare timeslot */
+    $min_time_index = $timeslot[0];
+    $max_time_index = end($timeslot);
+    $min_time = $timeslots[$min_time_index][0];
+    $max_time = $timeslots[$max_time_index][1];
+    $timeslot = array($min_time, $max_time);
 
-    return insert_reservation($conn, $_POST_name, $_POST_email, $_POST_phone, $_POST_message, $_POST_timeslots, $_POST_kajaks);
+    $amount_single_kajak = (int) clean_string($_POST['single-kajak']);
+    $amount_double_kajak = (int) clean_string($_POST['double-kajak']);
+    $amount_kajaks = array($amount_single_kajak, $amount_double_kajak);
+
+    /* Check if reservation is available for single kajaks */
+    if ($amount_single_kajak > 0 && !check_if_reservation_available($conn, $date, $timeslot, "single_kajak")) {
+        return $ERROR_SINGLE_KAJAK_NOT_AVAILABLE;
+    }
+
+    /* Check if reservation is available for double kajaks */
+    if ($amount_double_kajak > 0 && !check_if_reservation_available($conn, $date, $timeslot, "double_kajak")) {
+        return $ERROR_DOUBLE_KAJAK_NOT_AVAILABLE;
+    }
+
+    if (insert_reservation($conn, $name, $email, $phone, $date, $timeslot, $amount_kajaks) === false) {
+        return $ERROR_GENERAL;
+    }
+    return true;
 }
