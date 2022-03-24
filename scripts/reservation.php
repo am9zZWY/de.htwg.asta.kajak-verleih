@@ -32,6 +32,8 @@ $ERROR_TIMESLOT_NOT_SELECTED = "Bitte wähle eine Zeit aus.";
 $ERROR_KAJAK_TYPE_NOT_FOUND = "Kajaktyp nicht gefunden";
 $ERROR_SINGLE_KAJAK_NOT_AVAILABLE = "Einzelkajak nicht verfügbar";
 $ERROR_DOUBLE_KAJAK_NOT_AVAILABLE = "Doppelkajak nicht verfügbar";
+$ERROR_KAJAK_NOT_AVAILABLE = "Kajaks nicht verfügbar";
+$ERROR_KAJAK_NOT_SELECTED = "Bitte wähle einen Kajak aus.";
 $ERROR_GENERAL = "Ein Fehler ist aufgetreten.";
 
 /**
@@ -122,18 +124,28 @@ function drop_table($conn)
  * @param $date
  * @param $timeslot
  * @param string $kajak
+ * @param int $requested_amount
  * @return bool
  */
-function check_if_reservation_available($conn, $date, $timeslot, string $kajak): bool
+function check_if_kajak_available($conn, $date, $timeslot, string $kajak, int $requested_amount = -1): bool
 {
     global $amount_kajaks;
+
+    if (!array_key_exists($kajak, $amount_kajaks) || ($requested_amount !== -1 && $requested_amount > $amount_kajaks[$kajak])) {
+        return false;
+    }
+
+    if ($requested_amount === 0) {
+        return true;
+    }
 
     /* Convert date to DateTime to be able to subtract one second */
     try {
         $timeslot[1] = new DateTime($timeslot[1]);
-    } catch (Exception $e) {
+    } catch (Exception) {
         return false;
     }
+
     /* This is important to exclude the current time from the next timeslot */
     $timeslot[1]->modify("-1 second");
     $timeslot[1] = $timeslot[1]->format("H:i:s");
@@ -154,6 +166,10 @@ function check_if_reservation_available($conn, $date, $timeslot, string $kajak):
 
     /* Check if there are more than 0 kajaks available */
     $amount = $result->fetch_assoc()["amount"];
+    if ($amount === null) {
+        return false;
+    }
+
     return (int)$amount < $amount_kajaks[$kajak];
 }
 
@@ -187,7 +203,7 @@ function insert_reservation($conn, $name, $email, $phone, $date, $timeslot, $kaj
 function reservate_kajak($conn, $fields): bool|string
 {
     global $timeslots;
-    global $ERROR_GENERAL, $ERROR_SINGLE_KAJAK_NOT_AVAILABLE, $ERROR_DOUBLE_KAJAK_NOT_AVAILABLE, $ERROR_TIMESLOT_NOT_SELECTED;
+    global $ERROR_GENERAL, $ERROR_KAJAK_NOT_AVAILABLE, $ERROR_SINGLE_KAJAK_NOT_AVAILABLE, $ERROR_DOUBLE_KAJAK_NOT_AVAILABLE, $ERROR_KAJAK_NOT_SELECTED, $ERROR_TIMESLOT_NOT_SELECTED;
 
     $name = clean_string($fields['name']);
     $email = clean_string($fields['email']);
@@ -208,18 +224,31 @@ function reservate_kajak($conn, $fields): bool|string
     $max_time = $timeslots[$max_time_index][1];
     $timeslot = array($min_time, $max_time);
 
-    $amount_single_kajak = (int) clean_string($_POST['single-kajak']);
-    $amount_double_kajak = (int) clean_string($_POST['double-kajak']);
+    $amount_single_kajak = (int)clean_string($_POST['single-kajak']);
+    $amount_double_kajak = (int)clean_string($_POST['double-kajak']);
     $amount_kajaks = array($amount_single_kajak, $amount_double_kajak);
 
-    /* Check if reservation is available for single kajaks */
-    if ($amount_single_kajak > 0 && !check_if_reservation_available($conn, $date, $timeslot, "single_kajak")) {
+    $single_kajak_available = check_if_kajak_available($conn, $date, $timeslot, "single_kajak", $amount_single_kajak);
+    $double_kajak_available = check_if_kajak_available($conn, $date, $timeslot, "double_kajak", $amount_double_kajak);
+
+    if (!$single_kajak_available && !$double_kajak_available) {
+        /* Check if kajaks are available */
+        return $ERROR_KAJAK_NOT_AVAILABLE;
+    }
+
+    if (!$single_kajak_available) {
+        /* Check if reservation is available for single kajaks */
         return $ERROR_SINGLE_KAJAK_NOT_AVAILABLE;
     }
 
-    /* Check if reservation is available for double kajaks */
-    if ($amount_double_kajak > 0 && !check_if_reservation_available($conn, $date, $timeslot, "double_kajak")) {
+    if (!$double_kajak_available) {
+        /* Check if reservation is available for double kajaks */
         return $ERROR_DOUBLE_KAJAK_NOT_AVAILABLE;
+    }
+
+    if ($amount_single_kajak === 0 && $amount_double_kajak === 0) {
+        /* Check if any kajak is selected */
+        return $ERROR_KAJAK_NOT_SELECTED;
     }
 
     if (insert_reservation($conn, $name, $email, $phone, $date, $timeslot, $amount_kajaks) === false) {
