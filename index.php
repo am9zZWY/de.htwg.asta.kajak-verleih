@@ -129,10 +129,12 @@ include 'templates/head.php'
                                 </div>
 
                                 <div class="row my-2">
+                                    <?php global $amount_kajaks ?>
                                     <div class="col-md-6">
                                         <img alt="Bild eines einzelnen Kajaks" class="img-fluid"/>
                                         <div class="form-group form-floating">
-                                            <input type="number" max="9" min="0" id="single-kajak" value="0"
+                                            <input type="number" max="<?php echo $amount_kajaks["single_kajak"] ?>"
+                                                   min="0" id="single-kajak" value="0"
                                                    name="single-kajak" class="form-control"/>
                                             <label class="form-check-label" for="single-kajak">
                                                 Anzahl 1-Sitz Kajaks
@@ -142,7 +144,7 @@ include 'templates/head.php'
                                     <div class="col-md-6">
                                         <img alt="Bild eines doppelten Kajaks" class="img-fluid"/>
                                         <div class="form-group form-floating">
-                                            <input type="number" max="9" min="0" id="double-kajak" value="0"
+                                            <input type="number" max="<?php echo $amount_kajaks["double_kajak"] ?>" min="0" id="double-kajak" value="0"
                                                    name="double-kajak" class="form-control"/>
                                             <label class="form-check-label" for="double-kajak">
                                                 Anzahl 2-Sitz Kajaks
