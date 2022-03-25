@@ -49,9 +49,9 @@ include 'templates/head.php'
             }
         } else {
             ?>
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-lg-5 ms-auto">
                         <div class="booking-form">
                             <form action="index.php" method="post" class="needs-validation">
                                 <div class="form-floating mb-3">
@@ -161,7 +161,7 @@ include 'templates/head.php'
                             </form>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-lg-5 me-auto">
                         <div class="booking-cta">
                             <h2 class="primary">Reserviere Kajaks</h2>
                             <p>
