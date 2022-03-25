@@ -13,6 +13,7 @@ include 'templates/head.php'
 <body>
 <?php include 'templates/sidebar.php' ?>
 <div class="section" id="booking">
+
     <div class="section-center">
         <div class="booking-cta">
             <a href="index.php" class="primary text-decoration-none">
@@ -22,10 +23,10 @@ include 'templates/head.php'
             </a>
         </div>
         <?php
-        global $timeslots;
+        global $timeslots_field;
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $success = reservate_kajak($connection, $_POST);
-            if ($success) {
+            $ret_val = reservate_kajak($connection, $_POST);
+            if ($ret_val === true) {
                 ?>
                 <div class="booking-cta">
                     <a href="index.php" class="primary text-decoration-none">
@@ -40,7 +41,7 @@ include 'templates/head.php'
                 <div class="booking-cta">
                     <a href="index.php" class="danger text-decoration-none">
                         <h2>
-                            Reservierung fehlgeschlagen
+                            <?php echo $ret_val ?>
                         </h2>
                     </a>
                 </div>
@@ -112,10 +113,12 @@ include 'templates/head.php'
                                         <div class="form-group form-floating">
                                             <span class="form-label">Zeitslots</span><br>
                                             <!-- time slots -->
-                                            <?php foreach ($timeslots as $timeslot) { ?>
+                                            <?php
+                                            global $timeslots_formatted;
+                                            foreach ($timeslots_formatted as $index => $timeslot) { ?>
                                                 <span class="form-check-label">
                                                 <input type="checkbox" name="timeslots[]"
-                                                       value="<?php echo $timeslot ?>"
+                                                       value="<?php echo $index ?>"
                                                        class="form-check-input">
                                                 <?php echo $timeslot ?>
                                             </span>
@@ -126,10 +129,12 @@ include 'templates/head.php'
                                 </div>
 
                                 <div class="row my-2">
+                                    <?php global $amount_kajaks ?>
                                     <div class="col-md-6">
                                         <img alt="Bild eines einzelnen Kajaks" src="resources/images/EinzelKajak.png" class="img-fluid"/>
                                         <div class="form-group form-floating">
-                                            <input type="number" max="9" min="0" id="single-kajak" value="0"
+                                            <input type="number" max="<?php echo $amount_kajaks["single_kajak"] ?>"
+                                                   min="0" id="single-kajak" value="0"
                                                    name="single-kajak" class="form-control"/>
                                             <label class="form-check-label" for="single-kajak">
                                                 Anzahl 1-Sitz Kajaks
@@ -139,7 +144,7 @@ include 'templates/head.php'
                                     <div class="col-md-6">
                                         <img alt="Bild eines doppelten Kajaks" src="resources/images/doppelKajak.png" class="img-fluid"/>
                                         <div class="form-group form-floating">
-                                            <input type="number" max="9" min="0" id="double-kajak" value="0"
+                                            <input type="number" max="<?php echo $amount_kajaks["double_kajak"] ?>" min="0" id="double-kajak" value="0"
                                                    name="double-kajak" class="form-control"/>
                                             <label class="form-check-label" for="double-kajak">
                                                 Anzahl 2-Sitz Kajaks
@@ -160,7 +165,7 @@ include 'templates/head.php'
                         <div class="booking-cta">
                             <h2 class="primary">Reserviere Kajaks</h2>
                             <p>
-                                Wir bieten für die <b><i>HTWG Konstanz und für Universität Konstanz</i></b> die Möglichkeit, Kajaks zu reservieren.
+                                Wir bieten für die HTWG Konstanz und für Universität Konstanz die Möglichkeit, Kajaks zu reservieren.
                                 Bitte fülle das Formular aus, damit wir überprüfen können, ob an deinem gewünschten
                                 Datum
                                 und Zeit Kajaks frei sind.
