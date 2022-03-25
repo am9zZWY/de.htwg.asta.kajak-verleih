@@ -13,7 +13,6 @@ include 'templates/head.php'
 <body>
 <?php include 'templates/sidebar.php' ?>
 <div class="section" id="booking">
-
     <div class="section-center">
         <div class="booking-cta">
             <a href="index.php" class="primary text-decoration-none">
@@ -128,7 +127,7 @@ include 'templates/head.php'
 
                                 <div class="row my-2">
                                     <div class="col-md-6">
-                                        <img alt="Bild eines einzelnen Kajaks" class="img-fluid"/>
+                                        <img alt="Bild eines einzelnen Kajaks" src="resources/images/EinzelKajak.png" class="img-fluid"/>
                                         <div class="form-group form-floating">
                                             <input type="number" max="9" min="0" id="single-kajak" value="0"
                                                    name="single-kajak" class="form-control"/>
@@ -138,7 +137,7 @@ include 'templates/head.php'
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <img alt="Bild eines doppelten Kajaks" class="img-fluid"/>
+                                        <img alt="Bild eines doppelten Kajaks" src="resources/images/doppelKajak.png" class="img-fluid"/>
                                         <div class="form-group form-floating">
                                             <input type="number" max="9" min="0" id="double-kajak" value="0"
                                                    name="double-kajak" class="form-control"/>
@@ -161,7 +160,7 @@ include 'templates/head.php'
                         <div class="booking-cta">
                             <h2 class="primary">Reserviere Kajaks</h2>
                             <p>
-                                Wir bieten für die HTWG Konstanz und für Universität Konstanz die Möglichkeit, Kajaks zu reservieren.
+                                Wir bieten für die <b><i>HTWG Konstanz und für Universität Konstanz</i></b> die Möglichkeit, Kajaks zu reservieren.
                                 Bitte fülle das Formular aus, damit wir überprüfen können, ob an deinem gewünschten
                                 Datum
                                 und Zeit Kajaks frei sind.
