@@ -5,7 +5,7 @@ function login (string $username, string $password): bool {
         return true;
     }
 
-    if (!isset($_ENV['ADMIN_USERNAME']) || !isset($_ENV['ADMIN_PASSWORD'])) {
+    if (!isset($_ENV['ADMIN_USERNAME'], $_ENV['ADMIN_PASSWORD'])) {
         return false;
     }
 
