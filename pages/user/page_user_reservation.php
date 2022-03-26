@@ -90,8 +90,8 @@ $connection = $_SESSION['connection'];
                     <div class="row my-2">
                         <?php global $amount_kajaks ?>
                         <div class="col-md-6">
-                            <img alt="Bild eines einzelnen Kajaks" src="resources/images/EinzelKajak.png"
-                                 class="img-fluid"/>
+                            <img alt="Bild eines einzelnen Kajaks" src="/resources/images/einzelKajak.png"
+                                 class="img-fluid" style="width: 300px; height: 200px;" />
                             <div class="form-group form-floating">
                                 <input type="number" max="<?php echo $amount_kajaks["single_kajak"] ?>"
                                        min="0" id="single-kajak" value="0"
@@ -102,8 +102,8 @@ $connection = $_SESSION['connection'];
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <img alt="Bild eines doppelten Kajaks" src="resources/images/doppelKajak.png"
-                                 class="img-fluid"/>
+                            <img alt="Bild eines doppelten Kajaks" src="/resources/images/doppelKajak.png"
+                                 class="img-fluid" style="width: 300px; height: 200px;"/>
                             <div class="form-group form-floating">
                                 <input type="number" max="<?php echo $amount_kajaks["double_kajak"] ?>" min="0"
                                        id="double-kajak" value="0"
