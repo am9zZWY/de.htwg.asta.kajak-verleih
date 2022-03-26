@@ -12,8 +12,7 @@ include 'templates/head.php'
 <html lang="de" xmlns="http://www.w3.org/1999/html">
 <body>
 <?php include 'templates/sidebar.php' ?>
-<div class="section" id="booking">
-
+<div class="bg">
     <div class="section-center">
         <div class="booking-cta">
             <a href="index.php" class="primary text-decoration-none">
@@ -124,6 +123,9 @@ include 'templates/head.php'
                                             </span>
                                                 <br>
                                             <?php } ?>
+                                            <div class="row"><br><p>Ein Zeitslot kostet <b>p.P. 5€</b><br>
+                                                Beide Zeitslots kosten <b>p.P. 8€</b></p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -176,6 +178,7 @@ include 'templates/head.php'
             </div>
         <?php } ?>
     </div>
+
 </div>
 </body>
 </html>

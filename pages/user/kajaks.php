@@ -1,10 +1,11 @@
 <?php
-include '../templates/head.php'
+include '../../templates/head.php'
 ?>
 <body>
-<?php include '../templates/sidebar.php' ?>
+<?php include '../../templates/sidebar.php' ?>
 
-<div class="section" id="booking">
+<div class="bg">
+    <div class="section">
     <div class="section-center">
         <div class="booking-cta">
             <div class="container">
@@ -23,6 +24,7 @@ include '../templates/head.php'
                 </div>
             </div>
         </div>
+    </div>
     </div>
 </div>
 

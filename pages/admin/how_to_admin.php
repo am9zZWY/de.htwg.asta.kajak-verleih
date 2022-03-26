@@ -1,13 +1,13 @@
 <?php
-include '../templates/head.php'
+include '../../templates/head.php'
 ?>
 <html lang="de" xmlns="http://www.w3.org/1999/html">
 <body>
-<?php include '../templates/admin_sidebar.php' ?>
+<?php include '../../templates/admin_sidebar.php' ?>
 
 <div class="section" id="booking">
     <div class="section-center">
-        <div class="booking-cta">
+        <div class="booking-cta" style="width: auto">
             <div class="container">
                 <div class="row">
                 <h2>How To´s</h2>
@@ -26,6 +26,10 @@ include '../templates/head.php'
                     <button class="accordion">Sonstiges</button>
                     <div class="panel">
                         <h1>Du bist Dumm!</h1>
+                        <button class="accordion">Wirklich Sonstiges</button>
+                        <div class="panel">
+                            <h3>Josef und Vasilij sind krass!</h3>
+                        </div>
                     </div>
                 <script>
                     var acc = document.getElementsByClassName("accordion");

@@ -6,11 +6,28 @@
 .section .section-center {
     position: absolute
 }
+.bg{
+    /* The image used */
+    background-image: url("../resources/images/booking-bg.jpg");
+
+    /* Full height */
+    height: 100%;
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
 
 #booking {
     font-family: 'Montserrat', sans-serif;
-    background: url(../resources/images/booking-bg.jpg) no-repeat center center fixed;
-    background-size: auto;
+
+    background-image: url("../resources/images/booking-bg.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    height: 100%;
+
 }
 
 #booking::before {
@@ -46,10 +63,6 @@
     color: #3e485c;
     font-size: 14px;
 }
-
-/* .booking-form .form-control::-webkit-input-placeholder, .booking-form .form-control:-ms-input-placeholder, .booking-form .form-control::placeholder, .booking-form input[type="date"].form-control:invalid {
-    color: rgba(62, 72, 92, 0.3);
-} */
 
 .booking-form .submit-btn:hover,
 .booking-form .submit-btn:focus {

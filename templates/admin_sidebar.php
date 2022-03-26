@@ -1,9 +1,9 @@
 <!-- Menu Sidebar   -->
 <div id="mySidenav" class="sidenav">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-    <a href="../pages/admin_reservations.php">Reservierungen</a>
-    <a href="../pages/how_to_admin.php">How To Admin</a>
-    <a href="../pages/Kajaks.php">Abmelden</a>
+    <a href="/pages/admin/reservations.php">Reservierungen</a>
+    <a href="/pages/admin/how_to_admin.php">How To Admin</a>
+    <a href="/index.php">Abmelden</a>
 
 
 </div>

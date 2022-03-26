@@ -1,17 +1,18 @@
 <?php
-include '../templates/head.php'
+include '../../templates/head.php'
 ?>
 <body>
-<?php include '../templates/sidebar.php' ?>
+<?php include '../../templates/sidebar.php' ?>
 
-<div class="section" id="booking">
+<div class="bg">
+    <div class="section" id="booking">
     <div class="section-center">
         <div class="booking-cta">
             <div class="container">
                 <div class="row">
                     <h2 class="primary">Info </h2>
                 </div>
-                <div class="container" style="border: white solid;bo">
+                <div class="container" style="border: white solid;">
                     <div class="row">
                         <h3 class="primary">Mietsachen</3>
                     </div>
@@ -41,6 +42,7 @@ include '../templates/head.php'
                 </div>
             </div>
         </div>
+    </div>
     </div>
 </div>
 </body>

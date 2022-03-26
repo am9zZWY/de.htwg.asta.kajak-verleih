@@ -6,6 +6,7 @@
     "type": "project",
     "license": "MIT",
     "require": {
-        "ext-mysqli": "*"
+        "ext-mysqli": "*",
+        "vlucas/phpdotenv": "^5.4"
     }
 }
