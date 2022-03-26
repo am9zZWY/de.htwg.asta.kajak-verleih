@@ -77,8 +77,6 @@ function connect_to_database()
         die("Connection failed: " . $conn->connect_error);
     }
 
-    $_SESSION['conn_db'] = $conn;
-
     return $conn;
 }
 
