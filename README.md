@@ -8,34 +8,11 @@ Install [PHP](https://www.php.net/manual/de/install.php) and [Composer](https://
 
 ### 2.1 Start Development Server
 
-#### 2.1.1 Via Docker
-
 ```
 docker-compose up
 ```
 
-Then call `localhost:8080`.
-
-#### 2.1.2 Via Composer
-
-**Important: MySQL must be started manually!**
-
-
-```shell
-composer start
-```
-
-Then call `localhost:8080`.
-
-#### 2.1.3 Via PHP
-
-**Important: MySQL must be started manually!**
-
-```shell
-php -S 127.0.0.1:8080
-```
-
-Then call `localhost:8080`.
+Then call `localhost:8080`. This will start the php service and the mysql service.
 
 ## 2.2 Development Environment
 
