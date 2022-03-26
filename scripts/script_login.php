@@ -1,9 +1,4 @@
 <?php
-require __DIR__ . '/../vendor/autoload.php';
-
-use Dotenv\Dotenv;
-$dotenv = Dotenv::createImmutable(__DIR__, ['../.env'], false);
-$dotenv->safeLoad();
 
 function login (string $username, string $password): bool {
     if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
