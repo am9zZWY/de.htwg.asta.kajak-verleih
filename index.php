@@ -1,7 +1,16 @@
 <?php
 require __DIR__ . '/vendor/autoload.php';
+
 require __DIR__ . '/scripts/reservation.php';
-require_once __DIR__ . '/scripts/helpers.php';
+require __DIR__ . '/scripts/helpers.php';
+
+/* Used to load credentials from .env file */
+use Dotenv\Dotenv;
+$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
+
+/* Start session */
+session_start();
 
 /* Setup the database connection and the reservation table */
 $connection = connect_to_database();
@@ -133,7 +142,8 @@ include 'templates/head.php'
                                 <div class="row my-2">
                                     <?php global $amount_kajaks ?>
                                     <div class="col-md-6">
-                                        <img alt="Bild eines einzelnen Kajaks" src="resources/images/EinzelKajak.png" class="img-fluid"/>
+                                        <img alt="Bild eines einzelnen Kajaks" src="resources/images/EinzelKajak.png"
+                                             class="img-fluid"/>
                                         <div class="form-group form-floating">
                                             <input type="number" max="<?php echo $amount_kajaks["single_kajak"] ?>"
                                                    min="0" id="single-kajak" value="0"
@@ -144,9 +154,11 @@ include 'templates/head.php'
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <img alt="Bild eines doppelten Kajaks" src="resources/images/doppelKajak.png" class="img-fluid"/>
+                                        <img alt="Bild eines doppelten Kajaks" src="resources/images/doppelKajak.png"
+                                             class="img-fluid"/>
                                         <div class="form-group form-floating">
-                                            <input type="number" max="<?php echo $amount_kajaks["double_kajak"] ?>" min="0" id="double-kajak" value="0"
+                                            <input type="number" max="<?php echo $amount_kajaks["double_kajak"] ?>" min="0"
+                                                   id="double-kajak" value="0"
                                                    name="double-kajak" class="form-control"/>
                                             <label class="form-check-label" for="double-kajak">
                                                 Anzahl 2-Sitz Kajaks
@@ -167,7 +179,8 @@ include 'templates/head.php'
                         <div class="booking-cta">
                             <h2 class="primary">Reserviere Kajaks</h2>
                             <p>
-                                Wir bieten für die HTWG Konstanz und für Universität Konstanz die Möglichkeit, Kajaks zu reservieren.
+                                Wir bieten für die HTWG Konstanz und für Universität Konstanz die Möglichkeit, Kajaks zu
+                                reservieren.
                                 Bitte fülle das Formular aus, damit wir überprüfen können, ob an deinem gewünschten
                                 Datum
                                 und Zeit Kajaks frei sind.

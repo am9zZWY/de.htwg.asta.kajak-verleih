@@ -77,6 +77,8 @@ function connect_to_database()
         die("Connection failed: " . $conn->connect_error);
     }
 
+    $_SESSION['conn_db'] = $conn;
+
     return $conn;
 }
 
@@ -103,6 +105,14 @@ CREATE TABLE IF NOT EXISTS reservations
     CONSTRAINT NAME_CHECK CHECK (REGEXP_LIKE(name, '^[A-Za-z ]+'))
 )");
     $sql->execute();
+}
+
+function get_reservations($conn): array
+{
+    $sql = $conn->prepare("Select * From reservations WHERE date >=current_Date() Order BY Date ASC;");
+    $sql->execute();
+    $result = $sql->get_result();
+    return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
 /**
@@ -170,14 +180,14 @@ function check_if_kajak_available($conn, $date, $timeslot, string $kajak, int $r
 
     /* If null then no reservation on that day is found; therefore it's free */
     if ($amount === null) {
-        return false;
+        return true;
     }
 
     return (int)$amount + $requested_amount < $amount_kajaks[$kajak];
 }
 
 /**
- * Insert reservation into database
+ * Insert reservation into database.
  *
  * @param $conn
  * @param $name

@@ -256,7 +256,6 @@ span.psw {
 
 /* The Modal (background) */
 .modal {
-    display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
     left: 0;
@@ -321,13 +320,6 @@ span.psw {
 }
 
 /********************Admin*****************/
-table {
-    background-color: white;
-    width: 100%;
-    border: solid;
-    border-color: white;
-}
-
 th, td {
     text-align: left;
     padding: 8px;
