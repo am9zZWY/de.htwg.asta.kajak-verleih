@@ -18,16 +18,7 @@ create_header('Informationen zur Reservierung');
             <div class="panel">
                 <p>test ipsum..</p>
             </div>
-            <script>
-                const acc = document.getElementsByClassName("accordion");
-                Array.from(acc).forEach((item) => {
-                    item.addEventListener("click", function () {
-                        item.classList.toggle("active");
-                        const panel = item.nextElementSibling;
-                        panel.style.maxHeight = panel.style.maxHeight ? null : panel.scrollHeight + "px";
-                    });
-                })
-            </script>
+            <?php echo create_accordion(false) ?>
         </div>
     </div>
 </div>
