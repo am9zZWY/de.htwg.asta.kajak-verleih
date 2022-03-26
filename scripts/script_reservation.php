@@ -40,6 +40,7 @@ $ERROR_GENERAL = "Ein Fehler ist aufgetreten.";
  * Returns the next max_days weekdays in a string
  * @return array<string>
  */
+
 function get_days(): array
 {
     global $min_day, $max_days, $weekdays;
@@ -104,6 +105,14 @@ CREATE TABLE IF NOT EXISTS reservations
     $sql->execute();
 }
 
+function get_reservations($conn): array
+{
+    $sql = $conn->prepare("Select * From reservations WHERE date >=current_Date() Order BY Date ASC;");
+    $sql->execute();
+    $result = $sql->get_result();
+    return mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
+
 /**
  * USE WITH CAUTION!
  *
@@ -127,7 +136,7 @@ function drop_table($conn)
  * @param int $requested_amount
  * @return bool
  */
-function check_if_kajak_available($conn, $date, $timeslot, string $kajak, int $requested_amount = -1): bool
+function check_if_kajak_available($conn, $date, $timeslot, string $kajak, int $requested_amount): bool
 {
     global $amount_kajaks;
 
@@ -166,15 +175,17 @@ function check_if_kajak_available($conn, $date, $timeslot, string $kajak, int $r
 
     /* Check if there are more than 0 kajaks available */
     $amount = $result->fetch_assoc()["amount"];
+
+    /* If null then no reservation on that day is found; therefore it's free */
     if ($amount === null) {
-        return false;
+        return true;
     }
 
-    return (int)$amount < $amount_kajaks[$kajak];
+    return (int)$amount + $requested_amount < $amount_kajaks[$kajak];
 }
 
 /**
- * Insert reservation into database
+ * Insert reservation into database.
  *
  * @param $conn
  * @param $name
@@ -191,6 +202,19 @@ function insert_reservation($conn, $name, $email, $phone, $date, $timeslot, $kaj
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
     $sql->bind_param('ssssssss', $name, $email, $phone, $date, $timeslot[0], $timeslot[1], $kajaks[0], $kajaks[1]);
     return $sql->execute();
+}
+
+/**
+ * Delete reservations by id.
+ *
+ * @param $conn
+ * @param $ids
+ * @return void
+ */
+function delete_reservation($conn, $ids)
+{
+    $sql = "DELETE FROM reservations WHERE id IN(".implode(',', $ids).")";
+    $conn->query($sql);
 }
 
 /**

@@ -1,10 +1,11 @@
 <!-- Menu Sidebar   -->
 <div id="mySidenav" class="sidenav">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-    <a href="../index.php">Home</a>
-    <a href="../pages/Kajaks.php">Kajaks</a>
-    <a href="../pages/Infos.php">Info</a>
-    <a href="../pages/impressum.php">Impressum</a>
+    <a href="/pages/admin/reservations.php">Reservierungen</a>
+    <a href="/pages/admin/how_to_admin.php">How To Admin</a>
+    <a href="/index.php">Abmelden</a>
+
+
 </div>
 <div id="main">
     <span style="font-size:30px;background-color: transparent ;cursor:pointer" onclick="openNav()">&#9776; AStA</span>

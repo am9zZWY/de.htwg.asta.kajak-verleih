@@ -1,21 +1,34 @@
+/********************************* LAYOUT ***********************************/
+
 .section {
     position: relative;
     height: 100vh;
 }
 
 .section .section-center {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    right: 0;
-    -webkit-transform: translateY(-50%);
-    transform: translateY(-50%);
+    position: absolute
+}
+
+.bg {
+    /* The image used */
+    background-image: url("../resources/images/booking-bg.jpg");
+
+    /* Full height */
+    height: 100%;
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 #booking {
     font-family: 'Montserrat', sans-serif;
-    background: url(../resources/images/booking-bg.jpg) no-repeat center center fixed;
-    background-size: auto;
+    background-image: url("../resources/images/booking-bg.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    height: 100%;
 }
 
 #booking::before {
@@ -28,7 +41,9 @@
     background: rgba(44, 101, 136, 0.6);
 }
 
-.booking-form {
+/********************************* FORMS ***********************************/
+
+.custom-form {
     background-color: #fff;
     padding: 50px 20px;
     -webkit-box-shadow: 0 5px 20px -5px rgba(0, 0, 0, 0.3);
@@ -36,12 +51,12 @@
     border-radius: 4px;
 }
 
-.booking-form .form-group {
+.custom-form .form-group {
     position: relative;
     margin-bottom: 30px;
 }
 
-.booking-form .form-control, .booking-form .form-select {
+.custom-form .form-control, .custom-form .form-select {
     background-color: #ebecee;
     border-radius: 4px;
     border: none;
@@ -52,19 +67,12 @@
     font-size: 14px;
 }
 
-/* .booking-form .form-control::-webkit-input-placeholder, .booking-form .form-control:-ms-input-placeholder, .booking-form .form-control::placeholder, .booking-form input[type="date"].form-control:invalid {
-    color: rgba(62, 72, 92, 0.3);
-} */
-
-.booking-form .submit-btn:hover,
-.booking-form .submit-btn:focus {
+.custom-form .submit-btn:hover,
+.custom-form .submit-btn:focus {
     opacity: 0.9;
 }
 
-.booking-cta {
-    margin-top: 20px;
-    margin-bottom: 30px;
-}
+/********************************* COLORS ***********************************/
 
 .primary {
     color: white !important;
@@ -74,24 +82,33 @@
     color: #ff8833 !important;
 }
 
-.booking-cta h1, .booking-cta h2 {
+/********************************* HEADERS ***********************************/
+
+.header-wrapper {
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.header-wrapper h1, .header-wrapper h2 {
     text-transform: uppercase;
     font-weight: 700;
     text-align: center;
 }
 
-.booking-cta h1 {
+.header-wrapper h1 {
     font-size: 52px;
 }
 
-.booking-cta h2 {
+.header-wrapper h2 {
     font-size: 40px;
 }
 
-.booking-cta p {
+.header-wrapper p {
     font-size: 20px;
     color: rgba(255, 255, 255, 0.8);
 }
+
+/********************************* NAVIGATION ***********************************/
 
 
 .sidenav {
@@ -131,12 +148,17 @@
 
 #main {
     transition: margin-left .5s;
-    padding: 16px;
+    margin: 16px;
 }
 
 @media screen and (max-height: 450px) {
-    .sidenav {padding-top: 15px;}
-    .sidenav a {font-size: 18px;}
+    .sidenav {
+        padding-top: 15px;
+    }
+
+    .sidenav a {
+        font-size: 18px;
+    }
 }
 
 /* Style the buttons that are used to open and close the accordion panel */
@@ -174,6 +196,7 @@
 .active, .accordion:hover {
     background-color: #ccc;
 }
+
 .accordion:after {
     content: '\02795'; /* Unicode character for "plus" sign (+) */
     font-size: 13px;
@@ -193,6 +216,140 @@
     overflow: hidden;
     transition: max-height 0.2s ease-out;
 }
-.panel p{
+
+.panel p {
     color: black;
+}
+
+/********************************* ADMIN LOGIN ***********************************/
+
+/* Full-width input fields */
+input[type=text], input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+/* Set a style for all buttons */
+button {
+    background-color: #04AA6D;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+button:hover {
+    opacity: 0.85;
+}
+
+/* Center the image and position the close button */
+.img-container {
+    text-align: center;
+    margin: 12px 0 12px 0;
+    position: relative;
+}
+
+.img-avatar {
+    width: 30%;
+    border-radius: 10%;
+}
+
+.container {
+    padding: 16px;
+    margin: 10%;
+}
+
+span.psw {
+    float: right;
+    padding-top: 16px;
+}
+
+/* The Modal (background) */
+.modal {
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+    padding-top: 60px;
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+    border: 1px solid #888;
+    width: 50%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button (x) */
+.close {
+    position: absolute;
+    right: 25px;
+    top: 0;
+    color: #000;
+    font-size: 35px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: red;
+    cursor: pointer;
+}
+
+/* Add Zoom Animation */
+.animate {
+    -webkit-animation: animatezoom 0.6s;
+    animation: animatezoom 0.6s
+}
+
+@-webkit-keyframes animatezoom {
+    from {
+        -webkit-transform: scale(0)
+    }
+    to {
+        -webkit-transform: scale(1)
+    }
+}
+
+@keyframes animatezoom {
+    from {
+        transform: scale(0)
+    }
+    to {
+        transform: scale(1)
+    }
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+    span.psw {
+        display: block;
+        float: none;
+    }
+
+    .cancelbtn {
+        width: 100%;
+    }
+}
+
+/********************Admin*****************/
+th, td {
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: lightblue;
 }
