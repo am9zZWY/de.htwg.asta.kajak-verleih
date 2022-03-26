@@ -1,10 +1,10 @@
 <?php
 require __DIR__ . '/vendor/autoload.php';
 
-require __DIR__ . '/scripts/reservation.php';
-require __DIR__ . '/scripts/helpers.php';
-require __DIR__ . '/scripts/template_helpers.php';
-require __DIR__ . '/scripts/login.php';
+require __DIR__ . '/scripts/script_login.php';
+require __DIR__ . '/scripts/script_reservation.php';
+require __DIR__ . '/scripts/script_helpers.php';
+require __DIR__ . '/scripts/script_template_helpers.php';
 
 /* Used to load credentials from .env file */
 
@@ -34,31 +34,32 @@ function logged_in(): bool
     return true;
 }
 
-include 'templates/head.php'
+include 'templates/template_head.php'
 ?>
 <html lang="de" xmlns="http://www.w3.org/1999/html">
 <body>
-<?php include 'templates/sidebar.php' ?>
+<?php include 'templates/template_sidebar.php' ?>
 <div class="bg">
     <div class="section-center">
         <?php
-        if ($PARSED_URL === '/') {
-            require("pages/user/page_user_reservation.php");
-        } else if ($PARSED_URL === '/about') {
+        if ($PARSED_URL === '/about') {
             require("pages/user/about.php");
         } else if ($PARSED_URL === '/kajaks') {
             require("pages/user/kajaks.php");
         } else if ($PARSED_URL === '/impressum') {
             require("pages/user/impressum.php");
         } else if ($PARSED_URL === '/login') {
-            require("pages/admin/login.php");
+            require("pages/admin/page_admin_login.php");
+        } else if ($PARSED_URL === '/') {
+            require("pages/user/page_user_reservation.php");
         }
 
         if (logged_in()) {
             if ($PARSED_URL === '/reservations') {
-                require("pages/admin/reservations.php");
+                require("pages/admin/page_admin_reservations.php");
             }
         }
+
         ?>
     </div>
 
