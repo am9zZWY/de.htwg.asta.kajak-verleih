@@ -123,7 +123,7 @@ $connection = $_SESSION['connection'];
                 </form>
                 <?php
                 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                    $ret_val = reservate_kajak($connection, $_POST);
+                    $ret_val = reservate_kajak($connection, $_POST, true);
                     if ($ret_val === true) {
                         ?>
                         <h2>
