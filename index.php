@@ -38,7 +38,13 @@ include 'templates/template_head.php'
 ?>
 <html lang="de" xmlns="http://www.w3.org/1999/html">
 <body>
-<?php include 'templates/template_sidebar.php' ?>
+<?php
+if (logged_in()) {
+    include 'templates/template_admin_sidebar.php';
+} else {
+    include 'templates/template_sidebar.php';
+}
+?>
 <div class="bg">
     <div class="section-center">
         <?php
@@ -57,6 +63,8 @@ include 'templates/template_head.php'
         if (logged_in()) {
             if ($PARSED_URL === '/reservations') {
                 require("pages/admin/page_admin_reservations.php");
+            }elseif ($PARSED_URL === '/how_to_admin'){
+                require ("pages/admin/page_admin_about.php");
             }
         }
 
