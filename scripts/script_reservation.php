@@ -2,10 +2,10 @@
 // CONFIG
 
 // config for the database
-$servername = "mysql-test-service:3306";
-$username = "user";
-$password = "password";
-$dbname = "db";
+$servername = get_env('MYSQL_SERVER');
+$username = get_env('MYSQL_USERNAME');
+$password = get_env('MYSQL_PASSWORD');
+$dbname = get_env('MYSQL_DATABASE');
 
 // all weekdays in german
 $newLocal = setlocale(LC_ALL, 'de_DE', 'de_DE.UTF-8');
@@ -140,7 +140,7 @@ function check_if_kajak_available($conn, $date, $timeslot, string $kajak, int $r
 {
     global $amount_kajaks;
 
-    if (!array_key_exists($kajak, $amount_kajaks) || ($requested_amount !== -1 && $requested_amount > $amount_kajaks[$kajak])) {
+    if (!array_key_exists($kajak, $amount_kajaks) || ($requested_amount > $amount_kajaks[$kajak])) {
         return false;
     }
 
@@ -165,8 +165,8 @@ function check_if_kajak_available($conn, $date, $timeslot, string $kajak, int $r
     $sql = $conn->prepare("
         SELECT SUM($kajak) as amount FROM reservations
         WHERE date = ?
-          AND reservations.from_time BETWEEN ? AND ?
-          OR reservations.to_time BETWEEN ? AND ?
+          AND (reservations.from_time BETWEEN ? AND ?
+          OR reservations.to_time BETWEEN ? AND ?)
     ");
     $sql->bind_param('sssss', $date, $timeslots[0], $timeslots[1], $timeslots[0], $timeslots[1]);
 
@@ -222,9 +222,10 @@ function delete_reservation($conn, $ids)
  *
  * @param $conn
  * @param $fields
+ * @param bool $send_email
  * @return true | string
  */
-function reservate_kajak($conn, $fields): bool|string
+function reservate_kajak($conn, $fields, bool $send_email = false): bool|string
 {
     global $timeslots;
     global $ERROR_GENERAL, $ERROR_KAJAK_NOT_AVAILABLE, $ERROR_SINGLE_KAJAK_NOT_AVAILABLE, $ERROR_DOUBLE_KAJAK_NOT_AVAILABLE, $ERROR_KAJAK_NOT_SELECTED, $ERROR_TIMESLOT_NOT_SELECTED;
@@ -277,6 +278,10 @@ function reservate_kajak($conn, $fields): bool|string
 
     if (insert_reservation($conn, $name, $email, $phone, $date, $timeslot, $amount_kajaks) === false) {
         return $ERROR_GENERAL;
+    }
+
+    if ($send_email) {
+        send_reservation_email($name, $email, $amount_kajaks, $timeslot, $date);
     }
     return true;
 }
