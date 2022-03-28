@@ -165,8 +165,8 @@ function check_if_kajak_available($conn, $date, $timeslot, string $kajak, int $r
     $sql = $conn->prepare("
         SELECT SUM($kajak) as amount FROM reservations
         WHERE date = ?
-          AND reservations.from_time BETWEEN ? AND ?
-          OR reservations.to_time BETWEEN ? AND ?
+          AND (reservations.from_time BETWEEN ? AND ?
+          OR reservations.to_time BETWEEN ? AND ?)
     ");
     $sql->bind_param('sssss', $date, $timeslots[0], $timeslots[1], $timeslots[0], $timeslots[1]);
 
