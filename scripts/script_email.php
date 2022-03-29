@@ -24,11 +24,6 @@ function send_reservation_email(string $name, string $email_address_to, array $k
     ");
 }
 
-function test_send_mail(): bool
-{
-    return send_mail("j.mueller5021@gmail.com", "Test", "Test");
-}
-
 function send_mail(string $email_address_to, string $subject, string $body): bool
 {
     $email_address = get_env('MAIL_ADDRESS');
