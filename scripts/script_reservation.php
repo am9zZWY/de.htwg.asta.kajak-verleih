@@ -100,7 +100,8 @@ CREATE TABLE IF NOT EXISTS reservations
     to_time      TIME            NOT NULL,
     single_kajak NUMERIC         NOT NULL,
     double_kajak NUMERIC         NOT NULL,
-    CONSTRAINT NAME_CHECK CHECK (REGEXP_LIKE(name, '^[A-Za-z ]+'))
+    archived    BOOLEAN          NOT NULL DEFAULT FALSE,
+    CONSTRAINT NAME_CHECK CHECK (REGEXP_LIKE(name, '^[A-Za-z]+ [A-Za-z]+$'))
 )");
     $sql->execute();
 }
@@ -198,10 +199,14 @@ function check_if_kajak_available($conn, $date, $timeslot, string $kajak, int $r
  */
 function insert_reservation($conn, $name, $email, $phone, $date, $timeslot, $kajaks): bool
 {
-    $sql = $conn->prepare("INSERT INTO reservations (name, email, phone, date, from_time, to_time, single_kajak, double_kajak)
+    try {
+        $sql = $conn->prepare("INSERT INTO reservations (name, email, phone, date, from_time, to_time, single_kajak, double_kajak)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-    $sql->bind_param('ssssssss', $name, $email, $phone, $date, $timeslot[0], $timeslot[1], $kajaks[0], $kajaks[1]);
-    return $sql->execute();
+        $sql->bind_param('ssssssss', $name, $email, $phone, $date, $timeslot[0], $timeslot[1], $kajaks[0], $kajaks[1]);
+        return $sql->execute();
+    } catch (Exception $e) {
+        return false;
+    }
 }
 
 /**
@@ -213,7 +218,7 @@ function insert_reservation($conn, $name, $email, $phone, $date, $timeslot, $kaj
  */
 function delete_reservation($conn, $ids)
 {
-    $sql = "DELETE FROM reservations WHERE id IN(".implode(',', $ids).")";
+    $sql = "DELETE FROM reservations WHERE id IN(" . implode(',', $ids) . ")";
     $conn->query($sql);
 }
 
@@ -230,7 +235,9 @@ function reservate_kajak($conn, $fields, bool $send_email = false): bool|string
     global $timeslots;
     global $ERROR_GENERAL, $ERROR_KAJAK_NOT_AVAILABLE, $ERROR_SINGLE_KAJAK_NOT_AVAILABLE, $ERROR_DOUBLE_KAJAK_NOT_AVAILABLE, $ERROR_KAJAK_NOT_SELECTED, $ERROR_TIMESLOT_NOT_SELECTED;
 
-    $name = clean_string($fields['name']);
+    $name = clean_string($fields["name"]);
+    $surname = clean_string($fields["surname"]);
+    $fullname = $name . ' ' . $surname;
     $email = clean_string($fields['email']);
     $phone = clean_string($fields['phone']);
     $date = clean_string($fields['date']);
@@ -276,7 +283,7 @@ function reservate_kajak($conn, $fields, bool $send_email = false): bool|string
         return $ERROR_KAJAK_NOT_SELECTED;
     }
 
-    if (insert_reservation($conn, $name, $email, $phone, $date, $timeslot, $amount_kajaks) === false) {
+    if (insert_reservation($conn, $fullname, $email, $phone, $date, $timeslot, $amount_kajaks) === false) {
         return $ERROR_GENERAL;
     }
 
