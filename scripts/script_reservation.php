@@ -35,6 +35,7 @@ $ERROR_DOUBLE_KAJAK_NOT_AVAILABLE = "Doppelkajak nicht verfügbar";
 $ERROR_KAJAK_NOT_AVAILABLE = "Kajaks nicht verfügbar";
 $ERROR_KAJAK_NOT_SELECTED = "Bitte wähle einen Kajak aus.";
 $ERROR_GENERAL = "Ein Fehler ist aufgetreten.";
+$ERROR_MAIL_NOT_SENT = "E-Mail konnte nicht versendet werden.";
 
 /**
  * Returns the next max_days weekdays in a string
@@ -101,7 +102,7 @@ CREATE TABLE IF NOT EXISTS reservations
     single_kajak NUMERIC         NOT NULL,
     double_kajak NUMERIC         NOT NULL,
     archived    BOOLEAN          NOT NULL DEFAULT FALSE,
-    CONSTRAINT NAME_CHECK CHECK (REGEXP_LIKE(name, '^[A-Za-z]+ [A-Za-z]+$'))
+    CONSTRAINT NAME_CHECK CHECK (REGEXP_LIKE(name, '^[A-ZäÄöÖüÜa-z]+ [A-ZäÄöÖüÜa-z]+$'))
 )");
     $sql->execute();
 }
@@ -233,7 +234,7 @@ function delete_reservation($conn, $ids)
 function reservate_kajak($conn, $fields, bool $send_email = false): bool|string
 {
     global $timeslots;
-    global $ERROR_GENERAL, $ERROR_KAJAK_NOT_AVAILABLE, $ERROR_SINGLE_KAJAK_NOT_AVAILABLE, $ERROR_DOUBLE_KAJAK_NOT_AVAILABLE, $ERROR_KAJAK_NOT_SELECTED, $ERROR_TIMESLOT_NOT_SELECTED;
+    global $ERROR_GENERAL, $ERROR_KAJAK_NOT_AVAILABLE, $ERROR_SINGLE_KAJAK_NOT_AVAILABLE, $ERROR_DOUBLE_KAJAK_NOT_AVAILABLE, $ERROR_KAJAK_NOT_SELECTED, $ERROR_TIMESLOT_NOT_SELECTED, $ERROR_MAIL_NOT_SENT;
 
     $name = clean_string($fields["name"]);
     $surname = clean_string($fields["surname"]);
@@ -288,7 +289,10 @@ function reservate_kajak($conn, $fields, bool $send_email = false): bool|string
     }
 
     if ($send_email) {
-        send_reservation_email($name, $email, $amount_kajaks, $timeslot, $date);
+        $send_mail_status = send_reservation_email($name, $email, $amount_kajaks, $timeslot, $date);
+        if ($send_mail_status === false) {
+            return $ERROR_MAIL_NOT_SENT;
+        }
     }
     return true;
 }
