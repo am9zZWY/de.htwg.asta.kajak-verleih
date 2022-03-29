@@ -2,6 +2,15 @@
 /* Connect to database */
 $conn = connect_to_database();
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['delete_items'], $_POST['id'])) {
+        $ids = clean_array($_POST['id']);
+        delete_reservation($conn, $ids);
+    } else if (isset($_POST['delete_all'])) {
+        drop_table($conn);
+    }
+}
+
 /* Get all reservations from database */
 $reservations = get_reservations($conn);
 
@@ -40,7 +49,7 @@ create_header('Reservierungen');
                         <td><?php echo $reservation['phone'] ?></td>
                         <td><?php echo $reservation['email'] ?></td>
                         <td><?php echo $reservation['date'] ?></td>
-                        <td>Ganzen Tag</td>
+                        <td><?php echo $reservation['from_time'] . '—' . $reservation['to_time'] ?></td>
                         <td><?php echo $reservation['single_kajak'] ?></td>
                         <td><?php echo $reservation['double_kajak'] ?></td
                     </tr>
@@ -48,22 +57,12 @@ create_header('Reservierungen');
                 }
                 ?>
             </table>
-            <?php
-            if (count($reservations) > 0) {
-                ?>
-                <button type="submit" class="btn btn-primary submit-btn">Löschen</button>
-                <?php
-            } else {
-                ?>
-                <h3>Keine Reservierungen vorhanden</h3>
-                <?php
-            }
-            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $ids = clean_array($_POST['id']);
-                delete_reservation($conn, $ids);
-                // TODO: add reload
-            }
-            ?>
+            <div class="btn-group d-flex" role="group">
+                <button type="submit" class="btn btn-primary submit-btn mx-1" name="delete_items">Elemente löschen
+                </button>
+                <button type="submit" class="btn btn-primary submit-btn mx-1" name="delete_all"> Tabelle löschen
+                </button>
+            </div>
         </form>
     </div>
 </div>
