@@ -2,10 +2,10 @@
 // CONFIG
 
 // config for the database
-$servername = "mysql-test-service:3306";
-$username = "user";
-$password = "password";
-$dbname = "db";
+$servername = get_env('MYSQL_SERVER');
+$username = get_env('MYSQL_USERNAME');
+$password = get_env('MYSQL_PASSWORD');
+$dbname = get_env('MYSQL_DATABASE');
 
 // all weekdays in german
 $newLocal = setlocale(LC_ALL, 'de_DE', 'de_DE.UTF-8');
@@ -35,6 +35,7 @@ $ERROR_DOUBLE_KAJAK_NOT_AVAILABLE = "Doppelkajak nicht verfügbar";
 $ERROR_KAJAK_NOT_AVAILABLE = "Kajaks nicht verfügbar";
 $ERROR_KAJAK_NOT_SELECTED = "Bitte wähle einen Kajak aus.";
 $ERROR_GENERAL = "Ein Fehler ist aufgetreten.";
+$ERROR_MAIL_NOT_SENT = "E-Mail konnte nicht versendet werden.";
 
 /**
  * Returns the next max_days weekdays in a string
@@ -100,7 +101,8 @@ CREATE TABLE IF NOT EXISTS reservations
     to_time      TIME            NOT NULL,
     single_kajak NUMERIC         NOT NULL,
     double_kajak NUMERIC         NOT NULL,
-    CONSTRAINT NAME_CHECK CHECK (REGEXP_LIKE(name, '^[A-Za-z ]+'))
+    archived    BOOLEAN          NOT NULL DEFAULT FALSE,
+    CONSTRAINT NAME_CHECK CHECK (REGEXP_LIKE(name, '^[A-ZäÄöÖüÜa-z]+ [A-ZäÄöÖüÜa-z]+$'))
 )");
     $sql->execute();
 }
@@ -140,7 +142,7 @@ function check_if_kajak_available($conn, $date, $timeslot, string $kajak, int $r
 {
     global $amount_kajaks;
 
-    if (!array_key_exists($kajak, $amount_kajaks) || ($requested_amount !== -1 && $requested_amount > $amount_kajaks[$kajak])) {
+    if (!array_key_exists($kajak, $amount_kajaks) || ($requested_amount > $amount_kajaks[$kajak])) {
         return false;
     }
 
@@ -198,10 +200,14 @@ function check_if_kajak_available($conn, $date, $timeslot, string $kajak, int $r
  */
 function insert_reservation($conn, $name, $email, $phone, $date, $timeslot, $kajaks): bool
 {
-    $sql = $conn->prepare("INSERT INTO reservations (name, email, phone, date, from_time, to_time, single_kajak, double_kajak)
+    try {
+        $sql = $conn->prepare("INSERT INTO reservations (name, email, phone, date, from_time, to_time, single_kajak, double_kajak)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-    $sql->bind_param('ssssssss', $name, $email, $phone, $date, $timeslot[0], $timeslot[1], $kajaks[0], $kajaks[1]);
-    return $sql->execute();
+        $sql->bind_param('ssssssss', $name, $email, $phone, $date, $timeslot[0], $timeslot[1], $kajaks[0], $kajaks[1]);
+        return $sql->execute();
+    } catch (Exception $e) {
+        return false;
+    }
 }
 
 /**
@@ -213,7 +219,7 @@ function insert_reservation($conn, $name, $email, $phone, $date, $timeslot, $kaj
  */
 function delete_reservation($conn, $ids)
 {
-    $sql = "DELETE FROM reservations WHERE id IN(".implode(',', $ids).")";
+    $sql = "DELETE FROM reservations WHERE id IN(" . implode(',', $ids) . ")";
     $conn->query($sql);
 }
 
@@ -222,14 +228,17 @@ function delete_reservation($conn, $ids)
  *
  * @param $conn
  * @param $fields
+ * @param bool $send_email
  * @return true | string
  */
-function reservate_kajak($conn, $fields): bool|string
+function reservate_kajak($conn, $fields, bool $send_email = false): bool|string
 {
     global $timeslots;
-    global $ERROR_GENERAL, $ERROR_KAJAK_NOT_AVAILABLE, $ERROR_SINGLE_KAJAK_NOT_AVAILABLE, $ERROR_DOUBLE_KAJAK_NOT_AVAILABLE, $ERROR_KAJAK_NOT_SELECTED, $ERROR_TIMESLOT_NOT_SELECTED;
+    global $ERROR_GENERAL, $ERROR_KAJAK_NOT_AVAILABLE, $ERROR_SINGLE_KAJAK_NOT_AVAILABLE, $ERROR_DOUBLE_KAJAK_NOT_AVAILABLE, $ERROR_KAJAK_NOT_SELECTED, $ERROR_TIMESLOT_NOT_SELECTED, $ERROR_MAIL_NOT_SENT;
 
-    $name = clean_string($fields['name']);
+    $name = clean_string($fields["name"]);
+    $surname = clean_string($fields["surname"]);
+    $fullname = $name . ' ' . $surname;
     $email = clean_string($fields['email']);
     $phone = clean_string($fields['phone']);
     $date = clean_string($fields['date']);
@@ -275,8 +284,15 @@ function reservate_kajak($conn, $fields): bool|string
         return $ERROR_KAJAK_NOT_SELECTED;
     }
 
-    if (insert_reservation($conn, $name, $email, $phone, $date, $timeslot, $amount_kajaks) === false) {
+    if (insert_reservation($conn, $fullname, $email, $phone, $date, $timeslot, $amount_kajaks) === false) {
         return $ERROR_GENERAL;
+    }
+
+    if ($send_email) {
+        $send_mail_status = send_reservation_email($name, $email, $amount_kajaks, $timeslot, $date);
+        if ($send_mail_status === false) {
+            return $ERROR_MAIL_NOT_SENT;
+        }
     }
     return true;
 }

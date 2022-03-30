@@ -1,25 +1,26 @@
 <?php
 require __DIR__ . '/vendor/autoload.php';
 
-require __DIR__ . '/scripts/script_login.php';
-require __DIR__ . '/scripts/script_reservation.php';
-require __DIR__ . '/scripts/script_helpers.php';
-require __DIR__ . '/scripts/script_template_helpers.php';
-
 /* Used to load credentials from .env file */
-
 use Dotenv\Dotenv;
 
 $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->safeLoad();
 
+require __DIR__ . '/scripts/script_helpers.php';
+require __DIR__ . '/scripts/script_login.php';
+require __DIR__ . '/scripts/script_reservation.php';
+require __DIR__ . '/scripts/script_template_helpers.php';
+require __DIR__ . '/scripts/script_email.php';
+
 /* If session is not set start it */
 session_start();
 
+/* Get the current address because index.php acts as a router */
 $URL = $_SERVER['REQUEST_URI'];
-
 $PARSED_URL = parse_url($URL, PHP_URL_PATH);
 
+/* Send headers */
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");

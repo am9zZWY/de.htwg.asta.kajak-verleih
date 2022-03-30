@@ -9,13 +9,29 @@ $connection = $_SESSION['connection'];
         <div class="col-lg-5 ms-auto">
             <div class="custom-form">
                 <form action="/" method="post" class="needs-validation">
-                    <div class="form-floating mb-3">
-                        <input name="name" type="text" placeholder="Max Musterfrau" id="name"
-                               class="form-control"
-                               required>
-                        <label for="name">
-                            Name
-                        </label>
+                    <div class="row my-2">
+                        <div class="col-sm-6">
+                            <div class="mb-3 form-floating">
+                                <input name="name" type="text" placeholder="Max"
+                                       id="name"
+                                       class="form-control"
+                                       required>
+                                <label for="name">
+                                    Vorname
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="mb-3 form-floating">
+                                <input name="surname" type="text" placeholder="Mustermann" id="surname"
+                                       class="form-control"
+                                       required>
+                                <label for="surname">
+                                    Nachname
+                                </label>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="row my-2">
@@ -123,7 +139,7 @@ $connection = $_SESSION['connection'];
                 </form>
                 <?php
                 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                    $ret_val = reservate_kajak($connection, $_POST);
+                    $ret_val = reservate_kajak($connection, $_POST, true);
                     if ($ret_val === true) {
                         ?>
                         <h2>

@@ -5,8 +5,15 @@
     height: 100vh;
 }
 
-.section .section-center {
-    position: absolute
+.container.container-content {
+    border: white solid 2px;
+}
+
+.container.container-content div {
+    background-color: white;
+    margin: 2px;
+    padding: 10px;
+    color: black;
 }
 
 .bg {
