@@ -58,9 +58,9 @@ create_header('Reservierungen');
                 ?>
             </table>
             <div class="btn-group d-flex" role="group">
-                <button type="submit" class="btn btn-primary submit-btn mx-1" name="delete_items">Elemente löschen
+                <button type="submit" class="btn custom-btn mx-1" name="delete_items">Elemente löschen
                 </button>
-                <button type="submit" class="btn btn-primary submit-btn mx-1" name="delete_all"> Tabelle löschen
+                <button type="submit" class="btn custom-btn mx-1" name="delete_all"> Tabelle löschen
                 </button>
             </div>
         </form>
