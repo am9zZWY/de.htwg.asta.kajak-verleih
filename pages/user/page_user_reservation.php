@@ -143,7 +143,7 @@ $connection = $_SESSION['connection'];
                             <checkbox>
                                 <label>
                                     <input type="checkbox" name="terms" value="1" required class="form-check-input">
-                                    <b>Ich habe die <a href="/about.php">Nutzungsbedingungen</a> gelesen und akzeptiere sie.</b>
+                                    <b>Ich habe die <a href="/about">Nutzungsbedingungen</a> gelesen und akzeptiere sie.</b>
                                 </label>
                             </checkbox>
                         </div>
