@@ -1,9 +1,7 @@
 <?php
 create_header('Kajak Reservierung', '/');
-
 $connection = $_SESSION['connection'];
 ?>
-
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-5 ms-auto">
@@ -98,61 +96,60 @@ $connection = $_SESSION['connection'];
                                     <p>Ein Zeitslot kostet <b>p.P. 5€</b><br>
                                         Beide Zeitslots kosten <b>p.P. 8€</b></p>
                                 </div>
-                        </div>
-                    </div>
-
-                    <div class="row my-2">
-                        <?php global $amount_kajaks ?>
-                        <div class="col-md-6">
-                            <img alt="Bild eines einzelnen Kajaks" src="/resources/images/einzelKajak.png"
-                                 class="img-fluid" style="width: 300px; height: 200px;"/>
-                            <div class="form-group form-floating">
-                                <input type="number" max="<?php echo $amount_kajaks["single_kajak"] ?>"
-                                       min="0" id="single-kajak" value="0"
-                                       name="single-kajak" class="form-control"/>
-                                <label class="form-check-label" for="single-kajak">
-                                    Anzahl 1-Sitz Kajaks
-                                </label>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <img alt="Bild eines doppelten Kajaks" src="/resources/images/doppelKajak.png"
-                                 class="img-fluid" style="width: 300px; height: 200px;"/>
-                            <div class="form-group form-floating">
-                                <input type="number" max="<?php echo $amount_kajaks["double_kajak"] ?>" min="0"
-                                       id="double-kajak" value="0"
-                                       name="double-kajak" class="form-control"/>
-                                <label class="form-check-label" for="double-kajak">
-                                    Anzahl 2-Sitz Kajaks
-                                </label>
+
+                        <div class="row my-2">
+                            <?php global $amount_kajaks ?>
+                            <div class="col-md-6">
+                                <img alt="Bild eines einzelnen Kajaks" src="/resources/images/einzelKajak.png"
+                                     class="img-fluid" style="width: 300px; height: 200px;"/>
+                                <div class="form-group form-floating">
+                                    <input type="number" max="<?php echo $amount_kajaks["single_kajak"] ?>"
+                                           min="0" id="single-kajak" value="0"
+                                           name="single-kajak" class="form-control"/>
+                                    <label class="form-check-label" for="single-kajak">
+                                        Anzahl 1-Sitz Kajaks
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <img alt="Bild eines doppelten Kajaks" src="/resources/images/doppelKajak.png"
+                                     class="img-fluid" style="width: 300px; height: 200px;"/>
+                                <div class="form-group form-floating">
+                                    <input type="number" max="<?php echo $amount_kajaks["double_kajak"] ?>" min="0"
+                                           id="double-kajak" value="0"
+                                           name="double-kajak" class="form-control"/>
+                                    <label class="form-check-label" for="double-kajak">
+                                        Anzahl 2-Sitz Kajaks
+                                    </label>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="row my-2">
-                        <div class="col-md-6">
-                        <checkbox>
-                            <label>
-                                <input type="checkbox" name="is_studi" value="1" required
-                                       class="form-check-input">
-                                <p><b>Hiermit bestätige ich das eine Studierenden Person an der HTWG Konstanz oder der Universität Konstanz bin</b>.</p>
-                            </label>
-                        </checkbox>
-                        </div>
-                        <div class="col-md-6">
-                            <checkbox>
+                        <div class="row my-2">
+                            <div class="col-md-6">
+                                <label>
+                                    <input type="checkbox" name="is_studi" value="1" required
+                                           class="form-check-input">
+                                    <strong>Hiermit bestätige ich das eine Studierenden Person an der HTWG Konstanz
+                                        oder
+                                        der Universität Konstanz bin</strong>.
+                                </label>
+                            </div>
+                            <div class="col-md-6">
                                 <label>
                                     <input type="checkbox" name="terms" value="1" required class="form-check-input">
-                                    <b>Ich habe die <a href="/about">Nutzungsbedingungen</a> gelesen und akzeptiere sie.</b>
+                                    <strong>Ich habe die <a href="/about">Nutzungsbedingungen</a> gelesen und akzeptiere
+                                        sie.</strong>
                                 </label>
-                            </checkbox>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <button type="submit" class="btn custom-btn">Anfrage senden</button>
+                        <div class="row">
+                            <div class="col">
+                                <button type="submit" class="btn custom-btn">Anfrage senden</button>
+                            </div>
                         </div>
-                    </div>
                 </form>
                 <?php
                 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -174,18 +171,18 @@ $connection = $_SESSION['connection'];
                 ?>
             </div>
         </div>
-        </div>
-        <div class="col-lg-3 me-auto">
-            <div class="text-light header-wrapper">
-                <h2>Was bieten wir an?</h2>
-                <p>
-                    Wir bieten für die HTWG Konstanz und für Universität Konstanz die Möglichkeit, Kajaks zu
-                    reservieren.
-                    Bitte fülle das Formular aus, damit wir überprüfen können, ob an deinem gewünschten
-                    Datum
-                    und Zeit Kajaks frei sind.
-                </p>
-            </div>
+    </div>
+    <div class="col-lg-3 me-auto">
+        <div class="text-light header-wrapper">
+            <h2>Was bieten wir an?</h2>
+            <p>
+                Wir bieten für die HTWG Konstanz und für Universität Konstanz die Möglichkeit, Kajaks zu
+                reservieren.
+                Bitte fülle das Formular aus, damit wir überprüfen können, ob an deinem gewünschten
+                Datum
+                und Zeit Kajaks frei sind.
+            </p>
         </div>
     </div>
+</div>
 </div>
