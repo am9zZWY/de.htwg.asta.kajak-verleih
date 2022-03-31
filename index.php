@@ -2,6 +2,7 @@
 require __DIR__ . '/vendor/autoload.php';
 
 /* Used to load credentials from .env file */
+
 use Dotenv\Dotenv;
 
 $dotenv = Dotenv::createImmutable(__DIR__);
@@ -18,7 +19,7 @@ session_start();
 
 /* Get the current address because index.php acts as a router */
 $URL = $_SERVER['REQUEST_URI'];
-$PARSED_URL = parse_url($URL, PHP_URL_PATH);
+$PARSED_URL = strtolower(parse_url($URL, PHP_URL_PATH));
 
 /* Send headers */
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
@@ -30,23 +31,18 @@ $connection = connect_to_database();
 $_SESSION['connection'] = $connection;
 prepare_reservation_table($connection);
 
-function logged_in(): bool
-{
-    return true;
-}
-
 include 'templates/template_head.php'
 ?>
 <html lang="de" xmlns="http://www.w3.org/1999/html">
 <body>
 <?php
-if (logged_in()) {
+if (is_logged_in()) {
     include 'templates/template_admin_sidebar.php';
 } else {
     include 'templates/template_sidebar.php';
 }
 ?>
-<div class="bg">
+<div>
     <div class="section-center" >
         <?php
         if ($PARSED_URL === '/about') {
@@ -61,11 +57,11 @@ if (logged_in()) {
             require("pages/user/page_user_reservation.php");
         }
 
-        if (logged_in()) {
+        if (is_logged_in()) {
             if ($PARSED_URL === '/reservations') {
                 require("pages/admin/page_admin_reservations.php");
-            }elseif ($PARSED_URL === '/how_to_admin'){
-                require ("pages/admin/page_admin_about.php");
+            } elseif ($PARSED_URL === '/how_to_admin') {
+                require("pages/admin/page_admin_about.php");
             }
         }
 
