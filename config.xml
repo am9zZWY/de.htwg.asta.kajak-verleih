@@ -1,0 +1,26 @@
+<config>
+    <kajaks>
+        <kajak>
+            <name>Einzelkajak</name>
+            <seats>1</seats>
+            <img>resources/images/einzelKajak.png</img>
+            <amount>4</amount>
+        </kajak>
+        <kajak>
+            <name>Doppelkajak</name>
+            <seats>2</seats>
+            <img>resources/images/doppelKajak.png</img>
+            <amount>2</amount>
+        </kajak>
+    </kajaks>
+    <timeslots>
+        <timeslot>
+            <start>09:00:00</start>
+            <end>13:00:00</end>
+        </timeslot>
+        <timeslot>
+            <start>13:00:00</start>
+            <end>18:00:00</end>
+        </timeslot>
+    </timeslots>
+</config>
