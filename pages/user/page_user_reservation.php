@@ -133,7 +133,7 @@ $connection = $_SESSION['connection'];
                         <div class="col-md-6">
                         <checkbox>
                             <label>
-                                <input type="checkbox" name="Studi" value="1" required
+                                <input type="checkbox" name="is_studi" value="1" required
                                        class="form-check-input">
                                 <p><b>Hiermit bestätige ich das eine Studierenden Person an der HTWG Konstanz oder der Universität Konstanz bin</b>.</p>
                             </label>
@@ -143,7 +143,7 @@ $connection = $_SESSION['connection'];
                             <checkbox>
                                 <label>
                                     <input type="checkbox" name="terms" value="1" required class="form-check-input">
-                                    <b>Ich habe die <a href="about.php">Nutzungsbedingungen</a> gelesen und akzeptiere sie.</b>
+                                    <b>Ich habe die <a href="/about.php">Nutzungsbedingungen</a> gelesen und akzeptiere sie.</b>
                                 </label>
                             </checkbox>
                         </div>
