@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Login as admin.
+ *
+ * @param string $username
+ * @param string $password
+ * @return bool
+ */
 function login (string $username, string $password): bool {
     if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
         return true;
@@ -15,4 +22,23 @@ function login (string $username, string $password): bool {
 
     $_SESSION['logged_in'] = $logged_in;
     return $logged_in;
+}
+
+/**
+ * Logout.
+ *
+ * @return void
+ */
+function logout () {
+    unset($_SESSION['logged_in']);
+}
+
+
+/**
+ * Check if admin is logged in.
+ *
+ * @return bool
+ */
+function is_logged_in (): bool {
+    return isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true;
 }

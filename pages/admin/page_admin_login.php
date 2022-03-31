@@ -27,7 +27,7 @@ create_header('Login');
                             Passwort
                         </label>
                     </div>
-                    <button type="submit" class="btn btn-primary submit-btn">Login</button>
+                    <button type="submit" class="btn btn-primary custom-btn">Login</button>
                     <?php
                     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $logged_in = login(clean_string($_POST['name']), clean_string($_POST['password']));

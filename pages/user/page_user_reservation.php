@@ -105,7 +105,7 @@ $connection = $_SESSION['connection'];
                         <?php global $amount_kajaks ?>
                         <div class="col-md-6">
                             <img alt="Bild eines einzelnen Kajaks" src="/resources/images/einzelKajak.png"
-                                 class="img-fluid" style="width: 300px; height: 200px;" />
+                                 class="img-fluid" style="width: 300px; height: 200px;"/>
                             <div class="form-group form-floating">
                                 <input type="number" max="<?php echo $amount_kajaks["single_kajak"] ?>"
                                        min="0" id="single-kajak" value="0"
@@ -150,7 +150,7 @@ $connection = $_SESSION['connection'];
                     </div>
                     <div class="row">
                         <div class="col">
-                            <input type="submit" value="Anfrage senden" class="btn btn-primary submit-btn"/>
+                            <button type="submit" class="btn custom-btn">Anfrage senden</button>
                         </div>
                     </div>
                 </form>
@@ -175,9 +175,9 @@ $connection = $_SESSION['connection'];
             </div>
         </div>
         </div>
-        <div class="col-lg-5 me-auto">
-            <div class="header-wrapper">
-                <h2 class="primary">Was bieten wir an?</h2>
+        <div class="col-lg-3 me-auto">
+            <div class="text-light header-wrapper">
+                <h2>Was bieten wir an?</h2>
                 <p>
                     Wir bieten für die HTWG Konstanz und für Universität Konstanz die Möglichkeit, Kajaks zu
                     reservieren.
