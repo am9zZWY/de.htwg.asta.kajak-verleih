@@ -13,9 +13,11 @@ require __DIR__ . '/scripts/script_login.php';
 require __DIR__ . '/scripts/script_reservation.php';
 require __DIR__ . '/scripts/script_template_helpers.php';
 require __DIR__ . '/scripts/script_email.php';
+require __DIR__ . '/scripts/script_errors.php';
 
 /* If session is not set start it */
 session_start();
+
 
 /* Get the current address because index.php acts as a router */
 $URL = $_SERVER['REQUEST_URI'];
@@ -61,6 +63,8 @@ if (is_logged_in()) {
             require("pages/user/impressum.php");
         } else if ($PARSED_URL === '/login') {
             require("pages/admin/page_admin_login.php");
+        } else if ($PARSED_URL === '/storno') {
+            require("pages/user/page_user_storno.php");
         } else if ($PARSED_URL === '/') {
             require("pages/user/page_user_reservation.php");
         }
