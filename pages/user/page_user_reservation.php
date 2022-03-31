@@ -72,7 +72,6 @@ $connection = $_SESSION['connection'];
                                             <?php echo $day[0] ?>
                                         </option>
                                     <?php } ?>
-
                                 </select>
                                 <label for="date">
                                     Datum
@@ -99,7 +98,6 @@ $connection = $_SESSION['connection'];
                                     <p>Ein Zeitslot kostet <b>p.P. 5€</b><br>
                                         Beide Zeitslots kosten <b>p.P. 8€</b></p>
                                 </div>
-                            </div>
                         </div>
                     </div>
 
@@ -131,6 +129,25 @@ $connection = $_SESSION['connection'];
                         </div>
                     </div>
 
+                    <div class="row my-2">
+                        <div class="col-md-6">
+                        <checkbox>
+                            <label>
+                                <input type="checkbox" name="Studi" value="1" required
+                                       class="form-check-input">
+                                <p><b>Hiermit bestätige ich das eine Studierenden Person an der HTWG Konstanz oder der Universität Konstanz bin</b>.</p>
+                            </label>
+                        </checkbox>
+                        </div>
+                        <div class="col-md-6">
+                            <checkbox>
+                                <label>
+                                    <input type="checkbox" name="terms" value="1" required class="form-check-input">
+                                    <b>Ich habe die <a href="about.php">Nutzungsbedingungen</a> gelesen und akzeptiere sie.</b>
+                                </label>
+                            </checkbox>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col">
                             <input type="submit" value="Anfrage senden" class="btn btn-primary submit-btn"/>
@@ -156,6 +173,7 @@ $connection = $_SESSION['connection'];
                 }
                 ?>
             </div>
+        </div>
         </div>
         <div class="col-lg-5 me-auto">
             <div class="header-wrapper">
