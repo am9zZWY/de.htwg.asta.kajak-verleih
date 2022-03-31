@@ -7,7 +7,7 @@
 
 
 </div>
-<div id="main">
+<div id="main" style="background-color: white">
     <span style="font-size:30px;background-color: transparent ;cursor:pointer" onclick="openNav()">&#9776; AStA</span>
 </div>
 <script lang="javascript">
