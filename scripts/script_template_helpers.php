@@ -12,7 +12,7 @@ function create_header(string $header, string $link = '', bool $echo = true): st
 {
     $created_header = "
     <div class='header-wrapper'>
-        <a href='{$link}' class='primary text-decoration-none'>
+        <a href='{$link}' class='text-light text-decoration-none'>
             <h1>
                 {$header}
             </h1>
