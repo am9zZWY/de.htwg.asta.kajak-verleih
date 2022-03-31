@@ -6,19 +6,19 @@
     <a href="/about">Info</a>
     <a href="/impressum">Impressum</a>
 </div>
-<div id="main">
-    <span style="font-size:30px;background-color: transparent;cursor:pointer" onclick="openNav()">&#9776; AStA</span>
+<div id="burger" class="sidenav-burger">
+    <span style="font-size:30px;background-color: transparent;cursor:pointer" onclick="openNav()">&#9776;</span>
 </div>
 <script lang="javascript">
     function openNav() {
         document.getElementById("mySidenav").style.width = "250px";
-        document.getElementById("main").style.marginLeft = "250px";
+        document.getElementById("burger").style.marginLeft = "250px";
         document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
     }
 
     function closeNav() {
         document.getElementById("mySidenav").style.width = "0";
-        document.getElementById("main").style.marginLeft = "0";
+        document.getElementById("burger").style.marginLeft = "0";
         document.body.style.backgroundColor = "white";
     }
 
