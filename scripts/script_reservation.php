@@ -101,7 +101,8 @@ CREATE TABLE IF NOT EXISTS reservations
     to_time      TIME            NOT NULL,
     single_kajak NUMERIC         NOT NULL,
     double_kajak NUMERIC         NOT NULL,
-    archived    BOOLEAN          NOT NULL DEFAULT FALSE,
+    archived     BOOLEAN         NOT NULL DEFAULT FALSE,
+    cancelled    BOOLEAN         NOT NULL DEFAULT FALSE,
     CONSTRAINT NAME_CHECK CHECK (REGEXP_LIKE(name, '^[A-ZäÄöÖüÜa-z]+ [A-ZäÄöÖüÜa-z]+$'))
 )");
     $sql->execute();

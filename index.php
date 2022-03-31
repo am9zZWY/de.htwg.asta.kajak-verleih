@@ -47,7 +47,7 @@ if (logged_in()) {
 }
 ?>
 <div class="bg">
-    <div class="section-center">
+    <div class="section-center" >
         <?php
         if ($PARSED_URL === '/about') {
             require("pages/user/about.php");
