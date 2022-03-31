@@ -247,7 +247,7 @@ function reservate_kajak($conn, $fields, bool $send_email = false): bool|string
     $timeslot = clean_array($fields['timeslots'] ?? []);
 
     /* Check if timeslot is selected */
-    if (count($timeslot) === 0) {
+    if (empty($timeslot)) {
         return $ERROR_TIMESLOT_NOT_SELECTED;
     }
 
