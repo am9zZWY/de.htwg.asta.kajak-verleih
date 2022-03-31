@@ -1,5 +1,18 @@
 /********************************* LAYOUT ***********************************/
 
+body{
+    background-image: url("../resources/images/booking-bg.jpg");
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed ;
+    background-size: cover;
+}
+
+.bg{
+    background: transparent;
+}
 .section {
     position: relative;
     height: 100vh;
@@ -16,26 +29,9 @@
     color: black;
 }
 
-.bg {
-    /* The image used */
-    background-image: url("../resources/images/booking-bg.jpg");
-
-    /* Full height */
-    height: 100%;
-
-    /* Center and scale the image nicely */
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-
 #booking {
     font-family: 'Montserrat', sans-serif;
-    background-image: url("../resources/images/booking-bg.jpg");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    height: 100%;
+
 }
 
 #booking::before {
@@ -155,7 +151,7 @@
 
 #main {
     transition: margin-left .5s;
-    margin: 16px;
+    padding: 16px;
 }
 
 @media screen and (max-height: 450px) {
