@@ -31,9 +31,17 @@ $connection = connect_to_database();
 $_SESSION['connection'] = $connection;
 prepare_reservation_table($connection);
 
-include 'templates/template_head.php'
 ?>
+<!DOCTYPE html>
 <html lang="de" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Kajak Verleihsystem des AStA der HTWG Konstanz">
+    <link rel="stylesheet" href="/css/custom.css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <title>Kajak Verleihsystem von Coolen Typen</title>
+</head>
 <body>
 <?php
 if (is_logged_in()) {
@@ -43,7 +51,7 @@ if (is_logged_in()) {
 }
 ?>
 <div>
-    <div class="section-center" >
+    <div class="section-center">
         <?php
         if ($PARSED_URL === '/about') {
             require("pages/user/about.php");
@@ -67,7 +75,6 @@ if (is_logged_in()) {
 
         ?>
     </div>
-
 </div>
 </body>
 </html>
