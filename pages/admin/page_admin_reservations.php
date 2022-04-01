@@ -5,7 +5,7 @@ $conn = connect_to_database();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['delete_items'], $_POST['id'])) {
         $ids = clean_array($_POST['id']);
-        delete_reservation($conn, $ids);
+        archive_reservation($conn, $ids);
     } else if (isset($_POST['delete_all'])) {
         drop_table($conn);
     }
