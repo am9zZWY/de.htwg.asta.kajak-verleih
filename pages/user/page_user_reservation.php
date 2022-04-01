@@ -13,6 +13,7 @@ $connection = $_SESSION['connection'];
                             <div class="col-sm-6">
                                 <div class="mb-3 form-floating">
                                     <input name="name" type="text" placeholder="Max"
+                                           value="<?php echo get_post_field('name') ?>"
                                            id="name"
                                            class="form-control"
                                            required>
@@ -24,7 +25,9 @@ $connection = $_SESSION['connection'];
 
                             <div class="col-sm-6">
                                 <div class="mb-3 form-floating">
-                                    <input name="surname" type="text" placeholder="Mustermann" id="surname"
+                                    <input name="surname" type="text" placeholder="Mustermann"
+                                           value="<?php echo get_post_field('surname') ?>"
+                                           id="surname"
                                            class="form-control"
                                            required>
                                     <label for="surname">
@@ -38,6 +41,7 @@ $connection = $_SESSION['connection'];
                             <div class="col-sm-6">
                                 <div class="mb-3 form-floating">
                                     <input name="email" type="email" placeholder="ma391mus@htwg-konstanz.de"
+                                           value="<?php echo get_post_field('email') ?>"
                                            id="email"
                                            class="form-control"
                                            required>
@@ -49,7 +53,9 @@ $connection = $_SESSION['connection'];
 
                             <div class="col-sm-6">
                                 <div class="mb-3 form-floating">
-                                    <input name="phone" type="tel" placeholder="+49 (0) 123 456789" id="phone"
+                                    <input name="phone" type="tel" placeholder="+49 (0) 123 456789"
+                                           value="<?php echo get_post_field('phone') ?>"
+                                           id="phone"
                                            class="form-control"
                                            required>
                                     <label for="phone">
@@ -106,7 +112,7 @@ $connection = $_SESSION['connection'];
                                 <div class="col-md-6">
                                     <div class="form-group form-floating">
                                         <input type="number" max="<?php echo $amount_kajaks["single_kajak"] ?>"
-                                               min="0" id="single-kajak" value="0"
+                                               min="0" id="single-kajak" value="<?php echo get_post_field('single-kajak', 0) ?>"
                                                name="single-kajak" class="form-control"/>
                                         <label class="form-check-label" for="single-kajak">
                                             Anzahl 1-Sitz Kajaks
@@ -117,7 +123,7 @@ $connection = $_SESSION['connection'];
                                     <div class="form-group form-floating">
                                         <input type="number" max="<?php echo $amount_kajaks["double_kajak"] ?>"
                                                min="0"
-                                               id="double-kajak" value="0"
+                                               id="double-kajak" value="<?php echo get_post_field('double-kajak', 0) ?>"
                                                name="double-kajak" class="form-control"/>
                                         <label class="form-check-label" for="double-kajak">
                                             Anzahl 2-Sitz Kajaks
@@ -129,7 +135,7 @@ $connection = $_SESSION['connection'];
                             <div class="row my-2">
                                 <div class="col-md-6">
                                     <label>
-                                        <input type="checkbox" name="is_studi" value="1" required
+                                        <input type="checkbox" name="is_studi" value="1" required <?php echo get_post_field('is_studi') === '1' ? 'checked' : '' ?>
                                                class="form-check-input">
                                         Hiermit bestätige ich, dass ich eine studierende Person an der HTWG
                                         Konstanz oder der Universität Konstanz bin.
@@ -137,7 +143,7 @@ $connection = $_SESSION['connection'];
                                 </div>
                                 <div class="col-md-6">
                                     <label>
-                                        <input type="checkbox" name="terms" value="1" required
+                                        <input type="checkbox" name="terms" value="1" required <?php echo get_post_field('terms') === '1' ? 'checked' : '' ?>
                                                class="form-check-input">
                                         Ich habe die <a href="/about">Nutzungsbedingungen</a> gelesen und
                                         akzeptiere sie.
