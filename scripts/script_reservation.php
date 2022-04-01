@@ -1,12 +1,6 @@
 <?php
 // CONFIG
 
-// config for the database
-$servername = get_env('MYSQL_SERVER');
-$username = get_env('MYSQL_USERNAME');
-$password = get_env('MYSQL_PASSWORD');
-$dbname = get_env('MYSQL_DATABASE');
-
 // all weekdays in german
 $newLocal = setlocale(LC_ALL, 'de_DE', 'de_DE.UTF-8');
 // add two days to start date
@@ -27,18 +21,9 @@ $amount_kajaks = array("single_kajak" => 4, "double_kajak" => 2);
 // weekdays in german
 $weekdays = array("Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag");
 
-// Error messages
-$ERROR_TIMESLOT_NOT_SELECTED = "Bitte wähle eine Zeit aus.";
-$ERROR_KAJAK_TYPE_NOT_FOUND = "Kajaktyp nicht gefunden";
-$ERROR_SINGLE_KAJAK_NOT_AVAILABLE = "Einzelkajak nicht verfügbar";
-$ERROR_DOUBLE_KAJAK_NOT_AVAILABLE = "Doppelkajak nicht verfügbar";
-$ERROR_KAJAK_NOT_AVAILABLE = "Kajaks nicht verfügbar";
-$ERROR_KAJAK_NOT_SELECTED = "Bitte wähle einen Kajak aus.";
-$ERROR_GENERAL = "Ein Fehler ist aufgetreten.";
-$ERROR_MAIL_NOT_SENT = "E-Mail konnte nicht versendet werden.";
-
 /**
- * Returns the next max_days weekdays in a string
+ * Returns the next max_days weekdays in a string.
+ *
  * @return array<string>
  */
 
@@ -62,14 +47,18 @@ function get_days(): array
 }
 
 /**
- * Create connection to mysql database
- * Returns connection object if successful
+ * Create connection to mysql database.
+ * Returns connection object if successful.
  *
  * @return mysqli|void
  */
 function connect_to_database()
 {
-    global $servername, $username, $password, $dbname;
+    /* credentials to connect to database */
+    $servername = get_env('MYSQL_SERVER');
+    $username = get_env('MYSQL_USERNAME');
+    $password = get_env('MYSQL_PASSWORD');
+    $dbname = get_env('MYSQL_DATABASE');
 
     /* Create connection */
     $conn = new mysqli($servername, $username, $password, $dbname);
@@ -96,7 +85,9 @@ CREATE TABLE IF NOT EXISTS reservations
     name         VARCHAR(30)     NOT NULL,
     email        VARCHAR(50)     NOT NULL,
     phone        VARCHAR(20)     NOT NULL,
+    address      VARCHAR(80)     NOT NULL,
     date         DATE            NOT NULL,
+    reservation_date DATE        NOT NULL,
     from_time    TIME            NOT NULL,
     to_time      TIME            NOT NULL,
     single_kajak NUMERIC         NOT NULL,
@@ -108,6 +99,12 @@ CREATE TABLE IF NOT EXISTS reservations
     $sql->execute();
 }
 
+/**
+ * Get all reservations from database.
+ *
+ * @param $conn
+ * @return array
+ */
 function get_reservations($conn): array
 {
     $sql = $conn->prepare("Select * From reservations WHERE date >=current_Date() Order BY Date ASC;");
@@ -118,6 +115,7 @@ function get_reservations($conn): array
 
 /**
  * USE WITH CAUTION!
+ * USED BY ADMIN.
  *
  * Drops the reservation table.
  *
@@ -131,7 +129,8 @@ function drop_table($conn)
 }
 
 /**
- * Returns the amount of kajaks of a kajak type
+ * Returns the amount of kajaks of a kajak type.
+ *
  * @param $conn
  * @param $date
  * @param $timeslot
@@ -201,10 +200,13 @@ function check_if_kajak_available($conn, $date, $timeslot, string $kajak, int $r
  */
 function insert_reservation($conn, $name, $email, $phone, $date, $timeslot, $kajaks): bool
 {
+    $reservation_date = date('Y-m-d');
+    $address = '';
+
     try {
-        $sql = $conn->prepare("INSERT INTO reservations (name, email, phone, date, from_time, to_time, single_kajak, double_kajak)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        $sql->bind_param('ssssssss', $name, $email, $phone, $date, $timeslot[0], $timeslot[1], $kajaks[0], $kajaks[1]);
+        $sql = $conn->prepare("INSERT INTO reservations (name, email, phone, date, address, reservation_date, from_time, to_time, single_kajak, double_kajak)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $sql->bind_param('ssssssssss', $name, $email, $phone, $date, $address, $reservation_date, $timeslot[0], $timeslot[1], $kajaks[0], $kajaks[1]);
         return $sql->execute();
     } catch (Exception $e) {
         return false;
@@ -212,20 +214,7 @@ function insert_reservation($conn, $name, $email, $phone, $date, $timeslot, $kaj
 }
 
 /**
- * Delete reservations by id.
- *
- * @param $conn
- * @param $ids
- * @return void
- */
-function delete_reservation($conn, $ids)
-{
-    $sql = "DELETE FROM reservations WHERE id IN(" . implode(',', $ids) . ")";
-    $conn->query($sql);
-}
-
-/**
- * Main function to reservate a kajak
+ * Reservate a kajak.
  *
  * @param $conn
  * @param $fields
@@ -235,7 +224,7 @@ function delete_reservation($conn, $ids)
 function reservate_kajak($conn, $fields, bool $send_email = false): bool|string
 {
     global $timeslots;
-    global $ERROR_GENERAL, $ERROR_KAJAK_NOT_AVAILABLE, $ERROR_SINGLE_KAJAK_NOT_AVAILABLE, $ERROR_DOUBLE_KAJAK_NOT_AVAILABLE, $ERROR_KAJAK_NOT_SELECTED, $ERROR_TIMESLOT_NOT_SELECTED, $ERROR_MAIL_NOT_SENT;
+    global $ERROR_RESERVATION, $ERROR_RESERVATION_KAJAK_NOT_AVAILABLE, $ERROR_RESERVATION_SINGLE_KAJAK_NOT_AVAILABLE, $ERROR_RESERVATION_DOUBLE_KAJAK_NOT_AVAILABLE, $ERROR_RESERVATION_KAJAK_NOT_SELECTED, $ERROR_RESERVATION_TIMESLOT_NOT_SELECTED, $ERROR_MAIL_NOT_SENT;
 
     $name = clean_string($fields["name"]);
     $surname = clean_string($fields["surname"]);
@@ -247,8 +236,8 @@ function reservate_kajak($conn, $fields, bool $send_email = false): bool|string
     $timeslot = clean_array($fields['timeslots'] ?? []);
 
     /* Check if timeslot is selected */
-    if (count($timeslot) === 0) {
-        return $ERROR_TIMESLOT_NOT_SELECTED;
+    if (empty($timeslot)) {
+        return $ERROR_RESERVATION_TIMESLOT_NOT_SELECTED;
     }
 
     /* Prepare timeslot */
@@ -267,26 +256,26 @@ function reservate_kajak($conn, $fields, bool $send_email = false): bool|string
 
     if (!$single_kajak_available && !$double_kajak_available) {
         /* Check if kajaks are available */
-        return $ERROR_KAJAK_NOT_AVAILABLE;
+        return $ERROR_RESERVATION_KAJAK_NOT_AVAILABLE;
     }
 
     if (!$single_kajak_available) {
         /* Check if reservation is available for single kajaks */
-        return $ERROR_SINGLE_KAJAK_NOT_AVAILABLE;
+        return $ERROR_RESERVATION_SINGLE_KAJAK_NOT_AVAILABLE;
     }
 
     if (!$double_kajak_available) {
         /* Check if reservation is available for double kajaks */
-        return $ERROR_DOUBLE_KAJAK_NOT_AVAILABLE;
+        return $ERROR_RESERVATION_DOUBLE_KAJAK_NOT_AVAILABLE;
     }
 
     if ($amount_single_kajak === 0 && $amount_double_kajak === 0) {
         /* Check if any kajak is selected */
-        return $ERROR_KAJAK_NOT_SELECTED;
+        return $ERROR_RESERVATION_KAJAK_NOT_SELECTED;
     }
 
     if (insert_reservation($conn, $fullname, $email, $phone, $date, $timeslot, $amount_kajaks) === false) {
-        return $ERROR_GENERAL;
+        return $ERROR_RESERVATION;
     }
 
     if ($send_email) {
@@ -296,4 +285,57 @@ function reservate_kajak($conn, $fields, bool $send_email = false): bool|string
         }
     }
     return true;
+}
+
+
+/**
+ * Delete reservations by id.
+ * USED BY ADMIN.
+ *
+ * @param $conn
+ * @param $ids
+ * @return void
+ */
+function archive_reservation($conn, $ids)
+{
+    $sql = "UPDATE reservations SET archived = TRUE WHERE id IN (" . implode(',', $ids) . ")";
+    $conn->query($sql);
+}
+
+/**
+ * Cancel reservation by id.
+ *
+ * @param $conn
+ * @param $fields
+ * @param bool $send_email
+ * @return string
+ */
+function cancel_reservation($conn, $fields, bool $send_email = false): string
+{
+    global $ERROR_CANCELLATION, $ERROR_CANCELLATION_NOT_FOUND, $INFO_CANCELLATION_CANCELED;
+
+    /* prepare values */
+    $reservation_id = clean_string($fields['id']);
+    $email = clean_string($fields['email']);
+
+    /* check if reservation exists and is valid */
+    $sql = $conn->prepare("SELECT COUNT(*) as amount FROM reservations WHERE id = ? AND email = ? AND cancelled = 0 AND archived = 0");
+    $sql->bind_param('ss', $reservation_id, $email);
+    $sql->execute();
+    $result = $sql->get_result();
+    $amount = $result->fetch_assoc()["amount"];
+
+    /* if reservation does not exist it might be already cancelled */
+    if ($amount === null || (int) $amount === 0) {
+        return $ERROR_CANCELLATION_NOT_FOUND;
+    }
+
+    /* cancel reservation */
+    $sql = $conn->prepare("UPDATE reservations SET cancelled = TRUE WHERE id = ?");
+    $sql->bind_param('s', $reservation_id);
+    if ($sql->execute()) {
+        return $INFO_CANCELLATION_CANCELED;
+    }
+
+    return $ERROR_CANCELLATION;
 }

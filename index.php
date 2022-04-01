@@ -13,9 +13,11 @@ require __DIR__ . '/scripts/script_login.php';
 require __DIR__ . '/scripts/script_reservation.php';
 require __DIR__ . '/scripts/script_template_helpers.php';
 require __DIR__ . '/scripts/script_email.php';
+require __DIR__ . '/scripts/script_errors.php';
 
 /* If session is not set start it */
 session_start();
+
 
 /* Get the current address because index.php acts as a router */
 $URL = $_SERVER['REQUEST_URI'];
@@ -31,9 +33,17 @@ $connection = connect_to_database();
 $_SESSION['connection'] = $connection;
 prepare_reservation_table($connection);
 
-include 'templates/template_head.php'
 ?>
+<!DOCTYPE html>
 <html lang="de" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Kajak Verleihsystem des AStA der HTWG Konstanz">
+    <link rel="stylesheet" href="/css/custom.css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <title>Kajak Verleihsystem von Coolen Typen</title>
+</head>
 <body>
 <?php
 if (is_logged_in()) {
@@ -43,7 +53,7 @@ if (is_logged_in()) {
 }
 ?>
 <div>
-    <div class="section-center" >
+    <div class="section-center">
         <?php
         if ($PARSED_URL === '/about') {
             require("pages/user/about.php");
@@ -53,6 +63,8 @@ if (is_logged_in()) {
             require("pages/user/impressum.php");
         } else if ($PARSED_URL === '/login') {
             require("pages/admin/page_admin_login.php");
+        } else if ($PARSED_URL === '/storno') {
+            require("pages/user/page_user_storno.php");
         } else if ($PARSED_URL === '/') {
             require("pages/user/page_user_reservation.php");
         }
@@ -67,7 +79,6 @@ if (is_logged_in()) {
 
         ?>
     </div>
-
 </div>
 </body>
 </html>
