@@ -10,7 +10,7 @@ function send_reservation_email(string $name, string $email_address_to, array $k
     $formatted_timeslot_to = date('H:i', strtotime($timeslot[1]));
 
     return send_mail($email_address_to, "Reservierungsbestätigung Kajak am $formatted_date", "
-        <b>Hallo $name,</b>
+        Hallo $name,
         <p>
             Du hast am $formatted_date von $formatted_timeslot_from bis $formatted_timeslot_to Uhr eine Reservierung für folgende Kajaks:<br/>
             <ul>
@@ -18,9 +18,9 @@ function send_reservation_email(string $name, string $email_address_to, array $k
                 <li>Doppelkajak: $kajaks[1] Stück</li>
             </ul>
         </p>
-        <b>
+        <strong>
             <u>Bitte antworte auf diese E-Mail</u>, falls du die Reservierung stornieren möchtest.
-        </b>
+        </strong>
     ");
 }
 
@@ -52,7 +52,7 @@ function send_mail(string $email_address_to, string $subject, string $body): boo
         $mail->Username = get_env('MAIL_USERNAME');
         $mail->Password = get_env('MAIL_PASSWORD');
 
-        $mail->setFrom($email_address, 'Kajak Reservation');
+        $mail->setFrom($email_address, 'AStA Kajak-Reservierungsservice');
         $mail->addAddress($email_address_to);
 
         $mail->isHTML(true);
