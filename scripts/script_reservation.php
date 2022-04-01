@@ -50,10 +50,12 @@ function get_days(): array
  * Create connection to mysql database.
  * Returns connection object if successful.
  *
- * @return mysqli|void
+ * @return mysqli|null
  */
-function connect_to_database()
+function connect_to_database(): ?mysqli
 {
+    global $ERROR_DATABASE_CONNECTION;
+
     /* credentials to connect to database */
     $servername = get_env('MYSQL_SERVER');
     $username = get_env('MYSQL_USERNAME');
@@ -61,10 +63,16 @@ function connect_to_database()
     $dbname = get_env('MYSQL_DATABASE');
 
     /* Create connection */
-    $conn = new mysqli($servername, $username, $password, $dbname);
-    /* Check connection */
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+    try {
+        $conn = new mysqli($servername, $username, $password, $dbname);
+        /* Check connection */
+        if ($conn->connect_error) {
+            echo $ERROR_DATABASE_CONNECTION;
+            return null;
+        }
+    } catch (Exception) {
+        echo $ERROR_DATABASE_CONNECTION;
+        return null;
     }
 
     return $conn;
@@ -78,6 +86,13 @@ function connect_to_database()
  */
 function prepare_reservation_table($conn)
 {
+    global $ERROR_DATABASE_CONNECTION;
+
+    if ($conn === null) {
+        echo $ERROR_DATABASE_CONNECTION;
+        return;
+    }
+
     $sql = $conn->prepare("
 CREATE TABLE IF NOT EXISTS reservations
 (
@@ -107,6 +122,13 @@ CREATE TABLE IF NOT EXISTS reservations
  */
 function get_reservations($conn): array
 {
+    global $ERROR_DATABASE_CONNECTION;
+
+    if ($conn === null) {
+        echo $ERROR_DATABASE_CONNECTION;
+        return [];
+    }
+
     $sql = $conn->prepare("Select * From reservations WHERE date >=current_Date() Order BY Date ASC;");
     $sql->execute();
     $result = $sql->get_result();
@@ -140,6 +162,13 @@ function drop_table($conn)
  */
 function check_if_kajak_available($conn, $date, $timeslot, string $kajak, int $requested_amount): bool
 {
+    global $ERROR_DATABASE_CONNECTION;
+
+    if ($conn === null) {
+        echo $ERROR_DATABASE_CONNECTION;
+        return false;
+    }
+
     global $amount_kajaks;
 
     if (!array_key_exists($kajak, $amount_kajaks) || ($requested_amount > $amount_kajaks[$kajak])) {
@@ -200,6 +229,13 @@ function check_if_kajak_available($conn, $date, $timeslot, string $kajak, int $r
  */
 function insert_reservation($conn, $name, $email, $phone, $date, $timeslot, $kajaks): bool
 {
+    global $ERROR_DATABASE_CONNECTION;
+
+    if ($conn === null) {
+        echo $ERROR_DATABASE_CONNECTION;
+        return false;
+    }
+
     $reservation_date = date('Y-m-d');
     $address = '';
 
@@ -223,6 +259,12 @@ function insert_reservation($conn, $name, $email, $phone, $date, $timeslot, $kaj
  */
 function reservate_kajak($conn, $fields, bool $send_email = false): bool|string
 {
+    global $ERROR_DATABASE_CONNECTION;
+
+    if ($conn === null) {
+        return $ERROR_DATABASE_CONNECTION;
+    }
+
     global $timeslots;
     global $ERROR_RESERVATION, $ERROR_RESERVATION_KAJAK_NOT_AVAILABLE, $ERROR_RESERVATION_SINGLE_KAJAK_NOT_AVAILABLE, $ERROR_RESERVATION_DOUBLE_KAJAK_NOT_AVAILABLE, $ERROR_RESERVATION_KAJAK_NOT_SELECTED, $ERROR_RESERVATION_TIMESLOT_NOT_SELECTED, $ERROR_MAIL_NOT_SENT;
 
@@ -298,6 +340,13 @@ function reservate_kajak($conn, $fields, bool $send_email = false): bool|string
  */
 function archive_reservation($conn, $ids)
 {
+    global $ERROR_DATABASE_CONNECTION;
+
+    if ($conn === null) {
+        echo $ERROR_DATABASE_CONNECTION;
+        return;
+    }
+
     $sql = "UPDATE reservations SET archived = TRUE WHERE id IN (" . implode(',', $ids) . ")";
     $conn->query($sql);
 }
@@ -312,6 +361,12 @@ function archive_reservation($conn, $ids)
  */
 function cancel_reservation($conn, $fields, bool $send_email = false): string
 {
+    global $ERROR_DATABASE_CONNECTION;
+
+    if ($conn === null) {
+        return $ERROR_DATABASE_CONNECTION;
+    }
+
     global $ERROR_CANCELLATION, $ERROR_CANCELLATION_NOT_FOUND, $INFO_CANCELLATION_CANCELED;
 
     /* prepare values */
@@ -326,7 +381,7 @@ function cancel_reservation($conn, $fields, bool $send_email = false): string
     $amount = $result->fetch_assoc()["amount"];
 
     /* if reservation does not exist it might be already cancelled */
-    if ($amount === null || (int) $amount === 0) {
+    if ($amount === null || (int)$amount === 0) {
         return $ERROR_CANCELLATION_NOT_FOUND;
     }
 
