@@ -3,19 +3,19 @@ create_header('How to Admin');
 ?>
 <div class="container">
     <div class="row">
-        <button class="accordion"><b>Stornieren</b></button>
+        <button class="accordion"><strong>Stornieren</strong></button>
         <div class="panel">
             <p>Lorem ipsum..</p>
         </div>
-        <button class="accordion"><b>Zeitslot blockieren</b></button>
+        <button class="accordion"><strong>Zeitslot blockieren</strong></button>
         <div class="panel">
             <p>test ipsum..</p>
         </div>
-        <button class="accordion"><b>Zeitslots ändern</b></button>
+        <button class="accordion"><strong>Zeitslots ändern</strong></button>
         <div class="panel">
             <p>test ipsum..</p>
         </div>
-        <button class="accordion"><b>Sonstiges</b></button>
+        <button class="accordion"><strong>Sonstiges</strong></button>
         <div class="panel">
             <h1>Du bist Dumm!</h1>
             <button class="accordion">Wirklich Sonstiges</button>
