@@ -1,6 +1,9 @@
 <?php
 /********************************* Error messages *********************************/
 
+/* Database */
+$ERROR_DATABASE_CONNECTION = "Konnte keine Verbindung zur Datenbank herstellen. Läuft diese überhaupt?";
+
 /* Form reservation */
 $ERROR_RESERVATION_TIMESLOT_NOT_SELECTED = "Bitte wähle eine Zeit aus.";
 $ERROR_RESERVATION_KAJAK_TYPE_NOT_FOUND = "Kajaktyp nicht gefunden";
