@@ -4,20 +4,24 @@
  * Helper function to create header.
  *
  * @param string $header
- * @param string $link
+ * @param string|null $link
  * @param bool $echo
  * @return string
  */
-function create_header(string $header, string $link = '', bool $echo = true): string
+function create_header(string $header, string|null $link = null, bool $echo = true): string
 {
     $created_header = "
-    <div class='header-wrapper'>
-        <a href='{$link}' class='text-light text-decoration-none'>
+    <div class='header-wrapper'>" .
+        ($link === null ?
+            "<h1 class='text-light'>
+            {$header}
+        </h1>" :
+            "<a href = '{$link}' class='text-light text-decoration-none'>
             <h1>
                 {$header}
             </h1>
         </a>
-    </div>";
+") . "</div> ";
 
     if ($echo) {
         echo $created_header;
