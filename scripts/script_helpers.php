@@ -62,3 +62,14 @@ function get_env(string $key, string $default = ''): string
 {
     return $_ENV[$key] ?? $default;
 }
+
+/**
+ * Get field from POST request.
+ *
+ * @param string $field
+ * @param mixed $default
+ * @return mixed
+ */
+function get_post_field(string $field, mixed $default = ''): mixed {
+    return clean_string($_POST[$field] ?? $default);
+}
