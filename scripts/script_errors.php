@@ -16,4 +16,4 @@ $ERROR_MAIL_NOT_SENT = "E-Mail konnte nicht versendet werden.";
 /* Cancellation */
 $INFO_CANCELLATION_CANCELED = "Reservierung wurde storniert.";
 $ERROR_CANCELLATION = "Reservierung konnte nicht storniert werden.";
-$ERROR_CANCELLATION_EMAIL_WRONG = "E-Mail stimmt nicht überein.";
+$ERROR_CANCELLATION_NOT_FOUND = "Reservierung wurde nicht gefunden.";
