@@ -63,8 +63,8 @@ if (is_logged_in()) {
             require("pages/user/impressum.php");
         } else if ($PARSED_URL === '/login') {
             require("pages/admin/page_admin_login.php");
-        } else if ($PARSED_URL === '/storno') {
-            require("pages/user/page_user_storno.php");
+        } else if ($PARSED_URL === '/cancel') {
+            require("pages/user/page_user_cancel.php");
         } else if ($PARSED_URL === '/') {
             require("pages/user/page_user_reservation.php");
         }
@@ -80,5 +80,6 @@ if (is_logged_in()) {
         ?>
     </div>
 </div>
+<?php require("templates/template_footer.php"); ?>
 </body>
 </html>
