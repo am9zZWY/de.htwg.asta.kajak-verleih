@@ -33,6 +33,9 @@ function get_days(): array
 
     /* Create starting date */
     $date = date_create();
+    if ($date === false) {
+        return [''];
+    }
     date_add($date, new DateInterval("P${min_day}D"));
 
     $days = array();
@@ -52,7 +55,7 @@ function get_days(): array
  *
  * @return mysqli|null
  */
-function connect_to_database(): ?mysqli
+function connect_to_database(): mysqli|null
 {
     global $ERROR_DATABASE_CONNECTION;
 
@@ -81,16 +84,15 @@ function connect_to_database(): ?mysqli
 /**
  * Creates the reservation table if it doesn't exist.
  *
- * @param $conn
- * @return void
+ * @param mysqli|null $conn
+ * @return string|bool
  */
-function prepare_reservation_table($conn)
+function prepare_reservation_table(mysqli|null $conn): string|bool
 {
-    global $ERROR_DATABASE_CONNECTION;
+    global $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY;
 
     if ($conn === null) {
-        echo $ERROR_DATABASE_CONNECTION;
-        return;
+        return $ERROR_DATABASE_CONNECTION;
     }
 
     $sql = $conn->prepare("
@@ -111,16 +113,21 @@ CREATE TABLE IF NOT EXISTS reservations
     cancelled        BOOLEAN         NOT NULL DEFAULT FALSE,
     CONSTRAINT NAME_CHECK CHECK (REGEXP_LIKE(name, '^[A-ZäÄöÖüÜßa-z]+ [A-ZäÄöÖüÜßa-z]+$'))
 )");
-    $sql->execute();
+
+    if ($sql === false) {
+        return $ERROR_DATABASE_QUERY;
+    }
+
+    return $sql->execute();
 }
 
 /**
  * Get all reservations from database.
  *
- * @param $conn
- * @return array
+ * @param mysqli|null $conn
+ * @return array<string>
  */
-function get_reservations($conn): array
+function get_reservations(mysqli|null $conn): array
 {
     global $ERROR_DATABASE_CONNECTION;
 
@@ -129,7 +136,7 @@ function get_reservations($conn): array
         return [];
     }
 
-    $sql = $conn->prepare("Select * From reservations WHERE date >=current_Date() Order BY Date ASC;");
+    $sql = $conn->prepare("Select * From reservations WHERE date >=current_Date() Order BY Date;");
     $sql->execute();
     $result = $sql->get_result();
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -141,10 +148,10 @@ function get_reservations($conn): array
  *
  * Drops the reservation table.
  *
- * @param $conn
+ * @param mysqli $conn
  * @return void
  */
-function drop_table($conn)
+function drop_table(mysqli $conn)
 {
     $sql = $conn->prepare("DROP TABLE reservations");
     $sql->execute();
@@ -153,14 +160,14 @@ function drop_table($conn)
 /**
  * Returns the amount of kajaks of a kajak type.
  *
- * @param $conn
- * @param $date
- * @param $timeslot
+ * @param mysqli|null $conn
+ * @param string $date
+ * @param array<string> $timeslot
  * @param string $kajak
  * @param int $requested_amount
  * @return bool
  */
-function check_if_kajak_available($conn, $date, $timeslot, string $kajak, int $requested_amount): bool
+function check_if_kajak_available(mysqli|null $conn, string $date, array $timeslot, string $kajak, int $requested_amount): bool
 {
     global $ERROR_DATABASE_CONNECTION;
 
@@ -220,16 +227,16 @@ function check_if_kajak_available($conn, $date, $timeslot, string $kajak, int $r
 /**
  * Insert reservation into database.
  *
- * @param $conn
- * @param $name
- * @param $email
- * @param $phone
- * @param $date
- * @param $timeslot
- * @param $kajaks
+ * @param mysqli|null $conn
+ * @param string $name
+ * @param string $email
+ * @param string $phone
+ * @param string $date
+ * @param array<string> $timeslot
+ * @param array<string> $kajaks
  * @return bool|string
  */
-function insert_reservation($conn, $name, $email, $phone, $date, $timeslot, $kajaks): bool|string
+function insert_reservation(mysqli|null $conn, string $name, string $email, string $phone, string $date, array $timeslot, array $kajaks): bool|string
 {
     global $ERROR_DATABASE_CONNECTION;
 
@@ -259,7 +266,7 @@ INSERT INTO reservations (name, email, phone, date, address, reservation_date, f
 
         $reservation_id = $result->fetch_assoc()["id"];
         return $reservation_id ?? false;
-    } catch (Exception $e) {
+    } catch (Exception) {
         return false;
     }
 }
@@ -267,12 +274,12 @@ INSERT INTO reservations (name, email, phone, date, address, reservation_date, f
 /**
  * Reservate a kajak.
  *
- * @param $conn
- * @param $fields
+ * @param mysqli|null $conn
+ * @param array $fields
  * @param bool $send_email
  * @return true | string
  */
-function reservate_kajak($conn, $fields, bool $send_email = false): bool|string
+function reservate_kajak(mysqli|null $conn, array $fields, bool $send_email = false): bool|string
 {
     global $ERROR_DATABASE_CONNECTION;
 
@@ -348,14 +355,14 @@ function reservate_kajak($conn, $fields, bool $send_email = false): bool|string
 
 
 /**
- * Delete reservations by id.
+ * Archive reservations by id.
  * USED BY ADMIN.
  *
- * @param $conn
- * @param $ids
+ * @param mysqli|null $conn
+ * @param array<string> $ids
  * @return void
  */
-function archive_reservation($conn, $ids)
+function archive_reservation(mysqli|null $conn, array $ids)
 {
     global $ERROR_DATABASE_CONNECTION;
 
@@ -371,12 +378,12 @@ function archive_reservation($conn, $ids)
 /**
  * Cancel reservation by id.
  *
- * @param $conn
- * @param $fields
+ * @param mysqli|null $conn
+ * @param array<string> $fields
  * @param bool $send_email
  * @return string
  */
-function cancel_reservation($conn, $fields, bool $send_email = false): string
+function cancel_reservation(mysqli|null $conn, array $fields, bool $send_email = false): string
 {
     global $ERROR_DATABASE_CONNECTION;
 
