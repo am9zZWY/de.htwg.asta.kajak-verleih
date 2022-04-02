@@ -20,12 +20,12 @@ create_header('Reservierungen');
     <div class="row">
         <form method="post" class="needs-validation">
             <table class="table table-striped table-bordered table-sm table-light">
+                <caption>Übersicht aller Reservierungen</caption>
                 <tr>
                     <th>Löschen</th>
                     <th>Reservierungs ID</th>
                     <th>Name</th>
-                    <!-- <th>Nachname</th> -->
-                    <!-- <th>Adresse</th> -->
+                    <th>Adresse</th>
                     <th>Handynummer</th>
                     <th>E-Mail Adresse</th>
                     <th>Datum</th>
@@ -45,7 +45,7 @@ create_header('Reservierungen');
                         </td>
                         <td><?php echo $reservation['id'] ?></td>
                         <td><?php echo $reservation['name'] ?></td>
-                        <!-- <td><?php echo $reservation['addresse'] ?></td> -->
+                        <td><!-- <?php echo $reservation['address'] ?>--></td>
                         <td><?php echo $reservation['phone'] ?></td>
                         <td><?php echo $reservation['email'] ?></td>
                         <td><?php echo $reservation['date'] ?></td>
