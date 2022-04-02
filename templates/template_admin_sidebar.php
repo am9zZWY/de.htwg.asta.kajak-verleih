@@ -2,6 +2,11 @@
 <?php
 if (($_SERVER['REQUEST_METHOD'] === 'POST') && isset($_POST['logout'])) {
     logout();
+    ?>
+    <script>
+        window.location.href = "/";
+    </script>
+    <?php
 }
 ?>
 <div id="mySidenav" class="sidenav">
@@ -26,5 +31,4 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') && isset($_POST['logout'])) {
         document.getElementById("mySidenav").style.width = "0";
         document.getElementById("burger").style.marginLeft = "0";
     }
-
 </script>
