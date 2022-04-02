@@ -27,6 +27,17 @@ Fon: 07531 / 206 – 431<br/>
     ";
 }
 
+/**
+ * Send email for kajak reservation.
+ *
+ * @param string $reservation_id
+ * @param string $name
+ * @param string $email_address_to
+ * @param array<string> $kajaks
+ * @param array<string> $timeslot
+ * @param string $date
+ * @return bool
+ */
 function send_reservation_email(string $reservation_id, string $name, string $email_address_to, array $kajaks, array $timeslot, string $date): bool
 {
     $formatted_date = date('d.m.Y', strtotime($date));
@@ -44,11 +55,18 @@ function send_reservation_email(string $reservation_id, string $name, string $em
         </p>
         <p>
             Um die Reservierung zu stornieren, klicke bitte auf den folgenden Link:<br/>
-            <a href='http://{$_SERVER['HTTP_HOST']}/cancel?id={$reservation_id}'>Stornieren</a>
+            <a href='http://{$_SERVER['HTTP_HOST']}/cancel?id=$reservation_id'>Stornieren</a>
         </p>
     " . email_signature());
 }
 
+/**
+ * Send email for kajak cancellation.
+ *
+ * @param string $reservation_id
+ * @param string $email_address_to
+ * @return bool
+ */
 function send_cancellation_email(string $reservation_id, string $email_address_to): bool
 {
     return send_mail($email_address_to, "Stornierungsbestätigung Kajak", "
@@ -62,6 +80,14 @@ function send_cancellation_email(string $reservation_id, string $email_address_t
     " . email_signature());
 }
 
+/**
+ * Sends an email to a given address.
+ *
+ * @param string $email_address_to
+ * @param string $subject
+ * @param string $body
+ * @return bool
+ */
 function send_mail(string $email_address_to, string $subject, string $body): bool
 {
     $email_address = get_env('MAIL_ADDRESS');
@@ -99,7 +125,7 @@ function send_mail(string $email_address_to, string $subject, string $body): boo
 
         $mail->send();
         return true;
-    } catch (Exception $e) {
+    } catch (Exception) {
         return false;
     }
 }
