@@ -58,16 +58,6 @@ body {
     font-size: 14px;
 }
 
-/********************************* COLORS ***********************************/
-
-.primary {
-    color: white !important;
-}
-
-.danger {
-    color: #ff8833 !important;
-}
-
 /********************************* HEADERS ***********************************/
 
 .header-wrapper h1, .header-wrapper h2, .header-wrapper h3 {
@@ -261,11 +251,6 @@ button.custom-btn:hover, button.custom-btn:active {
 .container {
     padding: 16px;
     margin: 10%;
-}
-
-span.psw {
-    float: right;
-    padding-top: 16px;
 }
 
 /* The Modal (background) */
