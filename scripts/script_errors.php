@@ -3,6 +3,7 @@
 
 /* Database */
 $ERROR_DATABASE_CONNECTION = "Konnte keine Verbindung zur Datenbank herstellen. Läuft diese überhaupt?";
+$ERROR_DATABASE_QUERY = "Fehler bei der Vorbereitung";
 
 /* Form reservation */
 $ERROR_RESERVATION_TIMESLOT_NOT_SELECTED = "Bitte wähle eine Zeit aus.";
