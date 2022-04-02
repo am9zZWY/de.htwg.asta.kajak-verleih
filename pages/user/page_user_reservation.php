@@ -112,7 +112,8 @@ $connection = $_SESSION['connection'];
                                 <div class="col-md-6">
                                     <div class="form-group form-floating">
                                         <input type="number" max="<?php echo $amount_kajaks["single_kajak"] ?>"
-                                               min="0" id="single-kajak" value="<?php echo get_post_field('single-kajak', 0) ?>"
+                                               min="0" id="single-kajak"
+                                               value="<?php echo get_post_field('single-kajak', 0) ?>"
                                                name="single-kajak" class="form-control"/>
                                         <label class="form-check-label" for="single-kajak">
                                             Anzahl 1-Sitz Kajaks
@@ -135,7 +136,8 @@ $connection = $_SESSION['connection'];
                             <div class="row my-2">
                                 <div class="col-md-6">
                                     <label>
-                                        <input type="checkbox" name="is_studi" value="1" required <?php echo get_post_field('is_studi') === '1' ? 'checked' : '' ?>
+                                        <input type="checkbox" name="is_studi" value="1"
+                                               required <?php echo get_post_field('is_studi') === '1' ? 'checked' : '' ?>
                                                class="form-check-input">
                                         Hiermit bestätige ich, dass ich eine studierende Person an der HTWG
                                         Konstanz oder der Universität Konstanz bin.
@@ -143,7 +145,8 @@ $connection = $_SESSION['connection'];
                                 </div>
                                 <div class="col-md-6">
                                     <label>
-                                        <input type="checkbox" name="terms" value="1" required <?php echo get_post_field('terms') === '1' ? 'checked' : '' ?>
+                                        <input type="checkbox" name="terms" value="1"
+                                               required <?php echo get_post_field('terms') === '1' ? 'checked' : '' ?>
                                                class="form-check-input">
                                         Ich habe die <a href="/about">Nutzungsbedingungen</a> gelesen und
                                         akzeptiere sie.
@@ -223,13 +226,13 @@ $connection = $_SESSION['connection'];
                     Es gibt zwei Kajak-Modelle:
                     <div>
                         <strong>Einzelkajak</strong>
-                        <img alt="Bild eines einzelnen Kajaks" src="/resources/images/einzelKajak.png"
+                        <img alt="Bild eines einzelnen Kajaks" src="/static/img/einzelKajak.png"
                              class="img-fluid" style="width: 300px; height: 200px;"/>
                     </div>
                     <div>
 
                         <strong>Doppelkajak</strong>
-                        <img alt="Bild eines doppelten Kajaks" src="/resources/images/doppelKajak.png"
+                        <img alt="Bild eines doppelten Kajaks" src="/static/img/doppelKajak.png"
                              class="img-fluid" style="width: 300px; height: 200px;"/>
                     </div>
                 </div>
