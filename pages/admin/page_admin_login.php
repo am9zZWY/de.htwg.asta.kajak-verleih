@@ -7,7 +7,7 @@ create_header('Login');
             <div class="custom-form">
                 <form class="animate" method="post" class="needs-validation">
                     <div class="img-container">
-                        <img src="/resources/images/login.PNG" alt="Avatar" class="img-avatar">
+                        <img src="/static/img/login.PNG" alt="Avatar" class="img-avatar">
                     </div>
 
                     <div class="form-floating mb-3">
