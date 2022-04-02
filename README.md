@@ -2,7 +2,8 @@
 
 ## 1. Requirements
 
-Install [PHP](https://www.php.net/manual/de/install.php), [Composer](https://getcomposer.org/) and [Docker](https://www.docker.com/).
+Install [PHP](https://www.php.net/manual/de/install.php), [Composer](https://getcomposer.org/)
+and [Docker](https://www.docker.com/).
 
 ## 2. Development
 
@@ -13,15 +14,15 @@ Use the following command to start the development server:
 ```
 docker-compose up
 ```
-This will start the php service and the mysql service.
-Then open `localhost:8080` in the browser.
+
+This will start the php service and the mysql service. Then open `localhost:8080` in the browser.
 
 ## 2.2 Development Environment
 
 ### 2.2.1 MySQL
 
-When using `docker-compose up`, the database is created automatically.
-It can then be connected in the IDE or via [MySQL Workbench](https://dev.mysql.com/downloads/workbench/).
+When using `docker-compose up`, the database is created automatically. It can then be connected in the IDE or
+via [MySQL Workbench](https://dev.mysql.com/downloads/workbench/).
 
 ### 2.2.2 Environment File
 
