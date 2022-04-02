@@ -14,11 +14,11 @@ function create_header(string $header, string|null $link = null, bool $echo = tr
     <div class='header-wrapper'>" .
         ($link === null ?
             "<h1 class='text-light'>
-            {$header}
+            $header
         </h1>" :
-            "<a href = '{$link}' class='text-light text-decoration-none'>
+            "<a href = '$link' class='text-light text-decoration-none'>
             <h1>
-                {$header}
+                $header
             </h1>
         </a>
 ") . "</div> ";
@@ -38,8 +38,7 @@ function create_header(string $header, string|null $link = null, bool $echo = tr
 function create_accordion(bool $echo = true): string
 {
     $created_accordion = "<script>
-                const acc = document.getElementsByClassName('accordion');
-                Array.from(acc).forEach((item) => {
+                Array.from(document.getElementsByClassName('accordion')).forEach((item) => {
                     item.addEventListener('click', function () {
                         item.classList.toggle('active');
                         const panel = item.nextElementSibling;
@@ -47,7 +46,7 @@ function create_accordion(bool $echo = true): string
                     });
                 })
             </script>";
-    
+
     if ($echo) {
         echo $created_accordion;
     }
