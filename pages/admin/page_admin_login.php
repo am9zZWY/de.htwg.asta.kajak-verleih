@@ -37,8 +37,10 @@ create_header('Login');
                             <?php
                         } else {
                             ?>
-
                             <h3>Einloggen erfolgreich</h3>
+                            <script>
+                                window.location.href = "/reservations";
+                            </script>
                             <?php
                         }
                     }
