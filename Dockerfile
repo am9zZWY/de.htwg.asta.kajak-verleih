@@ -1,4 +1,4 @@
-FROM php:8.1-apache
+FROM php:bullseye
 WORKDIR /var/www/html
 VOLUME /var/www/html
 
