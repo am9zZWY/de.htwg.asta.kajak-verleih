@@ -40,8 +40,8 @@ prepare_reservation_table($connection);
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Kajak Verleihsystem des AStA der HTWG Konstanz">
-    <link rel="stylesheet" href="/css/custom.css">
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/custom.css">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
     <title>Kajak Verleihsystem von Coolen Typen</title>
 </head>
 <body>
@@ -53,7 +53,7 @@ if (is_logged_in()) {
 }
 ?>
 <div>
-    <div class="section-center">
+    <div class="section">
         <?php
         if ($PARSED_URL === '/about') {
             require("pages/user/about.php");
@@ -63,8 +63,8 @@ if (is_logged_in()) {
             require("pages/user/impressum.php");
         } else if ($PARSED_URL === '/login') {
             require("pages/admin/page_admin_login.php");
-        } else if ($PARSED_URL === '/storno') {
-            require("pages/user/page_user_storno.php");
+        } else if ($PARSED_URL === '/cancel') {
+            require("pages/user/page_user_cancel.php");
         } else if ($PARSED_URL === '/') {
             require("pages/user/page_user_reservation.php");
         }
@@ -80,5 +80,6 @@ if (is_logged_in()) {
         ?>
     </div>
 </div>
+<?php require("templates/template_footer.php"); ?>
 </body>
 </html>

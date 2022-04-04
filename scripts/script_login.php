@@ -7,7 +7,8 @@
  * @param string $password
  * @return bool
  */
-function login (string $username, string $password): bool {
+function login(string $username, string $password): bool
+{
     if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
         return true;
     }
@@ -29,7 +30,8 @@ function login (string $username, string $password): bool {
  *
  * @return void
  */
-function logout () {
+function logout()
+{
     unset($_SESSION['logged_in']);
 }
 
@@ -39,6 +41,7 @@ function logout () {
  *
  * @return bool
  */
-function is_logged_in (): bool {
+function is_logged_in(): bool
+{
     return isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true;
 }

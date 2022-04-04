@@ -1,6 +1,13 @@
 <?php
-create_header('Stornierung', '/');
+create_header('Stornierung');
 $connection = $_SESSION['connection'];
+
+$URL = $_SERVER['REQUEST_URI'];
+$PARSED_URL = parse_url($URL, PHP_URL_QUERY);
+if ($PARSED_URL !== NULL) {
+    parse_str($PARSED_URL, $params);
+}
+$reservation_id = clean_string($params['id'] ?? '');
 ?>
 
 <div class="container-fluid">
@@ -13,6 +20,7 @@ $connection = $_SESSION['connection'];
                             <input name="id" type="text" placeholder="12345"
                                    id="id"
                                    class="form-control"
+                                   value="<?php echo $reservation_id; ?>"
                                    required>
                             <label for="id">
                                 Reservierungsnummer
@@ -36,7 +44,7 @@ $connection = $_SESSION['connection'];
                 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ?>
                     <h2>
-                        <?php echo cancel_reservation($connection, $_POST) ?>
+                        <?php echo cancel_reservation($connection, $_POST, true) ?>
                     </h2>
                 <?php }
                 ?>

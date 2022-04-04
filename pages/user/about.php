@@ -22,7 +22,8 @@ create_header('Informationen zur Reservierung');
         <div class="row" style="text-align: justify;">
             <button class="accordion"><strong>Haftung</strong></button>
             <div class="panel">
-                <p><h5>Haftungsausschluss</h5>
+                <p>
+                <h5>Haftungsausschluss</h5>
 
                 <strong>Der AStA der HTWG Konstanz, haftet als reine Vemietung nicht für Personen-, Sach- und
                     Transportschäden.</strong><br>
@@ -35,7 +36,7 @@ create_header('Informationen zur Reservierung');
                 Verordnungen oder sonstigen Vorschriften in Zusammenhang mit dem Gebrauch der Mietgegenstände durch ihn
                 oder eine dritte Person frei.
                 <br><br>
-                <strong>Wir weisenausdrücklich darauf hin, dass viele Flüsse, Seen, Bachläufe und Uferzonen unter
+                <strong>Wir weisen ausdrücklich darauf hin, dass viele Flüsse, Seen, Bachläufe und Uferzonen unter
                     Naturschutz
                     stehen und aufgrund dessen mit großer Rücksichtnahme zu agieren ist!</strong>
                 In unmittelbahrer Ufernähe sollte nicht gepaddelt werden, da durch liegengebliebene Äste, niedrigen

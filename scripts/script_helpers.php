@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Escape all html characters.
  *
@@ -40,18 +41,6 @@ function is_secure(): bool
 $SERVER_ADDRESS = $_SESSION['SERVER_ADDRESS'] ?? ((is_secure() ? 'https://' : 'http://') . $_SERVER['HTTP_HOST']);
 
 /**
- * Creates link with SERVER_ADDRESS as base.
- *
- * @param string $link
- * @return string
- */
-function create_internal_link(string $link = ''): string
-{
-    global $SERVER_ADDRESS;
-    return $SERVER_ADDRESS . $link;
-}
-
-/**
  * Get env variable.
  *
  * @param string $key
@@ -68,8 +57,9 @@ function get_env(string $key, string $default = ''): string
  *
  * @param string $field
  * @param mixed $default
- * @return mixed
+ * @return string
  */
-function get_post_field(string $field, mixed $default = ''): mixed {
+function get_post_field(string $field, string $default = ''): string
+{
     return clean_string($_POST[$field] ?? $default);
 }
