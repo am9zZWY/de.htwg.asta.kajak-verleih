@@ -13,6 +13,7 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') && isset($_POST['logout'])) {
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
     <a href="/reservations">Reservierungen</a>
     <a href="/how_to_admin">How To Admin</a>
+    <a href="/config">Konfiguration</a>
     <form method="POST">
         <button type="submit" name="logout">Abmelden</button>
     </form>

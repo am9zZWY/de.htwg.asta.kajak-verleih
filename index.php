@@ -14,6 +14,7 @@ require __DIR__ . '/scripts/script_reservation.php';
 require __DIR__ . '/scripts/script_template_helpers.php';
 require __DIR__ . '/scripts/script_email.php';
 require __DIR__ . '/scripts/script_errors.php';
+require __DIR__ . '/scripts/script_config.php';
 
 /* If session is not set start it */
 session_start();
@@ -33,6 +34,10 @@ $connection = connect_to_database();
 $_SESSION['connection'] = $connection;
 prepare_reservation_table($connection);
 
+/* Initialize Config Class*/
+$config = new Config();
+$_SESSION['config'] = $config;
+
 ?>
 <!DOCTYPE html>
 <html lang="de" xmlns="http://www.w3.org/1999/html">
@@ -42,6 +47,7 @@ prepare_reservation_table($connection);
     <meta name="description" content="Kajak Verleihsystem des AStA der HTWG Konstanz">
     <link rel="stylesheet" href="/static/css/custom.css">
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <title>Kajak Verleihsystem von Coolen Typen</title>
 </head>
 <body>
@@ -53,14 +59,13 @@ if (is_logged_in()) {
 }
 ?>
 <div>
-    <div class="section">
         <?php
         if ($PARSED_URL === '/about') {
-            require("pages/user/about.php");
+            require("pages/user/page_user_agb.php");
         } else if ($PARSED_URL === '/kajaks') {
-            require("pages/user/kajaks.php");
+            require("pages/user/page_user_kajaks.php");
         } else if ($PARSED_URL === '/impressum') {
-            require("pages/user/impressum.php");
+            require("pages/user/page_user_impressum.php");
         } else if ($PARSED_URL === '/login') {
             require("pages/admin/page_admin_login.php");
         } else if ($PARSED_URL === '/cancel') {
@@ -73,12 +78,13 @@ if (is_logged_in()) {
             if ($PARSED_URL === '/reservations') {
                 require("pages/admin/page_admin_reservations.php");
             } elseif ($PARSED_URL === '/how_to_admin') {
-                require("pages/admin/page_admin_about.php");
+                require("pages/admin/page_admin_how_to.php");
+            } elseif ($PARSED_URL === '/config') {
+                require("pages/admin/page_admin_config.php");
             }
         }
 
         ?>
-    </div>
 </div>
 <?php require("templates/template_footer.php"); ?>
 </body>

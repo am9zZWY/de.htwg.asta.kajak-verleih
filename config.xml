@@ -1,14 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
 <config>
     <kajaks>
-        <kajak name="Einzelkajak" seats="1" amount="4" img="resources/images/einzelKajak.png"/>
-        <kajak name="Doppelkajak" seats="2" amount="2" img="resources/images/doppelKajak.png"/>
+        <kajak name="Einzelkajak">
+            <seats>1</seats>
+            <amount>4</amount>
+        </kajak>
+        <kajak name="Doppelkajak">
+            <seats>2</seats>
+            <amount>2</amount>
+        </kajak>
     </kajaks>
     <prices>
-        <price name="single" val="5"/>
-        <price name="complete" val="8"/>
+        <price name="Single">5</price>
+        <price name="Complete">8</price>
     </prices>
+    <kautionen>
+        <kaution name="Kaution">50</kaution>
+    </kautionen>
     <timeslots>
-        <timeslot start="09:00:00" end="13:00:00" />
-        <timeslot start="13:00:00" end="18:00:00" />
+        <timeslot name="Vormittag">
+            <start>09:00:00</start>
+            <ende>13:00:00</ende>
+        </timeslot>
+        <timeslot name="Nachmittag">
+            <start>13:00:00</start>
+            <ende>18:00:00</ende>
+        </timeslot>
     </timeslots>
 </config>

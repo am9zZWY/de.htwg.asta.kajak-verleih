@@ -5,6 +5,38 @@ $connection = $_SESSION['connection'];
 
 <div class="container">
     <div class="row">
+        <div class="col-lg-5 mx-auto">
+            <div class="row content">
+                <div class="header-wrapper">
+                    <h3>Was bieten wir an?</h3>
+                    <p>
+                        Wir bieten für die HTWG Konstanz und für Universität Konstanz die Möglichkeit, Kajaks zu
+                        reservieren.
+                        Bitte fülle das Formular aus, damit wir überprüfen können, ob an deinem gewünschten
+                        Datum
+                        und Zeit Kajaks frei sind.
+                    </p>
+                </div>
+            </div>
+            <div class="row content">
+                <div class="header-wrapper">
+                    <h3>Welche Kajak-Modelle gibt es?</h3>
+                    Es gibt zwei Kajak-Modelle:
+                    <div>
+                        <strong>Einzelkajak</strong>
+                        <img alt="Bild eines einzelnen Kajaks" src="/static/img/einzel-kajak.png"
+                             class="img-fluid" style="width: 300px; height: 200px;"/>
+                    </div>
+                    <div>
+
+                        <strong>Doppelkajak</strong>
+                        <img alt="Bild eines doppelten Kajaks" src="/static/img/doppel-kajak.png"
+                             class="img-fluid" style="width: 300px; height: 200px;"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="col-lg-6 mx-auto">
             <div class="row content">
                 <div class="custom-form">
@@ -65,25 +97,79 @@ $connection = $_SESSION['connection'];
                             </div>
                         </div>
 
-                        <div class="row my-2">
-                            <div class="col-sm-6">
-                                <!-- select dates -->
-                                <div class="form-group form-floating">
-                                    <select name="date" class="form-select" id="date" autocomplete="on"
-                                            required>
-                                        <?php
-                                        foreach (get_days() as $day) {
-                                            ?>
-                                            <option value=" <?php echo $day[1] ?>">
-                                                <?php echo $day[0] ?>
-                                            </option>
-                                        <?php } ?>
-                                    </select>
-                                    <label for="date">
-                                        Datum
-                                    </label>
-                                </div>
+                    <div class="row my-2">
+                        <div class="col-sm-6">
+                            <div class="mb-3 form-floating">
+                                <input name="street" type="text" placeholder="Straße, Hausnummer"
+                                       id="street"
+                                       class="form-control"
+                                       required>
+                                <label for="street">
+                                   Straße, Hausnummer
+                                </label>
                             </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="mb-3 form-floating">
+                                <input name="plz" type="text" placeholder="PLZ" id="plz"
+                                       class="form-control"
+                                       required>
+                                <label for="plz">
+                                    Postleitzahl
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row my-2">
+                        <div class="col-sm-6">
+                            <div class="form-group form-floating">
+                                <input name="city" type="text" placeholder="Stadt"
+                                       id="city"
+                                       class="form-control"
+                                       required>
+                                <label for="city">
+                                    Stadt
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group form-floating">
+                                <select name="country" class="form-select" id="country" autocomplete="on"
+                                        required>
+                                    <option>Deutschland</option>
+                                    <option>Schweiz</option>
+                                    <option>Österreich</option>
+                                </select>
+                                <label for="country">
+                                    Land
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row my-2">
+                        <div class="col-sm-6">
+                            <!-- select dates -->
+                            <div class="form-group form-floating">
+                                <select name="date" class="form-select" id="date" autocomplete="on"
+                                        required>
+                                    <?php
+                                    foreach (get_days() as $day) {
+                                        ?>
+                                        <option value=" <?php echo $day[1] ?>">
+                                            <?php echo $day[0] ?>
+                                        </option>
+                                    <?php } ?>
+                                </select>
+                                <label for="date">
+                                    Datum
+                                </label>
+                            </div>
+                        </div>
 
                             <div class="col-sm-6">
                                 <div class="form-group form-floating">
@@ -204,37 +290,6 @@ $connection = $_SESSION['connection'];
                         }
                     }
                     ?>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-5 mx-auto">
-            <div class="row content">
-                <div class="header-wrapper">
-                    <h3>Was bieten wir an?</h3>
-                    <p>
-                        Wir bieten für die HTWG Konstanz und für Universität Konstanz die Möglichkeit, Kajaks zu
-                        reservieren.
-                        Bitte fülle das Formular aus, damit wir überprüfen können, ob an deinem gewünschten
-                        Datum
-                        und Zeit Kajaks frei sind.
-                    </p>
-                </div>
-            </div>
-            <div class="row content">
-                <div class="header-wrapper">
-                    <h3>Welche Kajak-Modelle gibt es?</h3>
-                    Es gibt zwei Kajak-Modelle:
-                    <div>
-                        <strong>Einzelkajak</strong>
-                        <img alt="Bild eines einzelnen Kajaks" src="/static/img/einzelKajak.png"
-                             class="img-fluid" style="width: 300px; height: 200px;"/>
-                    </div>
-                    <div>
-
-                        <strong>Doppelkajak</strong>
-                        <img alt="Bild eines doppelten Kajaks" src="/static/img/doppelKajak.png"
-                             class="img-fluid" style="width: 300px; height: 200px;"/>
-                    </div>
                 </div>
             </div>
         </div>
