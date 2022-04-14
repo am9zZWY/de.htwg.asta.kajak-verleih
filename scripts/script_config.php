@@ -11,17 +11,21 @@ class Config
     // saveAsXML -> speichert die Konfiguration als XML in config.xml
 
     private $config;
-    private $days;
-    private $timeslots;
+    private array $days;
+    private array $timeslots;
+    private SimpleXMLElement $xml;
 
 
-    function __construct()
+    public function __construct()
     {
-        $this->xml = simplexml_load_file("config.xml");
-
+        $loaded_xml = simplexml_load_string(file_get_contents("config.xml"));
+        if ($loaded_xml === false) {
+            return;
+        }
+        $this->xml = $loaded_xml;
     }
 
-    function getKajaks()
+    public function getKajaks()
     {
         $kajaks = array();
         foreach ($this->xml->kajaks->children() as $child) {
@@ -36,7 +40,7 @@ class Config
         return $kajaks;
     }
 
-    function kajakToString($kajak)
+    public function kajakToString($kajak)
     {
         return "Name: " . $kajak->name . "<br>" .
             "Sitze: " . $kajak->seats . "<br>" .
@@ -45,7 +49,7 @@ class Config
 
     }
 
-    function getPrice()
+    public function getPrice(): array
     {
         $prices = array();
         foreach ($this->xml->prices->children() as $child) {
@@ -58,7 +62,7 @@ class Config
         return $prices;
     }
 
-    function pricesToString($prices)
+    public function pricesToString($prices): string
     {
         return "Timeslot: " . $prices->name . "<br>" .
             "Preis: " . $prices->price . "<br>" .
@@ -66,7 +70,7 @@ class Config
     }
 
 
-    function getKaution()
+    public function getKaution(): array
     {
         $kaution = array();
         foreach ($this->xml->kautionen->children() as $child) {
@@ -79,13 +83,13 @@ class Config
         return $kautionen;
     }
 
-    function kautionToString($kautionen)
+    public function kautionToString($kautionen): string
     {
         return "Kaution: " . $kautionen->value . "<br>" .
             "------------------------------" . "<br>";
     }
 
-    function getTimeslot()
+    public function getTimeslot(): array
     {
         $timeslots = array();
         foreach ($this->xml->timeslots->children() as $child) {
@@ -99,7 +103,7 @@ class Config
         return $timeslots;
     }
 
-    function timeslotToString($timeslots)
+    public function timeslotToString($timeslots): string
     {
         return "Timeslot: " . $timeslots->name . "<br>" .
             "Start: " . $timeslots->start . "<br>" .
@@ -107,20 +111,21 @@ class Config
             "------------------------------" . "<br>";
     }
 
-    function addTimeslot($timeslot)
+    public function addTimeslot($timeslot): void
     {
         $timeslot->setId(count($this->timeslots) + 1);
         $this->timeslots[] = $timeslot;
     }
 
-    function setTimeslot($timeslot)
+    public function setTimeslot($timeslot): void
     {
         $this->timeslots[$timeslot->getId()] = $timeslot;
     }
 
 
 
-    function formatTimeslot($formatTimeslot){
+    public function formatTimeslot($formatTimeslot): void
+    {
         
         $timeslots = array(array("09:00:00", "13:00:00"), array("13:00:00", "18:00:00"));
 
@@ -134,7 +139,7 @@ class Config
     }
 
 
-    function getDays()
+    public function getDays(): array
     {
         $days = array();
         foreach ($this->xml->days->children() as $child) {
