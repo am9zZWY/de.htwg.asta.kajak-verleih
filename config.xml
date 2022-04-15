@@ -11,12 +11,10 @@
         </kajak>
     </kajaks>
     <prices>
-        <price name="Single">5</price>
-        <price name="Complete">8</price>
+        <price name="single">5</price>
+        <price name="complete">8</price>
+        <price name="kaution">50</price>
     </prices>
-    <kautionen>
-        <kaution name="Kaution">50</kaution>
-    </kautionen>
     <timeslots>
         <timeslot name="Vormittag">
             <start>09:00:00</start>
