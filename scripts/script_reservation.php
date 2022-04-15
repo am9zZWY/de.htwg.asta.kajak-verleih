@@ -26,7 +26,6 @@ $weekdays = array("Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Fr
  *
  * @return array<string>
  */
-
 function get_days(): array
 {
     global $min_day, $max_days, $weekdays;
@@ -109,6 +108,7 @@ CREATE TABLE IF NOT EXISTS reservations
     to_time          TIME            NOT NULL,
     single_kajak     NUMERIC         NOT NULL,
     double_kajak     NUMERIC         NOT NULL,
+    price            NUMERIC         NOT NULL,
     archived         BOOLEAN         NOT NULL DEFAULT FALSE,
     cancelled        BOOLEAN         NOT NULL DEFAULT FALSE,
     CONSTRAINT NAME_CHECK CHECK (REGEXP_LIKE(name, '^[A-ZäÄöÖüÜßa-z]+ [A-ZäÄöÖüÜßa-z]+$'))
