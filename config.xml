@@ -1,20 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <config>
+    <!-- KAJAKS -->
     <kajaks>
-        <kajak name="Einzelkajak">
+        <kajak name="single_kajak">
+            <!-- TODO: maybe change to <prop name"seats">1</prop> -->
             <seats>1</seats>
             <amount>4</amount>
+            <imgPath>/static/img/einzel-kajak.png</imgPath>
         </kajak>
-        <kajak name="Doppelkajak">
+        <kajak name="double_kajak">
             <seats>2</seats>
             <amount>2</amount>
+            <imgPath>/static/img/doppel-kajak.png</imgPath>
         </kajak>
     </kajaks>
+    <!-- PRICES -->
     <prices>
         <price name="single">5</price>
         <price name="complete">8</price>
         <price name="kaution">50</price>
     </prices>
+    <!-- TIMESLOTS -->
     <timeslots>
         <timeslot name="Vormittag">
             <start>09:00:00</start>
@@ -25,4 +31,9 @@
             <ende>18:00:00</ende>
         </timeslot>
     </timeslots>
+    <!-- DAYS -->
+    <days>
+        <min>3</min>
+        <max>14</max>
+    </days>
 </config>
