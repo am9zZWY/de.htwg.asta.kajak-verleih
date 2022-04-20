@@ -52,7 +52,7 @@ prepare_reservation_table($connection);
 <?php
 include 'templates/template_sidebar.php';
 ?>
-<div class="container">
+<div class="container my-5">
     <?php
     if ($PARSED_URL === '/about') {
         require("pages/user/page_user_agb.php");
