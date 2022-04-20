@@ -1,52 +1,6 @@
 <?php
-// CONFIG
-
-// all weekdays in german
-$newLocal = setlocale(LC_ALL, 'de_DE', 'de_DE.UTF-8');
-// add two days to start date
-$min_day = 3;
-// max days for calendar
-$max_days = 14;
-// timeslots
-$timeslots = array(array("09:00:00", "13:00:00"), array("13:00:00", "18:00:00"));
-// converts timeslots to e.g. "09:00 - 13:00"
-$timeslots_formatted = array_map(static function ($array) {
-    $timeslot = array_map(static function ($time) {
-        return date('H:i', strtotime($time));
-    }, $array);
-    return implode(' - ', $timeslot);
-}, $timeslots);
-// kajaks for each kajak type
+/* kajaks for each kajak type */
 $amount_kajaks = array("single_kajak" => 4, "double_kajak" => 2);
-// weekdays in german
-$weekdays = array("Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag");
-
-/**
- * Returns the next max_days weekdays in a string.
- *
- * @return array<string>
- */
-function get_days(): array
-{
-    global $min_day, $max_days, $weekdays;
-
-    /* Create starting date */
-    $date = date_create();
-    if ($date === false) {
-        return [''];
-    }
-    date_add($date, new DateInterval("P${min_day}D"));
-
-    $days = array();
-    for ($i = 0; $i < $max_days; $i++) {
-        $weekday = (int)$date->format('w');
-        if ($weekday !== 0 && $weekday !== 6) {
-            $days[$i] = array($weekdays[$weekday] . ' ' . $date->format('d.m.Y'), $date->format('Y-m-d'));
-        }
-        date_add($date, new DateInterval("P1D"));
-    }
-    return $days;
-}
 
 /**
  * Create connection to mysql database.
