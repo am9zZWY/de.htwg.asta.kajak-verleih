@@ -46,9 +46,10 @@ class Config
             $kajak = new stdClass();
             $name = (string)$child->attributes()->name;
             $kajak->name = $name;
-            $kajak->seats = (string)$child->seats;
-            $kajak->amount = (string)$child->amount;
-            $kajak->imgPath = (string)$child->imgPath;
+            $props = $child->xpath('.//prop');
+            foreach ($props as $prop) {
+                $kajak->{(string)$prop->attributes()->name} = (string)$prop;
+            }
             if ($asList) {
                 $kajaks [] = $kajak;
             } else {
@@ -57,6 +58,20 @@ class Config
         }
 
         return $kajaks;
+    }
+
+    /**
+     * Get object with amount of kajaks
+     * @return array
+     */
+    public function getAmountKajaks(): array
+    {
+        $kajaks = $this->getKajaks(true);
+        $amount = array();
+        foreach ($kajaks as $kajak) {
+            $amount[$kajak->intName] = (int)$kajak->amount;
+        }
+        return $amount;
     }
 
     public function kajakToString($kajak): string
