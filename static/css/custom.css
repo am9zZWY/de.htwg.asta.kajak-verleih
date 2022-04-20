@@ -126,6 +126,12 @@ body {
     background-color: white
 }
 
+.sidenav-burger > span {
+    font-size: 30px;
+    background-color: transparent;
+    cursor: pointer;
+}
+
 #burger {
     transition: margin-left .5s;
     padding: 16px;
