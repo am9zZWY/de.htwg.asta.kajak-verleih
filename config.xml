@@ -23,9 +23,20 @@
     </kajaks>
     <!-- PRICES -->
     <prices>
-        <price name="single">5</price>
-        <price name="complete">8</price>
-        <price name="kaution">50</price>
+        <price name="single">
+            <prop name="value">5</prop>
+            <prop name="amountTimeslots">1</prop>
+        </price>
+        <price name="complete">
+            <prop name="value">8</prop>
+            <prop name="amountTimeslots">all</prop>
+        </price>
+        <price name="kaution">
+            <prop name="value">50</prop>
+        </price>
+        <!-- <price name="lol">
+            <prop name="value">5000</prop>
+        </price> -->
     </prices>
     <!-- TIMESLOTS -->
     <timeslots>
