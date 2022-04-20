@@ -2,17 +2,24 @@
 <config>
     <!-- KAJAKS -->
     <kajaks>
-        <kajak name="single_kajak">
-            <!-- TODO: maybe change to <prop name"seats">1</prop> -->
-            <seats>1</seats>
-            <amount>4</amount>
-            <imgPath>/static/img/einzel-kajak.png</imgPath>
+        <kajak name="Einzelkajak">
+            <prop name="intName">single_kajak</prop>
+            <prop name="seats">1</prop>
+            <prop name="amount">4</prop>
+            <prop name="img">/static/img/einzel-kajak.png</prop>
         </kajak>
-        <kajak name="double_kajak">
-            <seats>2</seats>
-            <amount>2</amount>
-            <imgPath>/static/img/doppel-kajak.png</imgPath>
+        <kajak name="Doppelkajak">
+            <prop name="intName">double_kajak</prop>
+            <prop name="seats">2</prop>
+            <prop name="amount">2</prop>
+            <prop name="img">/static/img/doppel-kajak.png</prop>
         </kajak>
+        <!-- <kajak name="Dreisitzkajak">
+            <prop name="intName">triple_kajak</prop>
+            <prop name="seats">3</prop>
+            <prop name="amount">1</prop>
+            <prop name="img">/static/img/doppel-kajak.png</prop>
+        </kajak> -->
     </kajaks>
     <!-- PRICES -->
     <prices>
