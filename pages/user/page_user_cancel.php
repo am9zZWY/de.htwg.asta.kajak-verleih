@@ -2,7 +2,7 @@
 create_header('Stornierung');
 $connection = $_SESSION['connection'];
 
-$URL = $_SERVER['REQUEST_URI'];
+global $URL;
 $PARSED_URL = parse_url($URL, PHP_URL_QUERY);
 if ($PARSED_URL !== NULL) {
     parse_str($PARSED_URL, $params);
