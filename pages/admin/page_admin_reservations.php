@@ -36,16 +36,25 @@ create_header('Reservierungen');
 
                 <?php
                 foreach ($reservations as $reservation) {
+                    $is_archived = $reservation['archived'] === 1;
                     ?>
-                    <tr>
+                    <tr class="reservation <?php echo $is_archived ? 'archived' : '' ?>">
                         <td class="text-center">
-                            <input class="form-check-input" type="checkbox"
-                                   value="<?php echo $reservation['id'] ?>"
-                                   name="id[]">
+                            <?php
+                            if (!$is_archived) {
+                                ?>
+                                <input class="form-check-input" type="checkbox"
+                                       value="<?php echo $reservation['id'] ?>"
+                                       name="id[]">
+                            <?php } else { ?>
+                                Gelöscht
+                                <?php
+                            }
+                            ?>
                         </td>
                         <td><?php echo $reservation['id'] ?></td>
                         <td><?php echo $reservation['name'] ?></td>
-                        <td><!-- <?php echo $reservation['address'] ?>--></td>
+                        <td><?php echo $reservation['address'] ?></td>
                         <td><?php echo $reservation['phone'] ?></td>
                         <td><?php echo $reservation['email'] ?></td>
                         <td><?php echo $reservation['date'] ?></td>
