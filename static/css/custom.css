@@ -263,6 +263,7 @@ button.custom-btn:hover, button.custom-btn:active {
 }
 
 /********************************* TABLE ***********************************/
+
 th, td {
     text-align: left;
     padding: 8px;
@@ -270,4 +271,9 @@ th, td {
 
 tr:nth-child(even) {
     background-color: lightblue;
+}
+
+tr.reservation.archived td {
+    background-color: #fd5a5a !important;
+    opacity: 0.5;
 }
