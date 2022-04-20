@@ -3,7 +3,7 @@ global $config;
 create_header('Kajak Reservierung', '/');
 $connection = $_SESSION['connection'];
 $kajaks = $config->getKajaks(true);
-$prices = $config->getPrices(false);
+$prices = $config->getPrices();
 ?>
 
 <div class="container my-2">
@@ -16,20 +16,22 @@ $prices = $config->getPrices(false);
                         Wir bieten für die HTWG Konstanz und für Universität Konstanz die Möglichkeit, Kajaks zu
                         reservieren.
                         Bitte fülle das Formular aus, damit wir überprüfen können, ob an deinem gewünschten
-                        Datum
-                        und Zeit Kajaks frei sind.
+                        Datum und Zeit Kajaks frei sind.
                     </p>
                 </div>
             </div>
             <div class="row content">
                 <div class="header-wrapper">
                     <h3>Welche Kajak-Modelle gibt es?</h3>
-                    Es gibt <?php echo count($kajaks) ?> Kajak-Modelle:
                     <?php
                     foreach ($kajaks as $kajak) {
                         ?>
                         <div>
-                            <strong><?php echo $kajak->name ?></strong>
+                            <h4><?php echo $kajak->name ?></h4><br/>
+                            Das <?php echo $kajak->name ?>
+                            hat <?php echo $kajak->seats . ((int)$kajak->seats === 1 ? ' Sitz' : ' Sitze') ?>. Insgesamt
+                            gibt
+                            es <?php echo $kajak->amount ?> Stück dieses Modells.<br/>
                             <img alt="Bild von <?php echo $kajak->name ?>" src="<?php echo $kajak->img ?>"
                                  class="img-fluid" style="width: 300px; height: 200px;"/>
                         </div>
@@ -104,6 +106,7 @@ $prices = $config->getPrices(false);
                             <div class="col-sm-6">
                                 <div class="mb-3 form-floating">
                                     <input name="street" type="text" placeholder="Straße, Hausnummer"
+                                           value="<?php echo get_post_field('street') ?>"
                                            id="street"
                                            class="form-control"
                                            required>
@@ -116,6 +119,7 @@ $prices = $config->getPrices(false);
                             <div class="col-sm-6">
                                 <div class="mb-3 form-floating">
                                     <input name="plz" type="text" placeholder="PLZ" id="plz"
+                                           value="<?php echo get_post_field('plz') ?>"
                                            class="form-control"
                                            required>
                                     <label for="plz">
@@ -129,6 +133,7 @@ $prices = $config->getPrices(false);
                             <div class="col-sm-6">
                                 <div class="form-group form-floating">
                                     <input name="city" type="text" placeholder="Stadt"
+                                           value="<?php echo get_post_field('city') ?>"
                                            id="city"
                                            class="form-control"
                                            required>
@@ -160,14 +165,14 @@ $prices = $config->getPrices(false);
                                 <div class="form-group form-floating">
                                     <?php
                                     /* is put here for better debug, better NOT move it further down */
-                                    $days = $config->getDays();
+                                    $days = $config->getFormattedDays();
                                     ?>
                                     <select name="date" class="form-select" id="date" autocomplete="on"
                                             required>
                                         <?php
                                         foreach ($days as $day) {
                                             ?>
-                                            <option value=" <?php echo $day[1] ?>">
+                                            <option value="<?php echo $day[1] ?>">
                                                 <?php echo $day[0] ?>
                                             </option>
                                         <?php } ?>
@@ -208,9 +213,10 @@ $prices = $config->getPrices(false);
                                             <input type="number" max="<?php echo $kajak->amount ?>"
                                                    min="0" id="<?php echo $kajak->intName ?>"
                                                    value="<?php echo get_post_field($kajak->intName, 0) ?>"
-                                                   name="<?php echo $kajak->intName ?>" class="form-control"/>
+                                                   name="<?php echo $kajak->intName ?>"
+                                                   class="amount-kajak form-control"/>
                                             <label class="form-check-label" for="<?php echo $kajak->intName ?>">
-                                                Anzahl <?php echo $kajak->seats ?>-Sitz Kajaks
+                                                Anzahl der <?php echo $kajak->name ?>s
                                             </label>
                                         </div>
                                     </div>
@@ -254,33 +260,21 @@ $prices = $config->getPrices(false);
                     <script>
                         const calculated_price_element = document.getElementById('calculated-price');
                         const calculate_price = () => {
-                            <?php
-                            foreach ($kajaks as $kajak) {
-                            ?>const <?php echo 'amount_' . $kajak->intName ?> = parseInt(document.getElementById('<?php echo $kajak->intName ?>').value);
-                            <?php
-                            } ?>
-
+                            const kajaks = Array.from(document.getElementsByClassName('amount-kajak'));
+                            const amount_kajaks = Array.from(kajaks).reduce((sum, amount) => parseInt(amount.value) + sum, 0);
                             const amount_timeslots = Array.from(document.getElementsByClassName('timeslot')).filter(timeslot => timeslot.checked).length;
-                            const kaution = <?php echo (int)$prices->kaution->price ?>;
 
-                            let price;
-                            if (amount_timeslots === 0) {
-                                price = 0;
-                            } else if (amount_timeslots === 1) {
-                                price = <?php echo (int)$prices->single->price ?>;
-                            } else {
-                                price = <?php echo (int)$prices->complete->price ?>;
-                            }
-
-                            calculated_price_element.innerHTML = '<strong>Bitte bringe ' + ((<?php
-                                foreach ($kajaks as $kajak) {
-                                ?><?php echo 'amount_' . $kajak->intName ?> + <?php
-                                } ?>0) * price + kaution) + '€ in Bar mit.</strong>';
+                            const xmlhttp = new XMLHttpRequest();
+                            xmlhttp.onreadystatechange = function () {
+                                if (this.readyState === 4 && this.status === 200) {
+                                    calculated_price_element.innerHTML = '<strong>Bitte bringe ' + this.responseText + '€ in Bar mit.</strong>';
+                                }
+                            };
+                            xmlhttp.open("GET", "/api?price&amount_kajaks=" + amount_kajaks + "&amount_timeslots=" + amount_timeslots, true);
+                            xmlhttp.send();
                         }
 
-
-                        document.getElementById('single_kajak').addEventListener('change', calculate_price)
-                        document.getElementById('double_kajak').addEventListener('change', calculate_price)
+                        Array.from(document.getElementsByClassName('amount-kajak')).forEach((kajak) => kajak.addEventListener('change', calculate_price))
                         Array.from(document.getElementsByClassName('timeslot')).forEach((timeslot) => timeslot.addEventListener('change', calculate_price))
                     </script>
                     <?php
