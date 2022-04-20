@@ -2,8 +2,7 @@
 
 use JetBrains\PhpStorm\Pure;
 
-
-class Config
+class ConfigHelper
 {
     private string $xml;
 
@@ -12,14 +11,21 @@ class Config
      */
     public function __construct()
     {
+        /* read in from config.xml as string */
         $loaded_xml = file_get_contents('config.xml');
         if ($loaded_xml === false) {
+            /* if it fails return */
             return;
         }
 
+        /* save xml string to variable */
         $this->xml = $loaded_xml;
     }
 
+    /**
+     * Get xml string as SimpleXMLElement.
+     * @return SimpleXMLElement|null
+     */
     private function getSimpleXMLConfig(): ?SimpleXMLElement
     {
         try {
@@ -30,22 +36,27 @@ class Config
     }
 
     /**
-     * Get list of all kajaks.
+     * Return kajaks as JSON object or as list.
      * @param bool $asList
      * @return array
      */
     public function getKajaks(bool $asList = false): array
     {
+        /* create either array or object */
         $kajaks = $asList ? array() : new stdClass();
+
         $xml = $this->getSimpleXMLConfig();
         if ($xml === null) {
             return $kajaks;
         }
 
+        /* prepare list of prices in which every price is an object with some props */
         foreach ($xml->kajaks->children() as $child) {
             $kajak = new stdClass();
             $name = (string)$child->attributes()->name;
             $kajak->name = $name;
+
+            /* get all props and put them as attributes into object */
             $props = $child->xpath('.//prop');
             foreach ($props as $prop) {
                 $kajak->{(string)$prop->attributes()->name} = (string)$prop;
@@ -83,11 +94,20 @@ class Config
     }
 
     /**
-     * Return prices as JSON like
+     * Return prices as JSON object like
+     * ```json
      * "single": {
      *   "name": "single",
      *   "price": "5"
      * }, ...
+     * ```
+     * or as list like
+     * ```json
+     * [{
+     *   "name": "single",
+     *   "price": "5"
+     * }, ...]
+     * ```
      *
      * @param bool $asList
      * @return stdClass|array
@@ -102,11 +122,17 @@ class Config
             return $prices;
         }
 
+        /* prepare list of prices in which every price is an object with some props */
         foreach ($xml->prices->children() as $child) {
             $price = new stdClass();
             $name = (string)$child->attributes()->name;
             $price->name = $name;
-            $price->price = (string)$child;
+
+            /* get all props and put them as attributes into object */
+            $props = $child->xpath('.//prop');
+            foreach ($props as $prop) {
+                $price->{(string)$prop->attributes()->name} = (string)$prop;
+            }
 
             /* decide between array or object */
             if ($asList) {
@@ -119,30 +145,39 @@ class Config
     }
 
     /**
-     * Calculate price depending on timeslots and amount of kajaks
-     * @param array $timeslots
-     * @param array $kajaks
+     * Calculate price depending on timeslots and amount of kajaks.
+     * @param int $amount_timeslots
+     * @param int $amount_kajaks
      * @return int
      */
-    public function calculatePrice(array $timeslots, array $kajaks): int
+    public function calculatePrice(int $amount_timeslots, int $amount_kajaks): int
     {
-        /* prepare amount/factor */
-        $amount_kajaks = count($kajaks[0]) + count($kajaks[1]);
+        global $timeslots;
 
-        /* prepare prices */
-        $prices = $this->getPrices();
-        $price_single = $prices["single"];
-        $price_double = $prices["double"];
-        $price_kaution = $prices["kaution"];
-
-        /* if one timeslot */
-        if (count($timeslots) === 1) {
-            return ($amount_kajaks * $price_single) + $price_kaution;
+        if ($amount_timeslots === 0 || $amount_kajaks === 0) {
+            return 0;
         }
 
-        /* if two timeslots */
-        if (count($timeslots) === 2) {
-            return ($amount_kajaks * $price_double) + $price_kaution;
+        /* prepare prices */
+        $prices = $this->getPrices(true);
+
+        /* calculate all static prices e.g. prices that don't have amountTimeslots */
+        $static_prices = array_sum(
+            array_map(static function ($price) {
+                return (int)$price->value;
+            },
+                array_filter($prices, static function ($price) {
+                    return !property_exists($price, 'amountTimeslots');
+                })));
+
+
+        /* price logic */
+        foreach ($prices as $price) {
+            if (property_exists($price, 'amountTimeslots') &&
+                ((int) $price->amountTimeslots === $amount_timeslots ||
+                    ($price->amountTimeslots === 'all' && $amount_timeslots === count($timeslots)))) {
+                return ($amount_kajaks * (int)$price->value) + $static_prices;
+            }
         }
 
         return 0;
@@ -157,9 +192,10 @@ class Config
 
     /**
      * Get all timeslots from config.
+     * @param bool $asMatrix
      * @return array
      */
-    #[Pure] public function getTimeslot(): array
+    #[Pure] public function getTimeslots(bool $asMatrix = false): array
     {
         $timeslots = array();
         $xml = $this->getSimpleXMLConfig();
@@ -168,9 +204,19 @@ class Config
         }
 
         foreach ($xml->timeslots->children() as $child) {
-            $timeslot = new stdClass();
-            $timeslot->start = (string)$child->start;
-            $timeslot->end = (string)$child->ende;
+            $start = (string)$child->start;
+            $end = (string)$child->ende;
+
+            if ($asMatrix === true) {
+                $timeslot = array();
+                $timeslot[0] = $start;
+                $timeslot[1] = $end;
+            } else {
+                $timeslot = new stdClass();
+                $timeslot->start = $start;
+                $timeslot->end = $end;
+            }
+
             $timeslots[] = $timeslot;
         }
         return $timeslots;
@@ -185,11 +231,11 @@ class Config
     }
 
     /**
-     * Formats multiple timeslots from e.g. [9:00, 13:00] to 9:00 - 13:00
+     * Formats multiple timeslots from e.g. [9:00, 13:00] to 9:00 - 13:00.
      * @param $timeslots
      * @return array
      */
-    public function formatTimeslot($timeslots): array
+    private function formatTimeslot($timeslots): array
     {
         return array_map(static function ($timeslot) {
             return date('H:i', strtotime($timeslot->start)) . " - " . date('H:i', strtotime($timeslot->end));
@@ -197,26 +243,25 @@ class Config
     }
 
     /**
-     * Get formatted timeslots
+     * Get formatted timeslots.
      * @return array
      */
     public function getFormattedTimeslots(): array
     {
-        return $this->formatTimeslot($this->getTimeslot());
+        return $this->formatTimeslot($this->getTimeslots());
     }
 
     /**
      * Get config for days.
      * @return stdClass
      */
-    #[Pure] public function getDayConfig(): stdClass
+    #[Pure] public function getDays(): stdClass
     {
         $day_config = new stdClass();
         $xml = $this->getSimpleXMLConfig();
         if ($xml === null) {
             return $day_config;
         }
-
 
         $days = (array)$xml->days;
         $day_config->min_days = (int)$days["min"];
@@ -225,23 +270,25 @@ class Config
     }
 
     /**
-     * Returns the next max_days weekdays in a string.
+     * Returns the next max_days weekdays as a list of strings.
      * @return array<string>
      */
-    public function getDays(): array
+    public function getFormattedDays(): array
     {
-        $config = $this->getDayConfig();
+        $config = $this->getDays();
         $min_days = $config->min_days;
         $max_days = $config->max_days;
         $weekdays = array("Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag");
 
-        /* Create starting date */
+        /* create starting date */
         $date = date_create();
         if ($date === false) {
             return [''];
         }
+        /* add min_days to starting date */
         date_add($date, new DateInterval("P${min_days}D"));
 
+        /* create array with all weekdays */
         $days = array();
         for ($i = 0; $i < $max_days; $i++) {
             $weekday = (int)$date->format('w');
