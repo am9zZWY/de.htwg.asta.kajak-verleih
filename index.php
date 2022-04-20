@@ -14,7 +14,7 @@ require __DIR__ . '/scripts/script_reservation.php';
 require __DIR__ . '/scripts/script_template_helpers.php';
 require __DIR__ . '/scripts/script_email.php';
 require __DIR__ . '/scripts/script_errors.php';
-require __DIR__ . '/scripts/script_config.php';
+require __DIR__ . '/scripts/Config.php';
 
 /* If session is not set start it */
 session_start();
@@ -29,15 +29,13 @@ header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 
-/* Setup the database connection and the reservation table */
+/* Set up the database connection and the reservation table */
 $connection = connect_to_database();
 $_SESSION['connection'] = $connection;
 prepare_reservation_table($connection);
 
 /* Initialize Config Class*/
-$config = new Config();
-$_SESSION['config'] = $config;
-
+$_SESSION['config'] = new Config();
 ?>
 <!DOCTYPE html>
 <html lang="de" xmlns="http://www.w3.org/1999/html">
@@ -52,39 +50,35 @@ $_SESSION['config'] = $config;
 </head>
 <body>
 <?php
-if (is_logged_in()) {
-    include 'templates/template_admin_sidebar.php';
-} else {
-    include 'templates/template_sidebar.php';
-}
+include 'templates/template_sidebar.php';
 ?>
-<div>
-        <?php
-        if ($PARSED_URL === '/about') {
-            require("pages/user/page_user_agb.php");
-        } else if ($PARSED_URL === '/kajaks') {
-            require("pages/user/page_user_kajaks.php");
-        } else if ($PARSED_URL === '/impressum') {
-            require("pages/user/page_user_impressum.php");
-        } else if ($PARSED_URL === '/login') {
-            require("pages/admin/page_admin_login.php");
-        } else if ($PARSED_URL === '/cancel') {
-            require("pages/user/page_user_cancel.php");
-        } else if ($PARSED_URL === '/') {
-            require("pages/user/page_user_reservation.php");
-        }
+<div class="container">
+    <?php
+    if ($PARSED_URL === '/about') {
+        require("pages/user/page_user_agb.php");
+    } else if ($PARSED_URL === '/kajaks') {
+        require("pages/user/page_user_kajaks.php");
+    } else if ($PARSED_URL === '/impressum') {
+        require("pages/user/page_user_impressum.php");
+    } else if ($PARSED_URL === '/login') {
+        require("pages/admin/page_admin_login.php");
+    } else if ($PARSED_URL === '/cancel') {
+        require("pages/user/page_user_cancel.php");
+    } else if ($PARSED_URL === '/') {
+        require("pages/user/page_user_reservation.php");
+    }
 
-        if (is_logged_in()) {
-            if ($PARSED_URL === '/reservations') {
-                require("pages/admin/page_admin_reservations.php");
-            } elseif ($PARSED_URL === '/how_to_admin') {
-                require("pages/admin/page_admin_how_to.php");
-            } elseif ($PARSED_URL === '/config') {
-                require("pages/admin/page_admin_config.php");
-            }
+    if (is_logged_in()) {
+        if ($PARSED_URL === '/reservations') {
+            require("pages/admin/page_admin_reservations.php");
+        } elseif ($PARSED_URL === '/how_to_admin') {
+            require("pages/admin/page_admin_how_to.php");
+        } elseif ($PARSED_URL === '/config') {
+            require("pages/admin/page_admin_config.php");
         }
+    }
 
-        ?>
+    ?>
 </div>
 <?php require("templates/template_footer.php"); ?>
 </body>
