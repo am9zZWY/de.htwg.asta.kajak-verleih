@@ -1,6 +1,7 @@
 <?php
+global $config;
 /* kajaks for each kajak type */
-$amount_kajaks = array("single_kajak" => 4, "double_kajak" => 2);
+$amount_kajaks = $config->getAmountKajaks();
 
 /**
  * Create connection to mysql database.
@@ -265,8 +266,8 @@ function reservate_kajak(mysqli|null $conn, array $fields, bool $send_email = fa
     $max_time = $timeslots[$max_time_index][1];
     $timeslot = array($min_time, $max_time);
 
-    $amount_single_kajak = (int)clean_string($_POST['single-kajak']);
-    $amount_double_kajak = (int)clean_string($_POST['double-kajak']);
+    $amount_single_kajak = (int)clean_string($_POST['single_kajak']);
+    $amount_double_kajak = (int)clean_string($_POST['double_kajak']);
     $amount_kajaks = array($amount_single_kajak, $amount_double_kajak);
 
     $single_kajak_available = check_if_kajak_available($conn, $date, $timeslot, "single_kajak", $amount_single_kajak);
