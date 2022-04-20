@@ -1,7 +1,9 @@
 <?php
+global $config;
 create_header('Kajak Reservierung', '/');
 $connection = $_SESSION['connection'];
-$config = $_SESSION['config'];
+$kajaks = $config->getKajaks(true);
+$prices = $config->getPrices(false);
 ?>
 
 <div class="container my-2">
@@ -22,16 +24,13 @@ $config = $_SESSION['config'];
             <div class="row content">
                 <div class="header-wrapper">
                     <h3>Welche Kajak-Modelle gibt es?</h3>
-                    <?php
-                    $kajaks = $config->getKajaks(true);
-                    ?>
                     Es gibt <?php echo count($kajaks) ?> Kajak-Modelle:
                     <?php
                     foreach ($kajaks as $kajak) {
                         ?>
                         <div>
                             <strong><?php echo $kajak->name ?></strong>
-                            <img alt="Bild von <?php echo $kajak->name ?>" src="<?php echo $kajak->imgPath ?>"
+                            <img alt="Bild von <?php echo $kajak->name ?>" src="<?php echo $kajak->img ?>"
                                  class="img-fluid" style="width: 300px; height: 200px;"/>
                         </div>
                         <?php
@@ -201,29 +200,23 @@ $config = $_SESSION['config'];
                             </div>
 
                             <div class="row my-2">
-                                <?php global $amount_kajaks ?>
-                                <div class="col-md-6">
-                                    <div class="form-group form-floating">
-                                        <input type="number" max="<?php echo $amount_kajaks["single_kajak"] ?>"
-                                               min="0" id="single-kajak"
-                                               value="<?php echo get_post_field('single-kajak', 0) ?>"
-                                               name="single-kajak" class="form-control"/>
-                                        <label class="form-check-label" for="single-kajak">
-                                            Anzahl 1-Sitz Kajaks
-                                        </label>
+                                <?php global $amount_kajaks;
+                                foreach ($kajaks as $kajak) {
+                                    ?>
+                                    <div class="col-md-6">
+                                        <div class="form-group form-floating">
+                                            <input type="number" max="<?php echo $kajak->amount ?>"
+                                                   min="0" id="<?php echo $kajak->intName ?>"
+                                                   value="<?php echo get_post_field($kajak->intName, 0) ?>"
+                                                   name="<?php echo $kajak->intName ?>" class="form-control"/>
+                                            <label class="form-check-label" for="<?php echo $kajak->intName ?>">
+                                                Anzahl <?php echo $kajak->seats ?>-Sitz Kajaks
+                                            </label>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group form-floating">
-                                        <input type="number" max="<?php echo $amount_kajaks["double_kajak"] ?>"
-                                               min="0"
-                                               id="double-kajak" value="<?php echo get_post_field('double-kajak', 0) ?>"
-                                               name="double-kajak" class="form-control"/>
-                                        <label class="form-check-label" for="double-kajak">
-                                            Anzahl 2-Sitz Kajaks
-                                        </label>
-                                    </div>
-                                </div>
+                                    <?php
+                                }
+                                ?>
                             </div>
 
                             <div class="row my-2">
@@ -261,22 +254,33 @@ $config = $_SESSION['config'];
                     <script>
                         const calculated_price_element = document.getElementById('calculated-price');
                         const calculate_price = () => {
-                            const amount_single_kajak = parseInt(document.getElementById('single-kajak').value)
-                            const amount_double_kajak = parseInt(document.getElementById('double-kajak').value)
-                            const amount_timeslots = Array.from(document.getElementsByClassName('timeslot')).filter(timeslot => timeslot.checked).length
+                            <?php
+                            foreach ($kajaks as $kajak) {
+                            ?>const <?php echo 'amount_' . $kajak->intName ?> = parseInt(document.getElementById('<?php echo $kajak->intName ?>').value);
+                            <?php
+                            } ?>
 
-                            let price = 0;
-                            if (amount_timeslots === 1) {
-                                price = 5;
-                            } else if (amount_timeslots === 2) {
-                                price = 8;
+                            const amount_timeslots = Array.from(document.getElementsByClassName('timeslot')).filter(timeslot => timeslot.checked).length;
+                            const kaution = <?php echo (int)$prices->kaution->price ?>;
+
+                            let price;
+                            if (amount_timeslots === 0) {
+                                price = 0;
+                            } else if (amount_timeslots === 1) {
+                                price = <?php echo (int)$prices->single->price ?>;
+                            } else {
+                                price = <?php echo (int)$prices->complete->price ?>;
                             }
 
-                            calculated_price_element.innerHTML = '<strong>Bitte bringe ' + (amount_single_kajak + amount_double_kajak) * price + '€ in Bar mit.</strong>'
+                            calculated_price_element.innerHTML = '<strong>Bitte bringe ' + ((<?php
+                                foreach ($kajaks as $kajak) {
+                                ?><?php echo 'amount_' . $kajak->intName ?> + <?php
+                                } ?>0) * price + kaution) + '€ in Bar mit.</strong>';
                         }
 
-                        document.getElementById('single-kajak').addEventListener('change', calculate_price)
-                        document.getElementById('double-kajak').addEventListener('change', calculate_price)
+
+                        document.getElementById('single_kajak').addEventListener('change', calculate_price)
+                        document.getElementById('double_kajak').addEventListener('change', calculate_price)
                         Array.from(document.getElementsByClassName('timeslot')).forEach((timeslot) => timeslot.addEventListener('change', calculate_price))
                     </script>
                     <?php
