@@ -2,6 +2,7 @@
 global $config;
 /* kajaks for each kajak type */
 $amount_kajaks = $config->getAmountKajaks();
+$timeslots = $config->getTimeslots(true);
 
 /**
  * Create connection to mysql database.
@@ -61,9 +62,9 @@ CREATE TABLE IF NOT EXISTS reservations
     reservation_date DATE            NOT NULL,
     from_time        TIME            NOT NULL,
     to_time          TIME            NOT NULL,
-    single_kajak     NUMERIC         NOT NULL,
-    double_kajak     NUMERIC         NOT NULL,
-    price            NUMERIC         NOT NULL,
+    single_kajak     NUMERIC         NOT NULL DEFAULT 0,
+    double_kajak     NUMERIC         NOT NULL DEFAULT 0,
+    price            NUMERIC         NOT NULL DEFAULT 0,
     archived         BOOLEAN         NOT NULL DEFAULT FALSE,
     cancelled        BOOLEAN         NOT NULL DEFAULT FALSE,
     CONSTRAINT NAME_CHECK CHECK (REGEXP_LIKE(name, '^[A-ZäÄöÖüÜßa-z]+ [A-ZäÄöÖüÜßa-z]+$'))
@@ -189,9 +190,10 @@ function check_if_kajak_available(mysqli|null $conn, string $date, array $timesl
  * @param string $date
  * @param array<string> $timeslot
  * @param array<string> $kajaks
+ * @param int $price
  * @return bool|string
  */
-function insert_reservation(mysqli|null $conn, string $name, string $email, string $phone, string $date, array $timeslot, array $kajaks): bool|string
+function insert_reservation(mysqli|null $conn, string $name, string $email, string $phone, string $date, array $timeslot, array $kajaks, int $price): bool|string
 {
     global $ERROR_DATABASE_CONNECTION;
 
@@ -205,10 +207,10 @@ function insert_reservation(mysqli|null $conn, string $name, string $email, stri
 
     try {
         $sql = $conn->prepare("
-INSERT INTO reservations (name, email, phone, date, address, reservation_date, from_time, to_time, single_kajak, double_kajak)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+INSERT INTO reservations (name, email, phone, date, address, reservation_date, from_time, to_time, single_kajak, double_kajak, price)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 ");
-        $sql->bind_param('ssssssssss', $name, $email, $phone, $date, $address, $reservation_date, $timeslot[0], $timeslot[1], $kajaks[0], $kajaks[1]);
+        $sql->bind_param('sssssssssss', $name, $email, $phone, $date, $address, $reservation_date, $timeslot[0], $timeslot[1], $kajaks[0], $kajaks[1], $price);
         $result_execute = $sql->execute();
         if ($result_execute === false) {
             return false;
@@ -221,7 +223,7 @@ INSERT INTO reservations (name, email, phone, date, address, reservation_date, f
 
         $reservation_id = $result->fetch_assoc()["id"];
         return $reservation_id ?? false;
-    } catch (Exception) {
+    } catch (Exception $e) {
         return false;
     }
 }
@@ -293,14 +295,18 @@ function reservate_kajak(mysqli|null $conn, array $fields, bool $send_email = fa
         return $ERROR_RESERVATION_KAJAK_NOT_SELECTED;
     }
 
+    /* calculate price */
+    global $config;
+    $price = $config->calculatePrice(count($timeslots), array_sum($amount_kajaks));
+
     /* insert reservation into database and get reservation_id back */
-    $reservation_id = insert_reservation($conn, $fullname, $email, $phone, $date, $timeslot, $amount_kajaks);
+    $reservation_id = insert_reservation($conn, $fullname, $email, $phone, $date, $timeslot, $amount_kajaks, $price);
     if ($reservation_id === false) {
         return $ERROR_RESERVATION;
     }
 
     if ($send_email) {
-        $send_mail_status = send_reservation_email($reservation_id, $name, $email, $amount_kajaks, $timeslot, $date);
+        $send_mail_status = send_reservation_email($reservation_id, $name, $email, $amount_kajaks, $timeslot, $date, $price);
         if ($send_mail_status === false) {
             return $ERROR_MAIL_NOT_SENT;
         }
