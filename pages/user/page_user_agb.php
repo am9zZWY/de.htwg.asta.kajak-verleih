@@ -1,5 +1,5 @@
 <?php
-create_header('Informationen zur Reservierung');
+echo create_header('Informationen zur Reservierung');
 ?>
 <div class="container-fluid">
     <div class="container">

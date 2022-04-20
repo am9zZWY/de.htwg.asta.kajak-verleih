@@ -1,5 +1,5 @@
 <?php
-create_header('How to Admin');
+echo create_header('How to Admin');
 ?>
 <div class="container">
     <div class="row">

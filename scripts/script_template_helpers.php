@@ -5,12 +5,11 @@
  *
  * @param string $header
  * @param string|null $link
- * @param bool $echo
  * @return string
  */
-function create_header(string $header, string|null $link = null, bool $echo = true): string
+function create_header(string $header, string|null $link = null): string
 {
-    $created_header = "
+    return "
     <div class='header-wrapper'>" .
         ($link === null ?
             "<h1 class='text-light'>
@@ -22,22 +21,16 @@ function create_header(string $header, string|null $link = null, bool $echo = tr
             </h1>
         </a>
 ") . "</div> ";
-
-    if ($echo) {
-        echo $created_header;
-    }
-    return $created_header;
 }
 
 /**
  * Creates an accordion.
  *
- * @param bool $echo
  * @return string
  */
-function create_accordion(bool $echo = true): string
+function create_accordion(): string
 {
-    $created_accordion = "<script>
+    return "<script>
                 Array.from(document.getElementsByClassName('accordion')).forEach((item) => {
                     item.addEventListener('click', function () {
                         item.classList.toggle('active');
@@ -46,9 +39,4 @@ function create_accordion(bool $echo = true): string
                     });
                 })
             </script>";
-
-    if ($echo) {
-        echo $created_accordion;
-    }
-    return $created_accordion;
 }

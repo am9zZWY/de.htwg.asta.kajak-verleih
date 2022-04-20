@@ -1,5 +1,5 @@
 <?php
-create_header('Impressum')
+echo create_header('Impressum')
 ?>
 <div class="container">
     <div class="row">

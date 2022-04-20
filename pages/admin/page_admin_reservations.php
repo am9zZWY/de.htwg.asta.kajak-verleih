@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 /* Get all reservations from database */
 $reservations = get_reservations($conn);
 
-create_header('Reservierungen');
+echo create_header('Reservierungen');
 ?>
 <div class="container">
     <div class="row">

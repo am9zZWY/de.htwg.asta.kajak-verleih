@@ -1,5 +1,5 @@
 <?php
-create_header('Login');
+echo create_header('Login');
 ?>
 <div class="container">
     <div class="row justify-content-center">

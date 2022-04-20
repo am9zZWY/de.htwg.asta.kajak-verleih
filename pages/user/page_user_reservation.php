@@ -1,6 +1,6 @@
 <?php
 global $config;
-create_header('Kajak Reservierung', '/');
+echo create_header('Kajak Reservierung', '/');
 $connection = $_SESSION['connection'];
 $kajaks = $config->getKajaks(true);
 $prices = $config->getPrices();

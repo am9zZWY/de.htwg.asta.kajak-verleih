@@ -1,5 +1,5 @@
 <?php
-create_header('Stornierung');
+echo create_header('Stornierung');
 $connection = $_SESSION['connection'];
 
 global $URL;

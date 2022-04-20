@@ -1,8 +1,5 @@
 <?php
-create_header('Konfiguration');
-
-$xml = simplexml_load_file("config.xml")
-or die("Error: Cannot create object");
+echo create_header('Konfiguration');
 ?>
 <div class="container">
     <div class="row content">
@@ -10,6 +7,8 @@ or die("Error: Cannot create object");
             <p>Aktuelle Werte:</p>
             <?php
 
+            /*
+            TODO: @Krakelo could you plzzz fix it? <3
             $config = $_SESSION['config'];
             echo $config->kajakToString($config->getKajaks()[0]);
             echo $config->kajakToString($config->getKajaks()[1]);
@@ -18,10 +17,10 @@ or die("Error: Cannot create object");
             echo $config->kautionToString($config->getKaution()[0]);
             echo $config->timeslotToString($config->getTimeslot()[0]);
             echo $config->timeslotToString($config->getTimeslot()[1]);
+            */
                 ?>
         </div>
     </div>
-</div>
 </div>
 
 
