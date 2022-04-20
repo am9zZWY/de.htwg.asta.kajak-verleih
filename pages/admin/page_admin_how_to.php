@@ -17,7 +17,6 @@ create_header('How to Admin');
         </div>
         <button class="accordion"><strong>Sonstiges</strong></button>
         <div class="panel">
-            <h1>Du bist Dumm!</h1>
             <button class="accordion">Wirklich Sonstiges</button>
             <div class="panel">
                 <h3>Josef und Vasilij sind krass!</h3>
