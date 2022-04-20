@@ -7,12 +7,12 @@ use PHPMailer\PHPMailer\PHPMailer;
  * Create email signature.
  * @return string
  */
-function email_signature(): string
+function get_email_signature(): string
 {
     return "
 <br/><br/>
-Beste Grüße<br/>
-Dein Kajak-Team<br/><br/>
+Beste Grüße<br/><br/>
+Dein Kajak-Team<br/>
 ------------------------------------------<br/>
 <strong>Allgemeiner Studierendenausschuss (AStA)</strong>
 <br/>
@@ -36,9 +36,10 @@ Fon: 07531 / 206 – 431<br/>
  * @param array<string> $kajaks
  * @param array<string> $timeslot
  * @param string $date
+ * @param int $price
  * @return bool
  */
-function send_reservation_email(string $reservation_id, string $name, string $email_address_to, array $kajaks, array $timeslot, string $date): bool
+function send_reservation_email(string $reservation_id, string $name, string $email_address_to, array $kajaks, array $timeslot, string $date, int $price): bool
 {
     $formatted_date = date('d.m.Y', strtotime($date));
     $formatted_timeslot_from = date('H:i', strtotime($timeslot[0]));
@@ -54,10 +55,13 @@ function send_reservation_email(string $reservation_id, string $name, string $em
             </ul>
         </p>
         <p>
+            Bitte bringe <strong>$price Euro</strong> in Bar und deinen <strong>Studierendenausweis</strong> mit.
+        </p>
+        <p>
             Um die Reservierung zu stornieren, klicke bitte auf den folgenden Link:<br/>
             <a href='http://{$_SERVER['HTTP_HOST']}/cancel?id=$reservation_id'>Stornieren</a>
         </p>
-    " . email_signature());
+    " . get_email_signature());
 }
 
 /**
@@ -77,7 +81,7 @@ function send_cancellation_email(string $reservation_id, string $email_address_t
         <strong>
             Falls dies ein Fehler war, kontaktiere uns bitte. Falls in der Zwischenzeit am selben Tag bereits jemand anderes reserviert hat, ist eine Rücknahme der Stornierung nicht möglich.
         </strong>
-    " . email_signature());
+    " . get_email_signature());
 }
 
 /**
