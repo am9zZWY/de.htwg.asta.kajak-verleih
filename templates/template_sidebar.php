@@ -10,8 +10,13 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') && isset($_POST['logout'])) {
 }
 ?>
 
+<nav class="fixed-top">
+    <div id="burger" class="sidenav-burger">
+        <span style="font-size:30px;background-color: transparent;cursor:pointer" onclick="openNav()">&#9776;</span>
+    </div>
+</nav>
 <div id="mySidenav" class="sidenav">
-    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="javascript:void(0)" class="close-btn" onclick="closeNav()">&times;</a>
     <a href="/">Home</a>
     <a href="/kajaks">Kajaks</a>
     <a href="/about">Info</a>
@@ -28,9 +33,6 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') && isset($_POST['logout'])) {
         <?php
     }
     ?>
-</div>
-<div id="burger" class="sidenav-burger">
-    <span style="font-size:30px;background-color: transparent;cursor:pointer" onclick="openNav()">&#9776;</span>
 </div>
 <script lang="javascript">
     function openNav() {
