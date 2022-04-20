@@ -31,18 +31,6 @@ function clean_array(array|null $array): array
 }
 
 /**
- * Checks if Server is using HTTPS.
- *
- * @return bool
- */
-function is_secure(): bool
-{
-    return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] === 443;
-}
-
-$SERVER_ADDRESS = $_SESSION['SERVER_ADDRESS'] ?? ((is_secure() ? 'https://' : 'http://') . $_SERVER['HTTP_HOST']);
-
-/**
  * Get env variable.
  *
  * @param string $key
