@@ -11,10 +11,8 @@ create_header('Informationen zur Reservierung');
                         Diese werden für einen sicheren Betrieb der Kajaks benötigt.
                         Der Mieter verpflichtet sich, die Mietgegenstände mit Sorgfalt zu behandeln. Schäden und
                         Verschmutzungen werden auf Kosten des Mieters entfernt. Zum festgelegten Abhol-/Rückholtermin
-                        hat
-                        der Mieter die Mietgegenstände vollständig und persönlich dem Vermieter zurückzugeben. Fehlende
-                        oder
-                        kaputte Gegenstände werden zum Wiederbeschaffungswert berechnet.
+                        hat der Mieter die Mietgegenstände vollständig und persönlich dem Vermieter zurückzugeben. Fehlende
+                        oder kaputte Gegenstände werden zum Wiederbeschaffungswert berechnet.
                     </p>
                 </div>
             </div>
