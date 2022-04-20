@@ -8,34 +8,34 @@ use Dotenv\Dotenv;
 $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->safeLoad();
 
+/* initialize Config Class */
+require __DIR__ . '/scripts/Config.php';
+$config = new Config();
+
 require __DIR__ . '/scripts/script_helpers.php';
 require __DIR__ . '/scripts/script_login.php';
 require __DIR__ . '/scripts/script_reservation.php';
 require __DIR__ . '/scripts/script_template_helpers.php';
 require __DIR__ . '/scripts/script_email.php';
 require __DIR__ . '/scripts/script_errors.php';
-require __DIR__ . '/scripts/Config.php';
 
-/* If session is not set start it */
+/* if session is not set start it */
 session_start();
 
 
-/* Get the current address because index.php acts as a router */
+/* get the current address because index.php acts as a router */
 $URL = $_SERVER['REQUEST_URI'];
 $PARSED_URL = strtolower(parse_url($URL, PHP_URL_PATH));
 
-/* Send headers */
+/* send headers */
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 
-/* Set up the database connection and the reservation table */
+/* set up the database connection and the reservation table */
 $connection = connect_to_database();
 $_SESSION['connection'] = $connection;
 prepare_reservation_table($connection);
-
-/* Initialize Config Class*/
-$_SESSION['config'] = new Config();
 ?>
 <!DOCTYPE html>
 <html lang="de" xmlns="http://www.w3.org/1999/html">
