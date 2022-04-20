@@ -9,8 +9,8 @@ $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->safeLoad();
 
 /* initialize Config Class */
-require __DIR__ . '/scripts/Config.php';
-$config = new Config();
+require __DIR__ . '/scripts/ConfigHelper.php';
+$config = new ConfigHelper();
 
 require __DIR__ . '/scripts/script_helpers.php';
 require __DIR__ . '/scripts/script_login.php';
@@ -21,7 +21,6 @@ require __DIR__ . '/scripts/script_errors.php';
 
 /* if session is not set start it */
 session_start();
-
 
 /* get the current address because index.php acts as a router */
 $URL = $_SERVER['REQUEST_URI'];
@@ -36,7 +35,14 @@ header("Pragma: no-cache");
 $connection = connect_to_database();
 $_SESSION['connection'] = $connection;
 prepare_reservation_table($connection);
+
+/* API */
+if ($PARSED_URL === '/api') {
+    require("pages/api/page_api.php");
+    return;
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="de" xmlns="http://www.w3.org/1999/html">
 <head>
@@ -46,18 +52,19 @@ prepare_reservation_table($connection);
     <link rel="stylesheet" href="/static/css/custom.css">
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous"></script>
     <title>Kajak Verleihsystem von Coolen Typen</title>
 </head>
 <body>
 <?php
-include 'templates/template_sidebar.php';
+include 'components/component_sidebar.php';
 ?>
 <div class="container my-5">
     <?php
     if ($PARSED_URL === '/about') {
         require("pages/user/page_user_agb.php");
-    } else if ($PARSED_URL === '/kajaks') {
-        require("pages/user/page_user_kajaks.php");
     } else if ($PARSED_URL === '/impressum') {
         require("pages/user/page_user_impressum.php");
     } else if ($PARSED_URL === '/login') {
@@ -80,6 +87,6 @@ include 'templates/template_sidebar.php';
 
     ?>
 </div>
-<?php require("templates/template_footer.php"); ?>
+<?php require("components/component_footer.php"); ?>
 </body>
 </html>
