@@ -22,6 +22,6 @@ echo create_header('How to Admin');
                 <h3>Josef und Vasilij sind krass!</h3>
             </div>
         </div>
-        <?php echo create_accordion(false) ?>
+        <?php echo create_accordion() ?>
     </div>
 </div>
