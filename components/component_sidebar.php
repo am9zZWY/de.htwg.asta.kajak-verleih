@@ -23,7 +23,7 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') && isset($_POST['logout'])) {
     <?php
     if (is_logged_in()) {
         ?>
-        <a href="/reservations">Reservierungen</a>
+        <a href="/admin">Dashboard</a>
         <a href="/config">Konfiguration</a>
         <a href="/how_to_admin">Anleitung</a>
         <form method="POST">
