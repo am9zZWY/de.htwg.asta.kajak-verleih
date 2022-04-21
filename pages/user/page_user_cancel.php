@@ -50,17 +50,5 @@ $reservation_id = clean_string($params['id'] ?? '');
                 ?>
             </div>
         </div>
-        <div class="col-lg-3 me-auto">
-            <div class="text-light header-wrapper">
-                <h2>Was bieten wir an?</h2>
-                <p>
-                    Wir bieten für die HTWG Konstanz und für Universität Konstanz die Möglichkeit, Kajaks zu
-                    reservieren.
-                    Bitte fülle das Formular aus, damit wir überprüfen können, ob an deinem gewünschten
-                    Datum
-                    und Zeit Kajaks frei sind.
-                </p>
-            </div>
-        </div>
     </div>
 </div>
