@@ -33,7 +33,7 @@ Fon: 07531 / 206 – 431<br/>
  * @param string $reservation_id
  * @param string $name
  * @param string $email_address_to
- * @param array<string> $kajaks
+ * @param array $kajaks
  * @param array<string> $timeslot
  * @param string $date
  * @param int $price
@@ -45,14 +45,15 @@ function send_reservation_email(string $reservation_id, string $name, string $em
     $formatted_timeslot_from = date('H:i', strtotime($timeslot[0]));
     $formatted_timeslot_to = date('H:i', strtotime($timeslot[1]));
 
+    $format_kajaks = "<ul>" . implode(array_map(static function ($kajak) {
+            return "<li>" . $kajak["kajak_name"] . " mit " . $kajak["seats"] . " Sitzen</li>";
+        }, $kajaks)) . "</ul>";
+
     return send_mail($email_address_to, "Reservierungsbestätigung Kajak am $formatted_date", "
         Hallo $name,
         <p>
             Du hast am $formatted_date von $formatted_timeslot_from bis $formatted_timeslot_to Uhr eine Reservierung mit der <strong>ID $reservation_id</strong> für folgende Kajaks:<br/>
-            <ul>
-                <li>Einzelkajak: $kajaks[0] Stück</li>
-                <li>Doppelkajak: $kajaks[1] Stück</li>
-            </ul>
+            $format_kajaks
         </p>
         <p>
             Bitte bringe <strong>$price Euro</strong> in Bar und deinen <strong>Studierendenausweis</strong> mit.
