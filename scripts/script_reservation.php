@@ -204,7 +204,6 @@ function insert_reservation(mysqli|null $conn, string $name, string $email, stri
     }
 
     $reservation_date = date('Y-m-d');
-    $address = '';
 
     try {
         $sql = $conn->prepare("
@@ -225,6 +224,7 @@ INSERT INTO reservations (name, email, phone, date, address, reservation_date, f
         $reservation_id = $result->fetch_assoc()["id"];
         return $reservation_id ?? false;
     } catch (Exception $e) {
+        var_dump($e);
         return false;
     }
 }
@@ -253,7 +253,7 @@ function reservate_kajak(mysqli|null $conn, array $fields, bool $send_email = fa
     $fullname = $name . ' ' . $surname;
     $email = clean_string($fields['email']);
     $phone = clean_string($fields['phone']);
-    $address= clean_string($fields['address'] . [' '] . $fields['plz'] . [' '] . $fields['city']);
+    $address= clean_string($fields['street'] . ' ' . $fields['plz'] . ', ' . $fields['city'] . ', ' . $fields['country']);
     $date = clean_string($fields['date']);
 
     $timeslot = clean_array($fields['timeslots'] ?? []);
