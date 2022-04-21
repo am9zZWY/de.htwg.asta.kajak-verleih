@@ -30,7 +30,7 @@ function login(string $username, string $password): bool
  *
  * @return void
  */
-function logout()
+function logout(): void
 {
     unset($_SESSION['logged_in']);
 }
