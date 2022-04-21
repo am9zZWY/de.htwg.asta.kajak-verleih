@@ -23,16 +23,17 @@ class ConfigHelper
     }
 
     /**
-     * Get xml string as SimpleXMLElement.
-     * @return SimpleXMLElement|null
+     * Get object with amount of kajaks
+     * @return array
      */
-    private function getSimpleXMLConfig(): ?SimpleXMLElement
+    public function getAmountKajaks(): array
     {
-        try {
-            return new SimpleXMLElement($this->xml);
-        } catch (Exception) {
-            return null;
+        $kajaks = $this->getKajaks(true);
+        $amount = array();
+        foreach ($kajaks as $kajak) {
+            $amount[$kajak->kind] = (int)$kajak->amount;
         }
+        return $amount;
     }
 
     /**
@@ -72,17 +73,16 @@ class ConfigHelper
     }
 
     /**
-     * Get object with amount of kajaks
-     * @return array
+     * Get xml string as SimpleXMLElement.
+     * @return SimpleXMLElement|null
      */
-    public function getAmountKajaks(): array
+    private function getSimpleXMLConfig(): ?SimpleXMLElement
     {
-        $kajaks = $this->getKajaks(true);
-        $amount = array();
-        foreach ($kajaks as $kajak) {
-            $amount[$kajak->intName] = (int)$kajak->amount;
+        try {
+            return new SimpleXMLElement($this->xml);
+        } catch (Exception) {
+            return null;
         }
-        return $amount;
     }
 
     public function kajakToString($kajak): string
@@ -91,6 +91,53 @@ class ConfigHelper
             "Sitze: " . $kajak->seats . "<br>" .
             "Anzahl: " . $kajak->amount . "<br>" .
             "------------------------------" . "<br>";
+    }
+
+    /**
+     * Calculate price depending on timeslots and amount of kajaks.
+     * @param int $amount_timeslots
+     * @param int $amount_kajaks
+     * @return int
+     */
+    public function calculatePrice(int $amount_timeslots, int $amount_kajaks): int
+    {
+        global $config_timeslots;
+
+        if ($amount_timeslots === 0 || $amount_kajaks === 0) {
+            return 0;
+        }
+
+        /* prepare prices */
+        $prices = $this->getPrices(true);
+
+        /* calculate all static prices e.g. prices that don't depend on a variable */
+        $static_prices = array_sum(
+            array_map(static function ($price) {
+                return (int)$price->value;
+            },
+                array_filter($prices, static function ($price) {
+                    return !property_exists($price, 'dependOn');
+                })));
+
+        /* calculate all prices that are per kajak */
+        $perKajak_prices = array_sum(
+            array_map(static function ($price) {
+                return (int)$price->value;
+            },
+                array_filter($prices, static function ($price) {
+                    return property_exists($price, 'dependOn') && $price->dependOn === 'kajak';
+                })));
+
+        /* calculate price */
+        foreach ($prices as $price) {
+            if (property_exists($price, 'amountTimeslots') &&
+                ((int)$price->amountTimeslots === $amount_timeslots ||
+                    ($price->amountTimeslots === 'all' && $amount_timeslots === count($config_timeslots)))) {
+                return $amount_kajaks * ((int)$price->value + $perKajak_prices) + $static_prices;
+            }
+        }
+
+        return 0;
     }
 
     /**
@@ -144,50 +191,40 @@ class ConfigHelper
         return $prices;
     }
 
-    /**
-     * Calculate price depending on timeslots and amount of kajaks.
-     * @param int $amount_timeslots
-     * @param int $amount_kajaks
-     * @return int
-     */
-    public function calculatePrice(int $amount_timeslots, int $amount_kajaks): int
-    {
-        global $timeslots;
-
-        if ($amount_timeslots === 0 || $amount_kajaks === 0) {
-            return 0;
-        }
-
-        /* prepare prices */
-        $prices = $this->getPrices(true);
-
-        /* calculate all static prices e.g. prices that don't have amountTimeslots */
-        $static_prices = array_sum(
-            array_map(static function ($price) {
-                return (int)$price->value;
-            },
-                array_filter($prices, static function ($price) {
-                    return !property_exists($price, 'amountTimeslots');
-                })));
-
-
-        /* price logic */
-        foreach ($prices as $price) {
-            if (property_exists($price, 'amountTimeslots') &&
-                ((int) $price->amountTimeslots === $amount_timeslots ||
-                    ($price->amountTimeslots === 'all' && $amount_timeslots === count($timeslots)))) {
-                return ($amount_kajaks * (int)$price->value) + $static_prices;
-            }
-        }
-
-        return 0;
-    }
-
     public function pricesToString($prices): string
     {
         return "Timeslot: " . $prices->name . "<br>" .
             "Preis: " . $prices->price . "<br>" .
             "------------------------------" . "<br>";
+    }
+
+    public function timeslotToString($timeslots): string
+    {
+        return "Timeslot: " . $timeslots->name . "<br>" .
+            "Start: " . $timeslots->start . "<br>" .
+            "Ende: " . $timeslots->ende . "<br>" .
+            "------------------------------" . "<br>";
+    }
+
+    /**
+     * Get formatted timeslots.
+     * @return array
+     */
+    public function getFormattedTimeslots(): array
+    {
+        return $this->formatTimeslot($this->getTimeslots());
+    }
+
+    /**
+     * Formats multiple timeslots from e.g. [9:00, 13:00] to 9:00 - 13:00.
+     * @param $timeslots
+     * @return array
+     */
+    private function formatTimeslot($timeslots): array
+    {
+        return array_map(static function ($timeslot) {
+            return date('H:i', strtotime($timeslot->start)) . " - " . date('H:i', strtotime($timeslot->end));
+        }, $timeslots);
     }
 
     /**
@@ -222,53 +259,6 @@ class ConfigHelper
         return $timeslots;
     }
 
-    public function timeslotToString($timeslots): string
-    {
-        return "Timeslot: " . $timeslots->name . "<br>" .
-            "Start: " . $timeslots->start . "<br>" .
-            "Ende: " . $timeslots->ende . "<br>" .
-            "------------------------------" . "<br>";
-    }
-
-    /**
-     * Formats multiple timeslots from e.g. [9:00, 13:00] to 9:00 - 13:00.
-     * @param $timeslots
-     * @return array
-     */
-    private function formatTimeslot($timeslots): array
-    {
-        return array_map(static function ($timeslot) {
-            return date('H:i', strtotime($timeslot->start)) . " - " . date('H:i', strtotime($timeslot->end));
-        }, $timeslots);
-    }
-
-    /**
-     * Get formatted timeslots.
-     * @return array
-     */
-    public function getFormattedTimeslots(): array
-    {
-        return $this->formatTimeslot($this->getTimeslots());
-    }
-
-    /**
-     * Get config for days.
-     * @return stdClass
-     */
-    #[Pure] public function getDays(): stdClass
-    {
-        $day_config = new stdClass();
-        $xml = $this->getSimpleXMLConfig();
-        if ($xml === null) {
-            return $day_config;
-        }
-
-        $days = (array)$xml->days;
-        $day_config->min_days = (int)$days["min"];
-        $day_config->max_days = (int)$days["max"];
-        return $day_config;
-    }
-
     /**
      * Returns the next max_days weekdays as a list of strings.
      * @return array<string>
@@ -299,5 +289,23 @@ class ConfigHelper
             date_add($date, new DateInterval("P1D"));
         }
         return $days;
+    }
+
+    /**
+     * Get config for days.
+     * @return stdClass
+     */
+    #[Pure] public function getDays(): stdClass
+    {
+        $day_config = new stdClass();
+        $xml = $this->getSimpleXMLConfig();
+        if ($xml === null) {
+            return $day_config;
+        }
+
+        $days = (array)$xml->days;
+        $day_config->min_days = (int)$days["min"];
+        $day_config->max_days = (int)$days["max"];
+        return $day_config;
     }
 }
