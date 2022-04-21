@@ -330,7 +330,7 @@ WHERE kajak_name NOT IN (SELECT kajak_reservation.kajak_name
  * @param int $price
  * @return bool|string
  */
-function insert_reservation(mysqli|null $conn, string $name, string $email, string $phone, string $date, array $timeslot, array $kajak_names, int $price): bool|string
+function insert_reservation(mysqli|null $conn, string $name, string $email, string $phone, string $address, string $date, array $timeslot, array $kajak_names, int $price): bool|string
 {
     global $ERROR_DATABASE_CONNECTION;
 
