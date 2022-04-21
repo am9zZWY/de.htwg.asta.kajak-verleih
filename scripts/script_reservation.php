@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS reservations
     name             VARCHAR(30)     NOT NULL,
     email            VARCHAR(50)     NOT NULL,
     phone            VARCHAR(20)     NOT NULL,
-    address          VARCHAR(80)     NOT NULL,
+    address          VARCHAR(200)     NOT NULL,
     date             DATE            NOT NULL,
     reservation_date DATE            NOT NULL,
     from_time        TIME            NOT NULL,
@@ -187,13 +187,14 @@ function check_if_kajak_available(mysqli|null $conn, string $date, array $timesl
  * @param string $name
  * @param string $email
  * @param string $phone
+ * @param string $address
  * @param string $date
  * @param array<string> $timeslot
  * @param array<string> $kajaks
  * @param int $price
  * @return bool|string
  */
-function insert_reservation(mysqli|null $conn, string $name, string $email, string $phone, string $date, array $timeslot, array $kajaks, int $price): bool|string
+function insert_reservation(mysqli|null $conn, string $name, string $email, string $phone, string $address, string $date, array $timeslot, array $kajaks, int $price): bool|string
 {
     global $ERROR_DATABASE_CONNECTION;
 
@@ -252,6 +253,7 @@ function reservate_kajak(mysqli|null $conn, array $fields, bool $send_email = fa
     $fullname = $name . ' ' . $surname;
     $email = clean_string($fields['email']);
     $phone = clean_string($fields['phone']);
+    $address= clean_string($fields['address'] . [' '] . $fields['plz'] . [' '] . $fields['city']);
     $date = clean_string($fields['date']);
 
     $timeslot = clean_array($fields['timeslots'] ?? []);
@@ -300,7 +302,7 @@ function reservate_kajak(mysqli|null $conn, array $fields, bool $send_email = fa
     $price = $config->calculatePrice(count($timeslots), array_sum($amount_kajaks));
 
     /* insert reservation into database and get reservation_id back */
-    $reservation_id = insert_reservation($conn, $fullname, $email, $phone, $date, $timeslot, $amount_kajaks, $price);
+    $reservation_id = insert_reservation($conn, $fullname, $email, $phone, $address, $date, $timeslot, $amount_kajaks, $price);
     if ($reservation_id === false) {
         return $ERROR_RESERVATION;
     }
