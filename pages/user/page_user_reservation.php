@@ -3,7 +3,6 @@ global $config;
 echo create_header('Kajak Reservierung', '/');
 $connection = $_SESSION['connection'];
 $kajaks = $config->getKajaks(true);
-$prices = $config->getPrices();
 ?>
 
 <div class="container my-2">
@@ -205,17 +204,17 @@ $prices = $config->getPrices();
                             </div>
 
                             <div class="row my-2">
-                                <?php global $amount_kajaks;
+                                <?php
                                 foreach ($kajaks as $kajak) {
                                     ?>
                                     <div class="col-md-6">
                                         <div class="form-group form-floating">
                                             <input type="number" max="<?php echo $kajak->amount ?>"
-                                                   min="0" id="<?php echo $kajak->intName ?>"
-                                                   value="<?php echo get_post_field($kajak->intName, 0) ?>"
-                                                   name="<?php echo $kajak->intName ?>"
+                                                   min="0" id="<?php echo $kajak->kind ?>"
+                                                   value="<?php echo get_post_field($kajak->kind, 0) ?>"
+                                                   name="<?php echo $kajak->kind ?>"
                                                    class="amount-kajak form-control"/>
-                                            <label class="form-check-label" for="<?php echo $kajak->intName ?>">
+                                            <label class="form-check-label" for="<?php echo $kajak->kind ?>">
                                                 Anzahl der <?php echo $kajak->name ?>s
                                             </label>
                                         </div>
