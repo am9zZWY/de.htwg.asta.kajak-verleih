@@ -1,5 +1,5 @@
 <?php
-echo create_header('Login');
+echo create_header('Einloggen');
 ?>
 <div class="container">
     <div class="row justify-content-center">
@@ -39,7 +39,7 @@ echo create_header('Login');
                             ?>
                             <h3>Einloggen erfolgreich</h3>
                             <script>
-                                window.location.href = "/reservations";
+                                window.location.href = "/admin";
                             </script>
                             <?php
                         }
