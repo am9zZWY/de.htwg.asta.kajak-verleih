@@ -1,7 +1,7 @@
 <?php
 require __DIR__ . '/vendor/autoload.php';
 
-/* Used to load credentials from .env file */
+/* used to load credentials from .env file */
 
 use Dotenv\Dotenv;
 
@@ -31,10 +31,12 @@ header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 
-/* set up the database connection and the reservation table */
+/* set up the database connection and the tables */
 $connection = connect_to_database();
 $_SESSION['connection'] = $connection;
-prepare_reservation_table($connection);
+add_reservation_table($connection);
+add_kajak_table($connection);
+add_reservation_kajak_table($connection);
 
 /* API */
 if ($PARSED_URL === '/api') {
@@ -59,6 +61,7 @@ if ($PARSED_URL === '/api') {
 </head>
 <body>
 <?php
+/* navigation bar */
 include 'components/component_sidebar.php';
 ?>
 <div class="container my-5">
@@ -75,9 +78,10 @@ include 'components/component_sidebar.php';
         require("pages/user/page_user_reservation.php");
     }
 
+    /* show these pages only when logged in */
     if (is_logged_in()) {
-        if ($PARSED_URL === '/reservations') {
-            require("pages/admin/page_admin_reservations.php");
+        if ($PARSED_URL === '/admin') {
+            require("pages/admin/page_admin.php");
         } elseif ($PARSED_URL === '/how_to_admin') {
             require("pages/admin/page_admin_how_to.php");
         } elseif ($PARSED_URL === '/config') {
