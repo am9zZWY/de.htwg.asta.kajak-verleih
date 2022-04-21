@@ -3,40 +3,34 @@
     <!-- KAJAKS -->
     <kajaks>
         <kajak name="Einzelkajak">
-            <prop name="intName">single_kajak</prop>
+            <prop name="kind">single_kajak</prop>
             <prop name="seats">1</prop>
             <prop name="amount">4</prop>
             <prop name="img">/static/img/einzel-kajak.png</prop>
         </kajak>
         <kajak name="Doppelkajak">
-            <prop name="intName">double_kajak</prop>
+            <prop name="kind">double_kajak</prop>
             <prop name="seats">2</prop>
             <prop name="amount">2</prop>
             <prop name="img">/static/img/doppel-kajak.png</prop>
         </kajak>
-        <!-- <kajak name="Dreisitzkajak">
-            <prop name="intName">triple_kajak</prop>
-            <prop name="seats">3</prop>
-            <prop name="amount">1</prop>
-            <prop name="img">/static/img/doppel-kajak.png</prop>
-        </kajak> -->
     </kajaks>
     <!-- PRICES -->
     <prices>
         <price name="single">
             <prop name="value">5</prop>
+            <prop name="dependOn">timeslot</prop>
             <prop name="amountTimeslots">1</prop>
         </price>
         <price name="complete">
             <prop name="value">8</prop>
+            <prop name="dependOn">timeslot</prop>
             <prop name="amountTimeslots">all</prop>
         </price>
         <price name="kaution">
             <prop name="value">50</prop>
+            <prop name="dependOn">kajak</prop>
         </price>
-        <!-- <price name="lol">
-            <prop name="value">5000</prop>
-        </price> -->
     </prices>
     <!-- TIMESLOTS -->
     <timeslots>
