@@ -36,7 +36,7 @@ echo create_header('Impressum')
 
                     </p>
                 </div>
-                <?php echo create_accordion(false) ?>
+                <?php echo create_accordion() ?>
             </div>
         </div>
     </div>
