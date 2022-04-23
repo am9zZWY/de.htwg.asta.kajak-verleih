@@ -18,16 +18,19 @@
     <!-- PRICES -->
     <prices>
         <price name="single">
+            <prop name="description">Ein Zeitslot pro Person</prop>
             <prop name="value">5</prop>
             <prop name="dependOn">timeslot</prop>
             <prop name="amountTimeslots">1</prop>
         </price>
         <price name="complete">
+            <prop name="description">Alle Zeitslots pro Person</prop>
             <prop name="value">8</prop>
             <prop name="dependOn">timeslot</prop>
             <prop name="amountTimeslots">all</prop>
         </price>
         <price name="kaution">
+            <prop name="description">Kaution pro Kajak</prop>
             <prop name="value">50</prop>
             <prop name="dependOn">kajak</prop>
         </price>
@@ -36,11 +39,11 @@
     <timeslots>
         <timeslot name="Vormittag">
             <start>09:00:00</start>
-            <ende>13:00:00</ende>
+            <end>13:00:00</end>
         </timeslot>
         <timeslot name="Nachmittag">
-            <start>13:00:00</start>
-            <ende>18:00:00</ende>
+            <start>13:30:00</start>
+            <end>18:00:00</end>
         </timeslot>
     </timeslots>
     <!-- DAYS -->

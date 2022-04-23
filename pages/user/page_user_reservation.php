@@ -197,8 +197,16 @@ $kajaks = $config->getKajaks(true);
                                         <br>
                                     <?php } ?>
                                     <div class="row mt-2">
-                                        <p>Ein Zeitslot kostet <strong>pro Person 5€</strong><br>
-                                            Beide Zeitslots kosten <strong>pro Person 8€</strong></p>
+                                        <p>
+                                        <?php
+                                        foreach ($config->getPrices(true) as $price){
+                                            echo $price->description . ": <strong>" . $price->value . "€</strong>";
+                                            ?>
+                                            <br>
+                                        <?php
+                                        }
+                                        ?>
+                                        </p>
                                     </div>
                                 </div>
                             </div>

@@ -8,6 +8,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         archive_reservation($conn, $ids);
     } else if (isset($_POST['delete_all'])) {
         drop_all_tables($conn);
+    } else if (isset($_POST['delete_kajak'])) {
+        drop_kajak($conn);
+    } else if (isset($_Post['add_kajak'])) {
+        add_kajak($conn);
     }
 }
 
@@ -68,9 +72,13 @@ echo create_header('Dashboard');
                 </table>
             </div>
             <div class="btn-group d-flex" role="group">
-                <button type="submit" class="btn custom-btn mx-1" name="delete_items">Elemente löschen
+                <button type="submit" class="btn custom-btn mx-1" name="delete_kajak">Kajak löschen
                 </button>
-                <button type="submit" class="btn custom-btn mx-1" name="delete_all"> Alle Tabellen löschen
+                <button type="submit" class="btn custom-btn mx-1" name="add_new_kajak">Kajak hinzufügen
+                </button>
+                <button type="submit" class="btn custom-btn mx-1" name="delete_items">Reservierungen stornieren
+                </button>
+                <button type="submit" class="btn custom-btn mx-1" name="delete_all">Tabellen stornieren
                 </button>
             </div>
         </form>
