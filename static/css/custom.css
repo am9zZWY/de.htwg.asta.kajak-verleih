@@ -16,22 +16,67 @@ body {
 
 /********************************* LAYOUT ***********************************/
 
+.content, .content-wrapper {
+    transition: all 300ms ease-in-out;
+}
+
 .content {
-    border: white solid 4px;
     padding: 16px;
     margin-bottom: 5%;
 }
 
-.content > div:first-child {
+.content:hover {
+    transform: translateY(-0.20rem);
+}
+
+.content > div:first-child, .content + .content-wrapper {
+    margin: 5px;
+    padding: 15px;
+    border-radius: 10px;
     background-color: white;
-    margin: 2px;
-    padding: 10px;
     color: black;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+}
+
+.content-wrapper:hover {
+    transform: translateY(-0.20rem);
+}
+
+.content-wrapper {
+    margin-top: 5px;
+}
+
+.content-wrapper h1, .content-wrapper h2 {
+    text-transform: uppercase;
+    font-weight: 600;
+    text-align: center;
+}
+
+.content-wrapper h1 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 52px;
+}
+
+.content-wrapper h2 {
+    font-size: 40px;
+}
+
+.content-wrapper h3 {
+    font-size: 32px;
+}
+
+.content-wrapper h4 {
+    font-size: 24px;
+}
+
+.content-wrapper p, .content-wrapper ol, .content-wrapper li {
+    font-size: 20px;
 }
 
 /********************************* FORMS ***********************************/
 
-.custom-form {
+.kajak-form {
     background-color: #fff;
     padding: 30px;
     margin-bottom: 50px;
@@ -39,44 +84,18 @@ body {
     box-shadow: 0 5px 20px -5px rgba(0, 0, 0, 0.3);
 }
 
-.custom-form .form-group {
+.kajak-form .form-group {
     position: relative;
     margin-bottom: 30px;
 }
 
-.custom-form .form-control, .custom-form .form-select {
+.kajak-form .form-control, .kajak-form .form-select {
     background-color: #ebecee;
     border: none;
     -webkit-box-shadow: none;
     box-shadow: none;
     color: #3e485c;
     font-size: 14px;
-}
-
-/********************************* HEADERS ***********************************/
-
-.header-wrapper h1, .header-wrapper h2, .header-wrapper h3 {
-    text-transform: uppercase;
-    font-weight: 600;
-    text-align: center;
-}
-
-.header-wrapper h1 {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    font-size: 52px;
-}
-
-.header-wrapper h2 {
-    font-size: 40px;
-}
-
-.header-wrapper h3 {
-    font-size: 32px;
-}
-
-.header-wrapper p {
-    font-size: 20px;
 }
 
 /********************************* NAVIGATION ***********************************/
@@ -104,7 +123,6 @@ body {
     font-size: 25px;
     color: white !important;
     display: block;
-    transition: 0.3s;
     background: none;
     border: none;
 }
@@ -119,11 +137,6 @@ body {
     right: 25px;
     font-size: 36px;
     margin-left: 50px;
-}
-
-
-.sidenav-burger {
-    background-color: white
 }
 
 .sidenav-burger > span {
@@ -190,6 +203,7 @@ body {
     float: right;
     margin-left: 5px;
 }
+
 .active:after {
     content: "\2212"; /* Unicode character for "minus" sign (-) */
 }
@@ -220,20 +234,20 @@ input[type=text], input[type=password] {
 
 /* Set a style for all buttons */
 button.custom-btn {
-    background-color: #04AA6D;
+    background-color: rgb(0, 180, 216);
     color: white;
     padding: 14px 20px;
     margin: 8px 0;
     border: none;
     cursor: pointer;
     width: 100%;
-    transition: all 200ms ease-in-out;
+    transition: all 300ms ease-in-out;
 }
 
 button.custom-btn:hover, button.custom-btn:active {
     opacity: 0.85;
-    transform: translateY(-0.15rem);
-    box-shadow: 0 0.25rem 0.75rem rgba(4, 170, 109, 0.15)
+    transform: translateY(-0.20rem);
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 180, 216, 0.15)
 }
 
 /* Center the image and position the close button */
