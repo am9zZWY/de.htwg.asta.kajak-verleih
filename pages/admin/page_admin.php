@@ -24,8 +24,8 @@ echo create_header('Dashboard');
     <div class="row">
         <form method="post" class="needs-validation">
             <div class="table-responsive">
-
-                <table class="table table-striped table-bordered table-sm table-light">
+                <input id="reservation-filter" onkeyup="filterTable()"/>
+                <table class="table table-striped table-bordered table-sm table-light" id="reservations">
                     <caption>Übersicht aller Reservierungen</caption>
                     <tr>
                         <th>Löschen</th>
@@ -43,7 +43,7 @@ echo create_header('Dashboard');
                     foreach ($reservations as $reservation) {
                         $is_archived = $reservation['archived'] === 1;
                         ?>
-                        <tr class="reservation <?php echo $is_archived ? 'archived' : '' ?>">
+                        <tr class="reservation reservation-row <?php echo $is_archived ? 'archived' : '' ?>">
                             <td class="text-center">
                                 <?php
                                 if (!$is_archived) {
@@ -83,4 +83,18 @@ echo create_header('Dashboard');
             </div>
         </form>
     </div>
+    <script>
+        const reservationFilter = document.getElementById('reservation-filter')
+
+        function filterTable() {
+            const reservations = document.getElementsByClassName('reservation-row')
+            Array.from(reservations).forEach((row) => {
+                if (row.textContent.toLowerCase().includes(reservationFilter.value.toLowerCase())) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            })
+        }
+    </script>
 </div>

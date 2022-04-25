@@ -366,6 +366,7 @@ INSERT INTO kajak_reservation (kajak_name, reservation_id)
 
         return $reservation_id;
     } catch (Exception $e) {
+        var_dump($e);
         return false;
     }
 }
@@ -495,7 +496,7 @@ function archive_reservation(mysqli|null $conn, array $ids): void
         return;
     }
 
-    $sql = "UPDATE reservations SET archived = TRUE WHERE reservations.reservation_id IN (" . implode(',', $ids) . ")";
+    $sql = "UPDATE reservations SET archived = TRUE WHERE reservation_id IN (" . implode(',', $ids) . ")";
     $conn->query($sql);
 }
 
