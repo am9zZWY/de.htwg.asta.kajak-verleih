@@ -17,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 /* Get all reservations from database */
 $reservations = get_reservations($conn);
+$kajaks_by_reservation_id = get_reservated_kajaks_by_id($conn);
 
 echo create_header('Dashboard');
 ?>
@@ -36,6 +37,7 @@ echo create_header('Dashboard');
                         <th>E-Mail Adresse</th>
                         <th>Datum</th>
                         <th>Zeitslot</th>
+                        <th>Kajaks</th>
                         <th>Preis</th>
                     </tr>
 
@@ -64,6 +66,7 @@ echo create_header('Dashboard');
                             <td><?php echo $reservation['email'] ?></td>
                             <td><?php echo date_create($reservation['date'])->format('d.m.Y') ?></td>
                             <td><?php echo $reservation['from_time'] . '–' . $reservation['to_time'] ?></td>
+                            <td><?php echo implode(', ', $kajaks_by_reservation_id[$reservation['reservation_id']] ?? []) ?></td>
                             <td><?php echo $reservation['price'] ?>€</td>
                         </tr>
                         <?php
