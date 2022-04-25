@@ -85,6 +85,16 @@ class ConfigHelper
         }
     }
 
+    /**
+     * Get all kajak kinds.
+     * @return array
+     */
+    public function getKajakKinds(): array
+    {
+        $kajaks = $this->getKajaks(true);
+        return array_unique(array_map(static fn($kajak) => $kajak->kind, $kajaks));
+    }
+
     public function kajakToString($kajak): string
     {
         return "Name: " . $kajak->name . "<br>" .
@@ -207,6 +217,15 @@ class ConfigHelper
     }
 
     /**
+     * Get formatted timeslots.
+     * @return array
+     */
+    public function getFormattedTimeslots(): array
+    {
+        return array_map(fn($timeslot) => $this->formatTimeslot($timeslot), $this->getTimeslots());
+    }
+
+    /**
      * Formats multiple timeslots from e.g. [9:00, 13:00] to 9:00 - 13:00.
      * @param $timeslot
      * @return string
@@ -214,15 +233,6 @@ class ConfigHelper
     public function formatTimeslot($timeslot): string
     {
         return date('H:i', strtotime($timeslot->start)) . " - " . date('H:i', strtotime($timeslot->end));
-    }
-
-    /**
-     * Get formatted timeslots.
-     * @return array
-     */
-    public function getFormattedTimeslots(): array
-    {
-        return array_map(fn($timeslot) => $this->formatTimeslot($timeslot), $this->getTimeslots());
     }
 
     /**
