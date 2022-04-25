@@ -21,17 +21,17 @@ CREATE TABLE IF NOT EXISTS reservations
 # Fill table reservations'
 INSERT INTO reservations (reservation_id, name, email, phone, address, date, reservation_date, from_time, to_time,
                           archived, cancelled, price)
-VALUES ('1', 'Paul Aner', 'lol@123.de', 'Max-Straße 8', '123456789', '2019-01-01', '2022-12-01', '10:00:00', '11:00:00',
+VALUES ('1', 'Paul Aner', 'lol@123.de', 'Max-Straße 8', '123456789', '2023-01-01', '2022-12-01', '10:00:00', '11:00:00',
         FALSE, FALSE, 100),
-       ('2', 'Spe Zi', 'foo@bar.de', 'Max-Straße 9', '987654321', '2019-01-01', '2018-12-02', '9:00:00', '14:00:00',
+       ('2', 'Spe Zi', 'foo@bar.de', 'Max-Straße 9', '987654321', '2023-01-01', '2018-12-02', '9:00:00', '14:00:00',
         FALSE,
         FALSE, 200)
         ,
-       ('3', 'Scheiß Verein', '123@123.de', 'Nice-Straße 1', '123498765', '2019-01-02', '2016-10-13', '12:00:00',
+       ('3', 'Scheiß Verein', '123@123.de', 'Nice-Straße 1', '123498765', '2023-01-02', '2016-10-13', '12:00:00',
         '15:00:00',
         FALSE, FALSE, 300)
         ,
-       ('4', 'Olivia Bolivia', '123@123.de', 'Nice-Straße 1', '123498765', '2019-01-02', '2016-10-13', '12:00:00',
+       ('4', 'Olivia Bolivia', '123@123.de', 'Nice-Straße 1', '123498765', '2023-01-02', '2016-10-13', '12:00:00',
         '15:00:00', FALSE, FALSE, 50);
 
 # Create table kajaks
@@ -55,6 +55,8 @@ VALUES ('Horst', 'single_kajak', 1),
        ('Marte', 'double_kajak', 2),
        ('Legolas', 'double_kajak', 2);
 
+DROP TABLE kajak_reservation;
+
 # Create table for kajak-reservation
 CREATE TABLE IF NOT EXISTS kajak_reservation
 (
@@ -65,13 +67,13 @@ CREATE TABLE IF NOT EXISTS kajak_reservation
 
 # Fill table kajak-reservation
 INSERT INTO kajak_reservation (kajak_name, reservation_id)
-VALUES ('Horst', 1),
-       ('Gertrud', 1),
-       ('Gertrud', 2),
-       ('Horst', 3),
-       ('Marte', 3),
-       ('Legolas', 3),
-       ('Horst2', 3);
+VALUES ('Horst', '1'),
+       ('Gertrud', '1'),
+       ('Gertrud', '2'),
+       ('Horst', '3'),
+       ('Marte', '3'),
+       ('Legolas', '3'),
+       ('Horst2', '3');
 
 SELECT *
 FROM reservations;
@@ -110,3 +112,16 @@ WHERE kajak_name NOT IN (SELECT kajak_reservation.kajak_name
 
 SELECT DISTINCT(kind)
 FROM kajaks;
+
+SELECT *
+FROM reservations
+WHERE reservation_id = '62671c1469108';
+
+SELECT COUNT(*) as amount
+FROM reservations
+WHERE reservation_id = '62671c1469108'
+  AND cancelled = 0
+  AND archived = 0;
+UPDATE reservations
+SET archived = TRUE
+WHERE reservation_id = '62671c1469108';
