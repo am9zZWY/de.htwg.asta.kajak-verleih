@@ -19,17 +19,20 @@ CREATE TABLE IF NOT EXISTS reservations
 );
 
 # Fill table reservations'
-INSERT INTO reservations (reservation_id, name, email, phone, address, date, reservation_date, from_time, to_time, archived, cancelled)
+INSERT INTO reservations (reservation_id, name, email, phone, address, date, reservation_date, from_time, to_time,
+                          archived, cancelled, price)
 VALUES ('1', 'Paul Aner', 'lol@123.de', 'Max-Straße 8', '123456789', '2019-01-01', '2022-12-01', '10:00:00', '11:00:00',
-        FALSE, FALSE),
-('2','Spe Zi', 'foo@bar.de', 'Max-Straße 9', '987654321', '2019-01-01', '2018-12-02', '9:00:00', '14:00:00', FALSE,
-    FALSE)
-,
-('3','Scheiß Verein', '123@123.de', 'Nice-Straße 1', '123498765', '2019-01-02', '2016-10-13', '12:00:00', '15:00:00',
-    FALSE, FALSE)
-,
-('4','Olivia Bolivia', '123@123.de', 'Nice-Straße 1', '123498765', '2019-01-02', '2016-10-13', '12:00:00',
-    '15:00:00', FALSE, FALSE);
+        FALSE, FALSE, 100),
+       ('2', 'Spe Zi', 'foo@bar.de', 'Max-Straße 9', '987654321', '2019-01-01', '2018-12-02', '9:00:00', '14:00:00',
+        FALSE,
+        FALSE, 200)
+        ,
+       ('3', 'Scheiß Verein', '123@123.de', 'Nice-Straße 1', '123498765', '2019-01-02', '2016-10-13', '12:00:00',
+        '15:00:00',
+        FALSE, FALSE, 300)
+        ,
+       ('4', 'Olivia Bolivia', '123@123.de', 'Nice-Straße 1', '123498765', '2019-01-02', '2016-10-13', '12:00:00',
+        '15:00:00', FALSE, FALSE, 50);
 
 # Create table kajaks
 DROP TABLE kajaks;
@@ -77,8 +80,8 @@ FROM reservations;
 SELECT COUNT(kajaks.kind) as amount
 FROM ((kajak_reservation
     INNER JOIN reservations
-    ON reservations.reservation_id = kajak_reservation.reservation_id)
-         LEFT JOIN kajaks ON kajak_reservation.kajak_name = kajaks.kajak_name)
+       ON reservations.reservation_id = kajak_reservation.reservation_id)
+    LEFT JOIN kajaks ON kajak_reservation.kajak_name = kajaks.kajak_name)
 WHERE reservations.date = '2019-01-01'
   AND kajaks.kind = 'single_kajak'
   AND (reservations.from_time BETWEEN '9:00:00' AND '17:59:59'
