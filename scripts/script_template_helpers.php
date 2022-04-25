@@ -10,7 +10,7 @@
 function create_header(string $header, string|null $link = null): string
 {
     return "
-    <div class='header-wrapper'>" .
+    <div class='content-wrapper'>" .
         ($link === null ?
             "<h1 class='text-light'>
             $header
