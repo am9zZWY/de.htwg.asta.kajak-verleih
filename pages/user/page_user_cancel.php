@@ -12,7 +12,7 @@ $reservation_id = clean_string($params['id'] ?? '');
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-lg-5 ms-auto">
+        <div class="col-lg-5 content mx-auto">
             <div class="kajak-form">
                 <form method="post" class="needs-validation">
                     <div class="col-sm">
@@ -38,7 +38,7 @@ $reservation_id = clean_string($params['id'] ?? '');
                             </label>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Stornieren</button>
+                    <button type="submit" class="btn custom-btn">Stornieren</button>
                 </form>
                 <?php
                 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
