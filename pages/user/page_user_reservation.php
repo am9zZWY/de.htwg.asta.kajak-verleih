@@ -3,14 +3,20 @@ global $config;
 echo create_header('Kajak Reservierung', '/');
 $connection = $_SESSION['connection'];
 $kajaks = $config->getKajaks(true);
+
+/* create csrf token */
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    $_SESSION['token'] = md5(uniqid(mt_rand(), true));
+    $_SESSION['token_field'] = md5(uniqid(mt_rand(), true));
+}
 ?>
 
 <div class="container my-2">
     <div class="row">
         <div class="col-lg-5 mx-auto">
             <div class="row content">
-                <div class="header-wrapper">
-                    <h3>Was bieten wir an?</h3>
+                <div class="content-wrapper">
+                    <h3 class="content-header">Was bieten wir an?</h3>
                     <p>
                         Wir bieten für die HTWG Konstanz und für Universität Konstanz die Möglichkeit, Kajaks zu
                         reservieren.
@@ -20,17 +26,17 @@ $kajaks = $config->getKajaks(true);
                 </div>
             </div>
             <div class="row content">
-                <div class="header-wrapper">
+                <div class="content-wrapper">
                     <h3>Welche Kajak-Modelle gibt es?</h3>
                     <?php
                     foreach ($kajaks as $kajak) {
                         ?>
                         <div>
-                            <h4><?php echo $kajak->name ?></h4><br/>
+                            <h4><?php echo $kajak->name ?></h4><br>
                             Das <?php echo $kajak->name ?>
                             hat <?php echo $kajak->seats . ((int)$kajak->seats === 1 ? ' Sitz' : ' Sitze') ?>. Insgesamt
                             gibt
-                            es <?php echo $kajak->amount ?> Stück dieses Modells.<br/>
+                            es <?php echo $kajak->amount ?> Stück dieses Modells.<br>
                             <img alt="Bild von <?php echo $kajak->name ?>" src="<?php echo $kajak->img ?>"
                                  class="img-fluid" style="width: 300px; height: 200px;"/>
                         </div>
@@ -43,8 +49,10 @@ $kajaks = $config->getKajaks(true);
 
         <div class="col-lg-6 mx-auto">
             <div class="row content">
-                <div class="custom-form">
+                <div class="kajak-form">
                     <form action="/" method="post" class="needs-validation">
+                        <input type="hidden" name="<?php echo $_SESSION['token_field'] ?? '' ?>"
+                               value="<?php echo $_SESSION['token'] ?? '' ?>">
                         <div class="row my-2">
                             <div class="col-sm-6">
                                 <div class="mb-3 form-floating">
@@ -82,7 +90,7 @@ $kajaks = $config->getKajaks(true);
                                            class="form-control"
                                            required>
                                     <label for="email">
-                                        E-Mail
+                                        HTWG E-Mail
                                     </label>
                                 </div>
                             </div>
@@ -198,14 +206,14 @@ $kajaks = $config->getKajaks(true);
                                     <?php } ?>
                                     <div class="row mt-2">
                                         <p>
-                                        <?php
-                                        foreach ($config->getPrices(true) as $price){
-                                            echo $price->description . ": <strong>" . $price->value . "€</strong>";
+                                            <?php
+                                            foreach ($config->getPrices(true) as $price) {
+                                                echo $price->description . ": <strong>" . $price->value . "€</strong>";
+                                                ?>
+                                                <br>
+                                                <?php
+                                            }
                                             ?>
-                                            <br>
-                                        <?php
-                                        }
-                                        ?>
                                         </p>
                                     </div>
                                 </div>
@@ -247,7 +255,8 @@ $kajaks = $config->getKajaks(true);
                                         <input type="checkbox" name="terms" value="1"
                                                required <?php echo get_post_field('terms') === '1' ? 'checked' : '' ?>
                                                class="form-check-input">
-                                        Ich habe die <a href="/about">Nutzungsbedingungen</a> gelesen und
+                                        Ich habe die <a href="/about" target="_blank">Nutzungsbedingungen</a> gelesen
+                                        und
                                         akzeptiere sie.
                                     </label>
                                 </div>
@@ -267,6 +276,7 @@ $kajaks = $config->getKajaks(true);
                     <script>
                         const calculated_price_element = document.getElementById('calculated-price');
                         const calculate_price = () => {
+                            /* get necessary fields and information */
                             const kajaks = Array.from(document.getElementsByClassName('amount-kajak'));
                             const amount_kajaks = Array.from(kajaks).reduce((sum, amount) => parseInt(amount.value) + sum, 0);
                             const amount_timeslots = Array.from(document.getElementsByClassName('timeslot')).filter(timeslot => timeslot.checked).length;
@@ -277,29 +287,46 @@ $kajaks = $config->getKajaks(true);
                                     calculated_price_element.innerHTML = '<strong>Bitte bringe ' + this.responseText + '€ in Bar mit.</strong>';
                                 }
                             };
+                            /* send request to own api to calculate price */
                             xmlhttp.open("GET", "/api?price&amount_kajaks=" + amount_kajaks + "&amount_timeslots=" + amount_timeslots, true);
                             xmlhttp.send();
                         }
 
-                        Array.from(document.getElementsByClassName('amount-kajak')).forEach((kajak) => kajak.addEventListener('change', calculate_price))
-                        Array.from(document.getElementsByClassName('timeslot')).forEach((timeslot) => timeslot.addEventListener('change', calculate_price))
+                        Array.from(document.getElementsByClassName('amount-kajak')).forEach(kajak => kajak.addEventListener('change', calculate_price))
+                        Array.from(document.getElementsByClassName('timeslot')).forEach(timeslot => timeslot.addEventListener('change', calculate_price))
                     </script>
                     <?php
                     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                        $ret_val = reservate_kajak($connection, $_POST, true);
-                        if ($ret_val === true) {
-                            ?>
-                            <h3>
-                                Reservierung erfolgreich
-                            </h3>
-                            <?php
-                        } else {
-                            ?>
-                            <h2>
-                                <?php echo $ret_val ?>
-                            </h2>
-                            <?php
-                        }
+                        /* check if csrf token match */
+                        $token = clean_string($_POST[$_SESSION['token_field']] ?? '');
+
+                    if (!$token || $token !== $_SESSION['token']) {
+                        ?>
+                        <h3>
+                            Es gibt ein Sicherheitsproblem!
+                        </h3>
+                    <?php
+                    exit();
+                    }
+
+                    $ret_val = reservate_kajak($connection, $_POST, true);
+                    if ($ret_val === true) {
+                    ?>
+                        <h3>
+                            Reservierung erfolgreich!
+                        </h3>
+                        <script>
+                            /* clean all input fields */
+                            Array.from(document.getElementsByTagName('input')).forEach(el => el.value = '');
+                        </script>
+                    <?php
+                    } else {
+                    ?>
+                        <h2>
+                            <?php echo $ret_val ?>
+                        </h2>
+                        <?php
+                    }
                     }
                     ?>
                 </div>
