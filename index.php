@@ -57,14 +57,18 @@ if ($PARSED_URL === '/api') {
     <title>Kajak Verleihsystem von Coolen Typen</title>
 </head>
 <body>
-<?php
-/* navigation bar */
-include 'components/component_sidebar.php';
-?>
-<div class="container my-5">
+<div class="container p-0">
+    <?php
+    /* navigation bar */
+    include 'components/component_sidebar.php';
+    ?>
+</div>
+<div class="container p-0">
     <?php
     if ($PARSED_URL === '/about') {
         require("pages/user/page_user_agb.php");
+    } else if ($PARSED_URL === '/privacy' || $PARSED_URL === '/dsgvo' || $PARSED_URL === '/datenschutz') {
+        require("pages/user/page_user_privacy.php");
     } else if ($PARSED_URL === '/impressum') {
         require("pages/user/page_user_impressum.php");
     } else if ($PARSED_URL === '/login') {
@@ -79,8 +83,6 @@ include 'components/component_sidebar.php';
     if (is_logged_in()) {
         if ($PARSED_URL === '/admin') {
             require("pages/admin/page_admin.php");
-        } elseif ($PARSED_URL === '/how_to_admin') {
-            require("pages/admin/page_admin_how_to.php");
         } elseif ($PARSED_URL === '/config') {
             require("pages/admin/page_admin_config.php");
         }
