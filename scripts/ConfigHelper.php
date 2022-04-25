@@ -207,24 +207,22 @@ class ConfigHelper
     }
 
     /**
+     * Formats multiple timeslots from e.g. [9:00, 13:00] to 9:00 - 13:00.
+     * @param $timeslot
+     * @return string
+     */
+    public function formatTimeslot($timeslot): string
+    {
+        return date('H:i', strtotime($timeslot->start)) . " - " . date('H:i', strtotime($timeslot->end));
+    }
+
+    /**
      * Get formatted timeslots.
      * @return array
      */
     public function getFormattedTimeslots(): array
     {
-        return $this->formatTimeslot($this->getTimeslots());
-    }
-
-    /**
-     * Formats multiple timeslots from e.g. [9:00, 13:00] to 9:00 - 13:00.
-     * @param $timeslots
-     * @return array
-     */
-    private function formatTimeslot($timeslots): array
-    {
-        return array_map(static function ($timeslot) {
-            return date('H:i', strtotime($timeslot->start)) . " - " . date('H:i', strtotime($timeslot->end));
-        }, $timeslots);
+        return array_map(fn($timeslot) => $this->formatTimeslot($timeslot), $this->getTimeslots());
     }
 
     /**
@@ -242,16 +240,19 @@ class ConfigHelper
 
         foreach ($xml->timeslots->children() as $child) {
             $start = (string)$child->start;
-            $end = (string)$child->ende;
+            $end = (string)$child->end;
+            $name = (string)$child->attributes()->name;
 
             if ($asMatrix === true) {
                 $timeslot = array();
                 $timeslot[0] = $start;
                 $timeslot[1] = $end;
+                $timeslot["name"] = $name;
             } else {
                 $timeslot = new stdClass();
                 $timeslot->start = $start;
                 $timeslot->end = $end;
+                $timeslot->name = $name;
             }
 
             $timeslots[] = $timeslot;

@@ -13,7 +13,8 @@ function clean_string(string|null $string): string
     if ($string === null) {
         return '';
     }
-    return htmlspecialchars($string, ENT_QUOTES);
+    /* convert special chars to prevent sql injection and trim also all whitespaces to prevent database errors */
+    return trim(htmlspecialchars($string, ENT_QUOTES));
 }
 
 /**

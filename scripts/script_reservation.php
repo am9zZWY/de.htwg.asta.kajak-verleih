@@ -53,7 +53,7 @@ function add_reservation_table(mysqli|null $conn): string|bool
     $sql = $conn->prepare("
 CREATE TABLE IF NOT EXISTS reservations
 (
-    reservation_id   INT             NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    reservation_id   VARCHAR(20)     NOT NULL PRIMARY KEY,
     name             VARCHAR(30)     NOT NULL,
     email            VARCHAR(50)     NOT NULL,
     phone            VARCHAR(20)     NOT NULL,
@@ -123,7 +123,7 @@ function add_reservation_kajak_table(mysqli|null $conn): string|bool
     $sql = $conn->prepare("
 CREATE TABLE IF NOT EXISTS kajak_reservation
 (
-    reservation_id   INT             NOT NULL,
+    reservation_id   VARCHAR(20)     NOT NULL,
     kajak_name       VARCHAR(30)     NOT NULL,
     PRIMARY KEY(reservation_id, kajak_name)
 )");
@@ -244,8 +244,6 @@ function drop_all_tables(mysqli $conn): void
 {
     $sql = $conn->prepare("DROP TABLE reservations");
     $sql->execute();
-    $sql = $conn->prepare("DROP TABLE kajaks");
-    $sql->execute();
     $sql = $conn->prepare("DROP TABLE kajak_reservation");
     $sql->execute();
 }
@@ -340,26 +338,16 @@ function insert_reservation(mysqli|null $conn, string $name, string $email, stri
     }
 
     $reservation_date = date('Y-m-d');
+    $reservation_id = uniqid();
 
     try {
         $sql = $conn->prepare("
-INSERT INTO reservations (name, email, phone, date, address, reservation_date, from_time, to_time, price)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+INSERT INTO reservations (reservation_id, name, email, phone, date, address, reservation_date, from_time, to_time, price)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? ,?);
 ");
-        $sql->bind_param('sssssssss', $name, $email, $phone, $date, $address, $reservation_date, $timeslot[0], $timeslot[1], $price);
+        $sql->bind_param('ssssssssss', $reservation_id, $name, $email, $phone, $date, $address, $reservation_date, $timeslot[0], $timeslot[1], $price);
         $result_execute = $sql->execute();
         if ($result_execute === false) {
-            return false;
-        }
-
-        /* get the id of the reservation */
-        $sql = $conn->prepare("SELECT LAST_INSERT_ID() as id");
-        $sql->execute();
-        $result = $sql->get_result();
-        $reservation_id = $result->fetch_assoc()["id"];
-
-        /* if reservation id is null it failed */
-        if ($reservation_id === null) {
             return false;
         }
 
@@ -378,6 +366,7 @@ INSERT INTO kajak_reservation (kajak_name, reservation_id)
 
         return $reservation_id;
     } catch (Exception $e) {
+        var_dump($e);
         return false;
     }
 }
@@ -507,7 +496,7 @@ function archive_reservation(mysqli|null $conn, array $ids): void
         return;
     }
 
-    $sql = "UPDATE reservations SET archived = TRUE WHERE reservations.reservation_id IN (" . implode(',', $ids) . ")";
+    $sql = "UPDATE reservations SET archived = TRUE WHERE reservation_id IN (" . implode(',', $ids) . ")";
     $conn->query($sql);
 }
 
@@ -559,4 +548,24 @@ function cancel_reservation(mysqli|null $conn, array $fields, bool $send_email =
     }
 
     return $ERROR_CANCELLATION;
+}
+
+/*
+ * Delete Kajak from database.
+ */
+function delete_kajak(mysqli $conn, string $kajak_name): bool
+{
+    $sql = $conn->prepare("DELETE FROM kajaks WHERE kajak_name = ?");
+    $sql->bind_param('s', $kajak_name);
+    return $sql->execute();
+}
+
+/*
+ * Add Kajak to database.
+ */
+function add_new_kajak(mysqli $conn, string $kajak_name, int $kajak_capacity): bool
+{
+    $sql = $conn->prepare("INSERT INTO kajaks (kajak_name, kajak_capacity) VALUES (?, ?)");
+    $sql->bind_param('si', $kajak_name, $kajak_capacity);
+    return $sql->execute();
 }
