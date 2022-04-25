@@ -10,20 +10,20 @@ use PHPMailer\PHPMailer\PHPMailer;
 function get_email_signature(): string
 {
     return "
-<br/><br/>
-Beste Grüße<br/><br/>
-Dein Kajak-Team<br/>
-------------------------------------------<br/>
+<br><br>
+Beste Grüße<br><br>
+Dein Kajak-Team<br>
+------------------------------------------<br>
 <strong>Allgemeiner Studierendenausschuss (AStA)</strong>
-<br/>
-HTWG<br/>
-Hochschule Konstanz<br/>
-Technik, Wirtschaft und Gestaltung<br/>
-Büro Gebäude D<br/>
-Alfred-Wachtel-Straße 8<br/>
-D-78462 Konstanz<br/>
-<br/>
-Fon: 07531 / 206 – 431<br/>
+<br>
+HTWG<br>
+Hochschule Konstanz<br>
+Technik, Wirtschaft und Gestaltung<br>
+Büro Gebäude D<br>
+Alfred-Wachtel-Straße 8<br>
+D-78462 Konstanz<br>
+<br>
+Fon: 07531 / 206 – 431<br>
     ";
 }
 
@@ -52,14 +52,14 @@ function send_reservation_email(string $reservation_id, string $name, string $em
     return send_mail($email_address_to, "Reservierungsbestätigung Kajak am $formatted_date", "
         Hallo $name,
         <p>
-            Du hast am $formatted_date von $formatted_timeslot_from bis $formatted_timeslot_to Uhr eine Reservierung mit der <strong>ID $reservation_id</strong> für folgende Kajaks:<br/>
+            Du hast am $formatted_date von $formatted_timeslot_from bis $formatted_timeslot_to Uhr eine Reservierung mit der <strong>ID $reservation_id</strong> für folgende Kajaks:<br>
             $format_kajaks
         </p>
         <p>
             Bitte bringe <strong>$price Euro</strong> in Bar und deinen <strong>Studierendenausweis</strong> mit.
         </p>
         <p>
-            Um die Reservierung zu stornieren, klicke bitte auf den folgenden Link:<br/>
+            Um die Reservierung zu stornieren, klicke bitte auf den folgenden Link:<br>
             <a href='http://{$_SERVER['HTTP_HOST']}/cancel?id=$reservation_id'>Stornieren</a>
         </p>
     " . get_email_signature());
