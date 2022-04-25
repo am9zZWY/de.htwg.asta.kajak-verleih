@@ -4,11 +4,10 @@ global $config;
 ?>
 <div class="container">
     <div class="row content">
-        <div class="header-wrapper">
+        <div class="content-wrapper">
             <p>Aktuelle Werte:</p>
             <ul>
                 <?php
-                // TODO: @Krakelo could you plzzz fix it? <3
                 echo "<li><strong>" . "Preise:" . "</strong><br>";
                 foreach ($config->getPrices(true) as $price) {
                     echo $price->description . ': ' . $price->value . ' €' . '<br>';
@@ -21,12 +20,12 @@ global $config;
                 echo '<br>';
 
                 foreach ($config->getTimeslots() as $timeslot) {
-                    echo '<li><strong>' . $timeslot->name . "</strong>".': ' . $config->formatTimeslot($timeslot) . '</li>';
+                    echo '<li><strong>' . $timeslot->name . "</strong>" . ': ' . $config->formatTimeslot($timeslot) . '</li>';
                 }
 
                 echo '<br>';
                 $days = $config->getDays();
-                echo "<li><strong>"."Reservierungs Zeitraum: "."</strong><br>".$days->min_days . ' - ' . $days->max_days . ' Tage'."</li>";
+                echo "<li><strong>" . "Reservierungs-Zeitraum: " . "</strong><br>" . $days->min_days . ' - ' . $days->max_days . ' Tage' . "</li>";
                 ?>
             </ul>
         </div>
