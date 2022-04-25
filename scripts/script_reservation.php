@@ -231,6 +231,40 @@ function get_reservations(mysqli|null $conn): array
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
+function get_reservated_kajaks_by_id(mysqli|null $conn)
+{
+    global $ERROR_DATABASE_CONNECTION;
+
+    if ($conn === null) {
+        echo $ERROR_DATABASE_CONNECTION;
+        return [];
+    }
+
+    try {
+        $sql = $conn->prepare("SELECT * FROM kajak_reservation");
+        $result_execute = $sql->execute();
+        if ($result_execute === false) {
+            return [];
+        }
+    } catch (Exception) {
+        return [];
+    }
+
+    $result = $sql->get_result();
+    $kajak_reservation_list = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+    $kajaks_by_reservation_id = array();
+    foreach ($kajak_reservation_list as $item) {
+        $kajak_name = $item["kajak_name"];
+        $reservation_id = $item["reservation_id"];
+        if (!array_key_exists($reservation_id, $kajaks_by_reservation_id)) {
+            $kajaks_by_reservation_id[$reservation_id] = array();
+        }
+        $kajaks_by_reservation_id[$reservation_id][] = $kajak_name;
+    }
+    return $kajaks_by_reservation_id;
+}
+
 /**
  * USE WITH CAUTION!
  * USED BY ADMIN.
