@@ -13,7 +13,7 @@ $reservation_id = clean_string($params['id'] ?? '');
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-5 ms-auto">
-            <div class="custom-form">
+            <div class="kajak-form">
                 <form method="post" class="needs-validation">
                     <div class="col-sm">
                         <div class="mb-3 form-floating">
