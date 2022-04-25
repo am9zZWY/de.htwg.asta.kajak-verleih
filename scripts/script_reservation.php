@@ -153,10 +153,7 @@ function add_kajak(mysqli|null $conn, string $name, string $kind, int $amount_se
     }
 
     /* get all kajaks and check if the kind is valid */
-    $kajaks = $config->getKajaks(true);
-    $kinds = array_unique(array_map(static function ($kajak) {
-        return $kajak->kind;
-    }, $kajaks));
+    $kinds = $config->getKajakKinds();
     if (!in_array($kind, $kinds, true)) {
         return $ERROR_TYPE_NOT_IN_CONFIG;
     }
@@ -174,6 +171,31 @@ function add_kajak(mysqli|null $conn, string $name, string $kind, int $amount_se
         return false;
     }
 }
+
+/**
+ * Remove kajak from database by name.
+ *
+ * @param mysqli|null $conn
+ * @param string $kajak_name
+ * @return bool
+ */
+function remove_kajak(mysqli|null $conn, string $kajak_name): bool
+{
+    global $ERROR_DATABASE_CONNECTION, $ERROR_TYPE_NOT_IN_CONFIG, $config;
+
+    if ($conn === null) {
+        return $ERROR_DATABASE_CONNECTION;
+    }
+
+    try {
+        $sql = $conn->prepare("DELETE FROM kajaks WHERE kajak_name = ?");
+        $sql->bind_param('s', $kajak_name);
+        return $sql->execute();
+    }  catch (Exception $e) {
+        return false;
+    }
+}
+
 
 /**
  * Get all kajak names.
@@ -218,7 +240,7 @@ function get_reservations(mysqli|null $conn): array
     }
 
     try {
-        $sql = $conn->prepare("SELECT * FROM reservations WHERE date >=current_Date() ORDER BY Date;");
+        $sql = $conn->prepare("SELECT * FROM reservations WHERE reservation_date >=current_Date() ORDER BY Date;");
         $result_execute = $sql->execute();
         if ($result_execute === false) {
             return [];
@@ -372,7 +394,7 @@ function insert_reservation(mysqli|null $conn, string $name, string $email, stri
     }
 
     $reservation_date = date('Y-m-d');
-    $reservation_id = uniqid();
+    $reservation_id = uniqid('', true);
 
     try {
         $sql = $conn->prepare("
@@ -400,7 +422,6 @@ INSERT INTO kajak_reservation (kajak_name, reservation_id)
 
         return $reservation_id;
     } catch (Exception $e) {
-        var_dump($e);
         return false;
     }
 }
@@ -530,8 +551,11 @@ function archive_reservation(mysqli|null $conn, array $ids): void
         return;
     }
 
-    $sql = "UPDATE reservations SET archived = TRUE WHERE reservation_id IN (" . implode(',', $ids) . ")";
-    $conn->query($sql);
+    /* concat all strings in array to one string */
+    $ids_as_string = implode(',', $ids);
+    $sql = $conn->prepare("UPDATE reservations SET archived = TRUE WHERE find_in_set(reservation_id, ?)");
+    $sql->bind_param("s", $ids_as_string);
+    $sql->execute();
 }
 
 /**
@@ -582,24 +606,4 @@ function cancel_reservation(mysqli|null $conn, array $fields, bool $send_email =
     }
 
     return $ERROR_CANCELLATION;
-}
-
-/*
- * Delete Kajak from database.
- */
-function delete_kajak(mysqli $conn, string $kajak_name): bool
-{
-    $sql = $conn->prepare("DELETE FROM kajaks WHERE kajak_name = ?");
-    $sql->bind_param('s', $kajak_name);
-    return $sql->execute();
-}
-
-/*
- * Add Kajak to database.
- */
-function add_new_kajak(mysqli $conn, string $kajak_name, int $kajak_capacity): bool
-{
-    $sql = $conn->prepare("INSERT INTO kajaks (kajak_name, kajak_capacity) VALUES (?, ?)");
-    $sql->bind_param('si', $kajak_name, $kajak_capacity);
-    return $sql->execute();
 }
