@@ -51,7 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             <div class="row content">
                 <div class="kajak-form">
                     <form action="/" method="post" class="needs-validation">
-                        <input type="hidden" name="<?php echo $_SESSION['token_field'] ?? '' ?>"
+                        <input type="hidden" id="<?php echo $_SESSION['token_field'] ?? '' ?>"
+                               name="<?php echo $_SESSION['token_field'] ?? '' ?>"
                                value="<?php echo $_SESSION['token'] ?? '' ?>">
                         <div class="row my-2">
                             <div class="col-sm-6">
@@ -317,7 +318,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         </h3>
                         <script>
                             /* clean all input fields */
-                            Array.from(document.getElementsByTagName('input')).forEach(el => el.value = '');
+                            Array.from(document.getElementsByTagName('input')).forEach(el => {
+                                    if (el.type === 'text' || el.type === 'email' || el.type === 'tel') {
+                                        el.value = ''
+                                    }
+                                }
+                            )
+                            ;
                         </script>
                     <?php
                     } else {
