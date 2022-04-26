@@ -181,7 +181,7 @@ function add_kajak(mysqli|null $conn, string $name, string $kind, int $amount_se
  */
 function remove_kajak(mysqli|null $conn, string $kajak_name): bool
 {
-    global $ERROR_DATABASE_CONNECTION, $ERROR_TYPE_NOT_IN_CONFIG, $config;
+    global $ERROR_DATABASE_CONNECTION;
 
     if ($conn === null) {
         return $ERROR_DATABASE_CONNECTION;
@@ -262,7 +262,7 @@ function get_reservations(mysqli|null $conn): array
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
-function get_reservated_kajaks_by_id(mysqli|null $conn): array
+function get_reserved_kajaks_by_id(mysqli|null $conn): array
 {
     global $ERROR_DATABASE_CONNECTION;
 
@@ -359,6 +359,8 @@ WHERE kajak_name NOT IN (SELECT kajak_reservation.kajak_name
                                   INNER JOIN reservations
                                              ON reservations.reservation_id = kajak_reservation.reservation_id
                          WHERE reservations.date = ?
+                           AND reservations.cancelled = '0'
+                           AND reservations.archived = '0'
                            AND (reservations.from_time BETWEEN ? AND ?
                              OR reservations.to_time BETWEEN ? AND ?))
   AND kajaks.kind = ? AND kajaks.available = 1");
@@ -431,7 +433,6 @@ INSERT INTO kajak_reservation (kajak_name, reservation_id)
 
         return $reservation_id;
     } catch (Exception $e) {
-        var_dump($e);
         return false;
     }
 }
@@ -454,13 +455,13 @@ function reservate_kajak(mysqli|null $conn, array $fields, bool $send_email = fa
     global $ERROR_RESERVATION, $ERROR_RESERVATION_KAJAK_NOT_AVAILABLE, $ERROR_RESERVATION_KAJAK_NOT_SELECTED, $ERROR_RESERVATION_TIMESLOT_NOT_SELECTED, $ERROR_SUCCESS_BUT_MAIL_NOT_SENT;
 
     $name = clean_string($fields["name"]);
-    $surname = clean_string($fields["surname"]);
-    $fullname = $name . ' ' . $surname;
+    $fullname = $name . ' ' . clean_string($fields["surname"]);
     $email = clean_string($fields['email']);
     $phone = clean_string($fields['phone']);
     $address = clean_string($fields['street'] . ' ' . $fields['plz'] . ', ' . $fields['city'] . ', ' . $fields['country']);
     $date = clean_string($fields['date']);
 
+    /****** prepare timeslots ******/
     $timeslots = clean_array($fields['timeslots'] ?? []);
     $amount_timeslots = count($timeslots);
 
@@ -469,7 +470,6 @@ function reservate_kajak(mysqli|null $conn, array $fields, bool $send_email = fa
         return $ERROR_RESERVATION_TIMESLOT_NOT_SELECTED;
     }
 
-    /* prepare timeslot */
     global $config_timeslots;
     $min_time_index = $timeslots[0];
     $max_time_index = end($timeslots);
