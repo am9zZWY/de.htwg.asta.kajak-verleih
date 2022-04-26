@@ -23,3 +23,6 @@ $ERROR_CANCELLATION_NOT_FOUND = "Reservierung wurde nicht gefunden.";
 
 /* Kajak */
 $ERROR_TYPE_NOT_IN_CONFIG = "Kajak-Typ nicht in Konfiguration gefunden";
+
+/* Login */
+$ERROR_LOGIN = "Einloggen fehlgeschlagen!";
