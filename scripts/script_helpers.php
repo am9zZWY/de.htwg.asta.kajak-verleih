@@ -54,3 +54,13 @@ function get_env(string $key, string $default = ''): string
 {
     return clean_string($_POST[$field] ?? $default);
 }
+
+/**
+ * Get random token.
+ *
+ * @return string
+ */
+function get_random_token(): string
+{
+    return md5(uniqid(mt_rand(), true));
+}
