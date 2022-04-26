@@ -53,7 +53,7 @@ function add_reservation_table(mysqli|null $conn): string|bool
     $sql = $conn->prepare("
 CREATE TABLE IF NOT EXISTS reservations
 (
-    reservation_id   VARCHAR(20)     NOT NULL PRIMARY KEY,
+    reservation_id   VARCHAR(60)     NOT NULL PRIMARY KEY,
     name             VARCHAR(30)     NOT NULL,
     email            VARCHAR(50)     NOT NULL,
     phone            VARCHAR(20)     NOT NULL,
@@ -92,7 +92,7 @@ function add_kajak_table(mysqli|null $conn): string|bool
     $sql = $conn->prepare("
 CREATE TABLE IF NOT EXISTS kajaks
 (
-    kajak_name             VARCHAR(30)     NOT NULL PRIMARY KEY,
+    kajak_name       VARCHAR(30)     NOT NULL PRIMARY KEY,
     kind             VARCHAR(30)     NOT NULL,
     seats            INT             NOT NULL DEFAULT 0,
     available        BOOLEAN         NOT NULL DEFAULT TRUE,
@@ -123,7 +123,7 @@ function add_reservation_kajak_table(mysqli|null $conn): string|bool
     $sql = $conn->prepare("
 CREATE TABLE IF NOT EXISTS kajak_reservation
 (
-    reservation_id   VARCHAR(20)     NOT NULL,
+    reservation_id   VARCHAR(60)     NOT NULL,
     kajak_name       VARCHAR(30)     NOT NULL,
     PRIMARY KEY(reservation_id, kajak_name)
 )");
@@ -253,7 +253,7 @@ function get_reservations(mysqli|null $conn): array
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
-function get_reservated_kajaks_by_id(mysqli|null $conn)
+function get_reservated_kajaks_by_id(mysqli|null $conn): array
 {
     global $ERROR_DATABASE_CONNECTION;
 
@@ -422,6 +422,7 @@ INSERT INTO kajak_reservation (kajak_name, reservation_id)
 
         return $reservation_id;
     } catch (Exception $e) {
+        var_dump($e);
         return false;
     }
 }
