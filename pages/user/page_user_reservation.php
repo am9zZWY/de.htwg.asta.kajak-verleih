@@ -299,12 +299,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                     <?php
                     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         /* check if csrf token match */
-                        $token = clean_string($_POST[$_SESSION['token_field']] ?? '');
+                        $token = clean_string($_POST[$_SESSION['token_field'] ?? ''] ?? '');
 
                     if (!$token || $token !== $_SESSION['token']) {
                         ?>
                         <h3>
-                            Es gibt ein Sicherheitsproblem!
+                            Reservierung nicht erfolgreich!
                         </h3>
                     <?php
                     exit();
@@ -317,13 +317,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                             Reservierung erfolgreich!
                         </h3>
                         <script>
-                            /* clean all input fields */
-                            Array.from(document.getElementsByTagName('input')).forEach(el => {
-                                    if (el.type === 'text' || el.type === 'email' || el.type === 'tel') {
-                                        el.value = ''
-                                    }
-                                }
-                            );
+                            setTimeout(() => {
+                                window.location = '/';
+                            }, 2000);
                         </script>
                     <?php
                     } else {
