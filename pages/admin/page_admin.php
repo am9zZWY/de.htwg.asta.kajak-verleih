@@ -27,6 +27,7 @@ global $config;
 $reservations = get_reservations($conn);
 $kajaks_by_reservation_id = get_reservated_kajaks_by_id($conn);
 $kajak_kinds = $config->getKajakKinds();
+$kajaks = get_kajaks($conn);
 
 echo create_header('Dashboard');
 ?>
@@ -38,8 +39,7 @@ echo create_header('Dashboard');
                 <div class="mb-3 form-floating">
                     <input id="reservation-filter"
                            name="filter" type="text" placeholder="bsp. Reservierungsnummer"
-                           value="<?php echo get_post_field('name') ?>"
-                           onkeyup="filterTable()"
+                           onkeyup="filterReservationTable()"
                            class=" form-control"
                            required>
                     <label for="filter">
@@ -51,7 +51,7 @@ echo create_header('Dashboard');
                 <form method="post" class="needs-validation">
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered table-sm table-light" id="reservations">
-                            <caption>Übersicht aller Reservierungen</caption>
+                            <caption>Auflistung aller Reservierungen</caption>
                             <tr>
                                 <th>Löschen</th>
                                 <th>ID</th>
@@ -68,17 +68,21 @@ echo create_header('Dashboard');
                             <?php
                             foreach ($reservations as $reservation) {
                                 $is_archived = $reservation['archived'] === 1;
+                                $is_cancelled = $reservation['cancelled'] === 1;
                                 ?>
-                                <tr class="reservation reservation-row <?php echo $is_archived ? 'archived' : '' ?>">
+                                <tr class="reservation reservation-row <?php echo $is_archived || $is_cancelled ? 'archived' : '' ?>">
                                     <td class="text-center">
                                         <?php
-                                        if (!$is_archived) {
-                                            ?>
+                                        if ($is_archived) { ?>
+                                            Gelöscht
+                                            <?php
+                                        } else if ($is_cancelled) { ?>
+                                            Storniert
+                                            <?php
+                                        } else { ?>
                                             <input class="form-check-input" type="checkbox"
                                                    value="<?php echo $reservation['reservation_id'] ?>"
                                                    name="id[]">
-                                        <?php } else { ?>
-                                            Gelöscht
                                             <?php
                                         }
                                         ?>
@@ -111,7 +115,7 @@ echo create_header('Dashboard');
     </div>
     <div class="row content">
         <div class="content-wrapper">
-            <h4>Kajak registrieren</h4>
+            <h4>Kajaks verwalten</h4>
             <form method="post" class="needs-validation">
                 <div class="row">
                     <div class="col-sm-4">
@@ -159,27 +163,78 @@ echo create_header('Dashboard');
                     </div>
                 </div>
 
-                <div class="btn-group d-flex" role="group">
-                    <button type="submit" class="btn custom-btn mx-1" name="delete_kajak">Kajak löschen
-                    </button>
-                    <button type="submit" class="btn custom-btn mx-1" name="add_kajak">Kajak hinzufügen
-                    </button>
+                <div class="col">
+                    <div class="mb-3 form-floating">
+                        <input id="kajak-filter"
+                               name="filter" type="text" placeholder="bsp. Kajakname"
+                               onkeyup="filterKajakTable()"
+                               class="form-control"
+                               required>
+                        <label for="filter">
+                            Filter
+                        </label>
+                    </div>
                 </div>
-            </form>
-        </div>
-    </div>
-    <script>
-        const reservationFilter = document.getElementById('reservation-filter')
+                <div class="col">
+                    <form method="post" class="needs-validation">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-sm table-light" id="reservations">
+                                <caption>Auflistung aller Kajaks</caption>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Typ</th>
+                                    <th>Anzahl der Sitze</th>
+                                    <th>Verfügbar</th>
+                                    <th>Kommentar</th>
+                                </tr>
+                                <?php
+                                foreach ($kajaks as $kajak) {
+                                    $is_available = $kajak['available'] === 1;
+                                    $kajak_name = $kajak['kajak_name'];
+                                    ?>
+                                    <tr class="kajak-row">
+                                        <td><?php echo $kajak_name ?></td>
+                                        <td><?php echo $kajak['kind'] ?></td>
+                                        <td><?php echo $kajak['seats'] ?></td>
+                                        <td><?php echo $is_available ? 'Ja' : 'Nein' ?></td>
+                                        <td><?php echo $kajak['comment'] ?></td>
+                                    </tr>
+                                    <?php
+                                } ?>
+                            </table>
+                        </div>
 
-        function filterTable() {
-            const reservations = document.getElementsByClassName('reservation-row')
-            Array.from(reservations).forEach((row) => {
-                if (row.textContent.toLowerCase().includes(reservationFilter.value.toLowerCase())) {
-                    row.style.display = "";
-                } else {
-                    row.style.display = "none";
-                }
-            })
-        }
-    </script>
-</div>
+                        <div class="btn-group d-flex" role="group">
+                            <button type="submit" class="btn custom-btn mx-1" name="delete_kajak">Kajak löschen
+                            </button>
+                            <button type="submit" class="btn custom-btn mx-1" name="add_kajak">Kajak hinzufügen
+                            </button>
+                        </div>
+                    </form>
+                </div>
+        </div>
+        <script>
+            const reservationFilter = document.getElementById('reservation-filter')
+            const kajakFilter = document.getElementById('kajak-filter')
+
+            const filter = (inputElement, elements) => {
+                return Array.from(elements).forEach((row) => {
+                    if (row.textContent.toLowerCase().includes(inputElement.value.toLowerCase())) {
+                        row.style.display = "";
+                    } else {
+                        row.style.display = "none";
+                    }
+                })
+            }
+
+            function filterReservationTable() {
+                const reservations = document.getElementsByClassName('reservation-row')
+                filter(reservationFilter, reservations);
+            }
+
+            function filterKajakTable() {
+                const kajaks = document.getElementsByClassName('kajak-row')
+                filter(kajakFilter, kajaks);
+            }
+        </script>
+    </div>
