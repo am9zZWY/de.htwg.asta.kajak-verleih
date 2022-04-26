@@ -323,8 +323,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                         el.value = ''
                                     }
                                 }
-                            )
-                            ;
+                            );
                         </script>
                     <?php
                     } else {
