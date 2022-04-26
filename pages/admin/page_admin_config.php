@@ -5,7 +5,7 @@ global $config;
 <div class="container">
     <div class="row content">
         <div class="content-wrapper">
-            <p>Aktuelle Werte:</p>
+            <h4>Aktuelle Konfiguration</h4>
             <ul>
                 <!-- PRICES -->
                 <li>
