@@ -11,25 +11,23 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') && isset($_POST['logout'])) {
 ?>
 
 <nav class="navbar navbar-expand-lg bg-light fixed-top">
-    <div class="collapse navbar-collapse">
-        <ul class="navbar-nav">
-            <li class="sidenav-burger" id="burger">
-                <span onclick="openNav()">&#9776;</span>
-            </li>
-        </ul>
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" href="/privacy">
-                    Datenschutz
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/impressum">
-                    Impressum
-                </a>
-            </li>
-        </ul>
-    </div>
+    <ul class="navbar-nav">
+        <li class="sidenav-burger" id="burger">
+            <span onclick="openNav()">&#9776;</span>
+        </li>
+    </ul>
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" href="/privacy">
+                Datenschutz
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/impressum">
+                Impressum
+            </a>
+        </li>
+    </ul>
 </nav>
 <div id="sidenav" class="sidenav">
     <ul class="nav nav-flush flex-column mb-auto">
