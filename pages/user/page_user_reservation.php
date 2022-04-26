@@ -6,8 +6,8 @@ $kajaks = $config->getKajaks(true);
 
 /* create csrf token */
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $_SESSION['token'] = md5(uniqid(mt_rand(), true));
-    $_SESSION['token_field'] = md5(uniqid(mt_rand(), true));
+    $_SESSION['token'] = get_random_token();
+    $_SESSION['token_field'] = get_random_token();
 }
 ?>
 
