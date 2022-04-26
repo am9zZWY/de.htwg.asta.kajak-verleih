@@ -2,30 +2,27 @@
 /* Connect to database */
 $conn = connect_to_database();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (is_logged_in()) {
-
-        if (isset($_POST['delete_items'], $_POST['id'])) {
-            $ids = clean_array($_POST['id']);
-            archive_reservation($conn, $ids);
-        } else if (isset($_POST['drop_all'])) {
-            drop_all_tables($conn);
-        } else if (isset($_POST['delete_kajak'])) {
-            $name = clean_string($_POST['name']);
-            remove_kajak($conn, $name);
-        } else if (isset($_POST['add_kajak'])) {
-            $name = clean_string($_POST['name']);
-            $kind = clean_string($_POST['kind']);
-            $seats = (int)clean_string($_POST['seats']);
-            add_kajak($conn, $name, $kind, $seats);
-        }
+if (($_SERVER['REQUEST_METHOD'] === 'POST') && isset($_POST['confirm']) && is_logged_in() && clean_string($_POST['confirm']) === '1') {
+    if (isset($_POST['delete_items'], $_POST['id'])) {
+        $ids = clean_array($_POST['id']);
+        archive_reservation($conn, $ids);
+    } else if (isset($_POST['drop_all'])) {
+        drop_all_tables($conn);
+    } else if (isset($_POST['delete_kajak'])) {
+        $name = clean_string($_POST['name']);
+        remove_kajak($conn, $name);
+    } else if (isset($_POST['add_kajak'])) {
+        $name = clean_string($_POST['name']);
+        $kind = clean_string($_POST['kind']);
+        $seats = (int)clean_string($_POST['seats']);
+        add_kajak($conn, $name, $kind, $seats);
     }
 }
 
 /* Get all reservations from database */
 global $config;
 $reservations = get_reservations($conn);
-$kajaks_by_reservation_id = get_reservated_kajaks_by_id($conn);
+$kajaks_by_reservation_id = get_reserved_kajaks_by_id($conn);
 $kajak_kinds = $config->getKajakKinds();
 $kajaks = get_kajaks($conn);
 
@@ -40,8 +37,7 @@ echo create_header('Dashboard');
                     <input id="reservation-filter"
                            name="filter" type="text" placeholder="bsp. Reservierungsnummer"
                            onkeyup="filterReservationTable()"
-                           class=" form-control"
-                           required>
+                           class=" form-control">
                     <label for="filter">
                         Filter
                     </label>
@@ -108,6 +104,13 @@ echo create_header('Dashboard');
                         <button type="submit" class="btn custom-btn mx-1" name="drop_all">
                             Tabellen löschen
                         </button>
+                        <div class="mx-1">
+                            <input type="checkbox" name="confirm" value="1" id="confirm"
+                                   class="form-check-input">
+                            <label for="confirm">
+                                Bestätigen
+                            </label>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -169,7 +172,7 @@ echo create_header('Dashboard');
                                name="filter" type="text" placeholder="bsp. Kajakname"
                                onkeyup="filterKajakTable()"
                                class="form-control"
-                               required>
+                        >
                         <label for="filter">
                             Filter
                         </label>
@@ -209,9 +212,17 @@ echo create_header('Dashboard');
                             </button>
                             <button type="submit" class="btn custom-btn mx-1" name="add_kajak">Kajak hinzufügen
                             </button>
+                            <div class="mx-1">
+                                <input type="checkbox" name="confirm" value="1" id="confirm"
+                                       class="form-check-input">
+                                <label for="confirm">
+                                    Bestätigen
+                                </label>
+                            </div>
                         </div>
                     </form>
                 </div>
+            </form>
         </div>
         <script>
             const reservationFilter = document.getElementById('reservation-filter')
