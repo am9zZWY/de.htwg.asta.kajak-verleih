@@ -51,9 +51,8 @@ if ($PARSED_URL === '/api') {
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Kajak Verleihsystem des AStA der HTWG Konstanz">
-    <link rel="stylesheet" href="/static/css/custom.css">
-    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="/static/css/custom.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css" media="print" onload="this.media='all'">
     <title>Kajak Verleihsystem von Coolen Typen</title>
 </head>
 <body>
@@ -65,7 +64,7 @@ if ($PARSED_URL === '/api') {
 </div>
 <div class="container p-0">
     <?php
-    if ($PARSED_URL === '/about') {
+    if ($PARSED_URL === '/about' || $PARSED_URL === '/terms') {
         require("pages/user/page_user_agb.php");
     } else if ($PARSED_URL === '/privacy' || $PARSED_URL === '/dsgvo' || $PARSED_URL === '/datenschutz') {
         require("pages/user/page_user_privacy.php");
