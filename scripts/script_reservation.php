@@ -191,18 +191,17 @@ function remove_kajak(mysqli|null $conn, string $kajak_name): bool
         $sql = $conn->prepare("DELETE FROM kajaks WHERE kajak_name = ?");
         $sql->bind_param('s', $kajak_name);
         return $sql->execute();
-    }  catch (Exception $e) {
+    } catch (Exception $e) {
         return false;
     }
 }
 
-
 /**
- * Get all kajak names.
+ * Get all kajak.
  * @param mysqli|null $conn
  * @return array|bool
  */
-function get_kajaks_kinds(mysqli|null $conn): array|bool
+function get_kajaks(mysqli|null $conn): array|bool
 {
     global $ERROR_DATABASE_CONNECTION;
 
@@ -211,7 +210,7 @@ function get_kajaks_kinds(mysqli|null $conn): array|bool
     }
 
     try {
-        $sql = $conn->prepare("SELECT DISTINCT(kind) FROM kajaks");
+        $sql = $conn->prepare("SELECT * FROM kajaks");
         $result_execute = $sql->execute();
         if ($result_execute === false) {
             return [];
@@ -222,6 +221,16 @@ function get_kajaks_kinds(mysqli|null $conn): array|bool
 
     $result = $sql->get_result();
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
+
+/**
+ * Get all kajak kinds.
+ * @param mysqli|null $conn
+ * @return array|bool
+ */
+function get_kajaks_kinds(mysqli|null $conn): array|bool
+{
+    return array_values(array_unique(array_map(static fn($kajak) => $kajak['kind'], get_kajaks($conn))));
 }
 
 /**
@@ -473,7 +482,6 @@ function reservate_kajak(mysqli|null $conn, array $fields, bool $send_email = fa
 
     /* check if more than 0 kajaks where selected */
     $amount_kajaks = array_map(static function ($kajak_kind) {
-        $kajak_kind = $kajak_kind["kind"];
         if (!isset($_POST[$kajak_kind])) {
             return 0;
         }
@@ -489,7 +497,6 @@ function reservate_kajak(mysqli|null $conn, array $fields, bool $send_email = fa
     /* check for each kind, if it is available */
     $reserved_kajaks = array();
     foreach ($kajak_kinds as $kajak_kind) {
-        $kajak_kind = $kajak_kind["kind"];
         $requested_amount = !isset($_POST[$kajak_kind]) ? 0 : (int)clean_string($_POST[$kajak_kind]);
         /* skip 0 requested kajaks */
         if ($requested_amount === 0) {
