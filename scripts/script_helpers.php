@@ -1,6 +1,5 @@
 <?php
 
-use JetBrains\PhpStorm\Pure;
 
 /**
  * Escape all html characters.
@@ -8,7 +7,7 @@ use JetBrains\PhpStorm\Pure;
  * @param string|null $string |null $string $string
  * @return string
  */
-function clean_string(string|null $string): string
+function clean_string(?string $string): string
 {
     if ($string === null) {
         return '';
@@ -23,7 +22,7 @@ function clean_string(string|null $string): string
  * @param array|null $array
  * @return array
  */
-function clean_array(array|null $array): array
+function clean_array(?array $array): array
 {
     if ($array === null) {
         return [];
@@ -50,7 +49,7 @@ function get_env(string $key, string $default = ''): string
  * @param mixed $default
  * @return string
  */
-#[Pure] function get_post_field(string $field, string $default = ''): string
+function get_post_field(string $field, string $default = ''): string
 {
     return clean_string($_POST[$field] ?? $default);
 }
