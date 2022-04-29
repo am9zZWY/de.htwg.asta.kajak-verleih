@@ -7,7 +7,7 @@
  * @param string|null $link
  * @return string
  */
-function create_header(string $header, string|null $link = null): string
+function create_header(string $header, ?string $link = null): string
 {
     return "
     <div class='content-wrapper'>" .
