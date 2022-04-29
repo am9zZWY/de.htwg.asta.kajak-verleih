@@ -12,7 +12,7 @@ global $config;
                     <strong>Preise:</strong>
                     <ul>
                         <?php
-                        foreach ($config->getPrices(true) as $price) {
+                        foreach ($config->getPrices() as $price) {
                             ?>
                             <li>
                                 <?php echo $price->description ?>: <?php echo $price->value ?>
