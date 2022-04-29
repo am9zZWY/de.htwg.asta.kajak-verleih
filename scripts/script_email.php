@@ -122,7 +122,7 @@ function send_mail(string $email_address_to, string $subject, string $body): boo
         $mail->Password = get_env('MAIL_PASSWORD');
 
         $mail->setFrom($email_address, 'AStA Kajak-Reservierungsservice');
-        $mail->addAddress($email_address_to);
+        $mail->addAddress($email_address_to === '' ? $email_address : $email_address_to);
 
         $mail->isHTML(true);
         $mail->Subject = $subject;
@@ -130,7 +130,7 @@ function send_mail(string $email_address_to, string $subject, string $body): boo
 
         $mail->send();
         return true;
-    } catch (Exception) {
+    } catch (Exception $e) {
         return false;
     }
 }
