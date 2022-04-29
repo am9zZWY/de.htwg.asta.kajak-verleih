@@ -208,7 +208,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                     <div class="row mt-2">
                                         <p>
                                             <?php
-                                            foreach ($config->getPrices(true) as $price) {
+                                            foreach ($config->getPrices() as $price) {
                                                 echo $price->description . ": <strong>" . $price->value . "€</strong>";
                                                 ?>
                                                 <br>
@@ -297,6 +297,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         Array.from(document.getElementsByClassName('timeslot')).forEach(timeslot => timeslot.addEventListener('change', calculate_price))
                     </script>
                     <?php
+                    global $ERROR_RESERVATION;
+
                     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         /* check if csrf token match */
                         $token = clean_string($_POST[$_SESSION['token_field'] ?? ''] ?? '');
@@ -304,33 +306,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                     if (!$token || $token !== $_SESSION['token']) {
                         ?>
                         <h3>
-                            Reservierung nicht erfolgreich!
+                            <?php echo $ERROR_RESERVATION ?>
                         </h3>
                     <?php
                     exit();
                     }
 
                     $ret_val = reservate_kajak($connection, $_POST, true);
-                    if ($ret_val === true) {
                     ?>
                         <h3>
-                            Reservierung erfolgreich!
+                            <?php echo $ret_val->getMessage(); ?>
                         </h3>
+                    <?php
+                    if ($ret_val->isSuccess()) {
+                    ?>
                         <script>
                             setTimeout(() => {
                                 window.location = '/';
                             }, 2000);
                         </script>
-                    <?php
-                    } else {
-                    ?>
-                        <h2>
-                            <?php echo $ret_val ?>
-                        </h2>
-                        <?php
-                    }
-                    }
-                    ?>
+                    <?php }
+                    } ?>
                 </div>
             </div>
         </div>
