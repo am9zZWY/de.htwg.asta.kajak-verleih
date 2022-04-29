@@ -51,8 +51,8 @@ if ($PARSED_URL === '/api') {
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Kajak Verleihsystem des AStA der HTWG Konstanz">
-    <link rel="stylesheet" href="/static/css/custom.css" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="/static/css/bootstrap.min.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="/static/css/custom.css">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
     <title>Kajak Verleihsystem von Coolen Typen</title>
 </head>
 <body>
