@@ -8,8 +8,14 @@ $config_timeslots = $config->getTimeslots(true);
 
 class ReturnValue
 {
-    public bool $status;
-    public string $statusMessage;
+    /**
+     * @var bool
+     */
+    public $status;
+    /**
+     * @var string
+     */
+    public $statusMessage;
 
     public function __construct($status, $statusMessage)
     {
@@ -284,7 +290,9 @@ function get_kajaks(?mysqli $conn): array
  */
 function get_kajaks_kinds(?mysqli $conn): array
 {
-    return array_values(array_unique(array_map(static fn($kajak) => $kajak['kind'], get_kajaks($conn))));
+    return array_values(array_unique(array_map(static function ($kajak) {
+        return $kajak['kind'];
+    }, get_kajaks($conn))));
 }
 
 /**
@@ -595,7 +603,9 @@ function reservate_kajak(?mysqli $conn, array $fields, bool $send_email = false)
     $price = $config->calculatePrice($amount_timeslots, $sum_kajaks);
 
     /* insert reservation into database and get reservation_id back */
-    $kajak_names = array_map(static fn($available_kajak) => $available_kajak["kajak_name"], $reserved_kajaks);
+    $kajak_names = array_map(static function ($available_kajak) {
+        return $available_kajak["kajak_name"];
+    }, $reserved_kajaks);
     $reservation_id = insert_reservation($conn, $fullname, $email, $phone, $address, $date, $timeslots, $kajak_names, $price);
     if ($reservation_id === '') {
         return ReturnValue::error($ERROR_RESERVATION);
