@@ -8,16 +8,15 @@ use Dotenv\Dotenv;
 $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->safeLoad();
 
-/* initialize Config Class */
-require __DIR__ . '/scripts/ConfigHelper.php';
-$config = new ConfigHelper();
-
-require __DIR__ . '/scripts/script_helpers.php';
-require __DIR__ . '/scripts/script_login.php';
-require __DIR__ . '/scripts/script_reservation.php';
-require __DIR__ . '/scripts/script_template_helpers.php';
-require __DIR__ . '/scripts/script_email.php';
-require __DIR__ . '/scripts/script_errors.php';
+/* initialize scripts */
+require __DIR__ . '/scripts/Config.php';
+$config = new Config();
+require __DIR__ . '/scripts/General.php';
+require __DIR__ . '/scripts/Login.php';
+require __DIR__ . '/scripts/Database.php';
+require __DIR__ . '/scripts/Templates.php';
+require __DIR__ . '/scripts/Email.php';
+require __DIR__ . '/scripts/Errors.php';
 
 /* if session is not set start it */
 session_start();
@@ -79,12 +78,8 @@ if ($PARSED_URL === '/api') {
     }
 
     /* show these pages only when logged in */
-    if (is_logged_in()) {
-        if ($PARSED_URL === '/admin') {
-            require("pages/admin/page_admin.php");
-        } elseif ($PARSED_URL === '/config') {
-            require("pages/admin/page_admin_config.php");
-        }
+    if ($PARSED_URL === '/admin' && is_logged_in()) {
+        require("pages/admin/page_admin.php");
     }
 
     ?>
