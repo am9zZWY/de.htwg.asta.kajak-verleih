@@ -1,4 +1,6 @@
 <?php
+/** @noinspection ForgottenDebugOutputInspection */
+
 global $config;
 /* kajaks for each kajak type */
 $amount_kajaks = $config->getAmountKajaks();
@@ -17,7 +19,7 @@ class ReturnValue
 
     public static function error($statusMessage = 'Aktion fehlgeschlagen'): ReturnValue
     {
-        return new ReturnValue(false, $statusMessage, null);
+        return new ReturnValue(false, $statusMessage);
     }
 
     public static function success($statusMessage = 'Aktion erfolgreich'): ReturnValue
@@ -57,11 +59,11 @@ function connect_to_database(): ?mysqli
         $conn = new mysqli($servername, $username, $password, $dbname);
         /* Check connection */
         if ($conn->connect_error) {
-            error_log($ERROR_DATABASE_CONNECTION, 0);
+            error_log($ERROR_DATABASE_CONNECTION);
             return null;
         }
     } catch (Exception $e) {
-        error_log($ERROR_DATABASE_CONNECTION, 0);
+        error_log($ERROR_DATABASE_CONNECTION);
         return null;
     }
 
@@ -75,10 +77,10 @@ function connect_to_database(): ?mysqli
  */
 function add_reservation_table(?mysqli $conn): void
 {
-    global $INFO_TABLE_CREATED, $ERROR_TABLE_CREATION, $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY;
+    global $ERROR_TABLE_CREATION, $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY;
 
     if ($conn === null) {
-        error_log($ERROR_DATABASE_CONNECTION, 0);
+        error_log($ERROR_DATABASE_CONNECTION);
         return;
     }
 
@@ -101,28 +103,28 @@ CREATE TABLE IF NOT EXISTS reservations
 )");
 
     if ($sql === false) {
-        error_log($ERROR_DATABASE_QUERY, 0);
+        error_log($ERROR_DATABASE_QUERY);
         return;
     }
 
     if ($sql->execute()) {
         return;
     }
-    error_log($ERROR_TABLE_CREATION, 0);
+    error_log($ERROR_TABLE_CREATION);
 }
 
 /**
  * Create table for kajaks.
  *
  * @param mysqli|null $conn
- * @return string|bool
+ * @return void
  */
 function add_kajak_table(?mysqli $conn): void
 {
     global $ERROR_TABLE_CREATION, $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY;
 
     if ($conn === null) {
-        error_log($ERROR_DATABASE_CONNECTION, 0);
+        error_log($ERROR_DATABASE_CONNECTION);
         return;
     }
 
@@ -137,14 +139,14 @@ CREATE TABLE IF NOT EXISTS kajaks
 )");
 
     if ($sql === false) {
-        error_log($ERROR_DATABASE_QUERY, 0);
+        error_log($ERROR_DATABASE_QUERY);
         return;
     }
 
     if ($sql->execute()) {
         return;
     }
-    error_log($ERROR_TABLE_CREATION, 0);
+    error_log($ERROR_TABLE_CREATION);
 }
 
 /**
@@ -158,7 +160,7 @@ function add_reservation_kajak_table(?mysqli $conn): void
     global $ERROR_TABLE_CREATION, $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY;
 
     if ($conn === null) {
-        error_log($ERROR_DATABASE_CONNECTION, 0);
+        error_log($ERROR_DATABASE_CONNECTION);
         return;
     }
 
@@ -171,14 +173,14 @@ CREATE TABLE IF NOT EXISTS kajak_reservation
 )");
 
     if ($sql === false) {
-        error_log($ERROR_DATABASE_QUERY, 0);
+        error_log($ERROR_DATABASE_QUERY);
         return;
     }
 
     if ($sql->execute()) {
         return;
     }
-    error_log($ERROR_TABLE_CREATION, 0);
+    error_log($ERROR_TABLE_CREATION);
 }
 
 /**
@@ -195,14 +197,14 @@ function add_kajak(?mysqli $conn, string $name, string $kind, int $amount_seats)
     global $ERROR_DATABASE_CONNECTION, $ERROR_TYPE_NOT_IN_CONFIG, $config;
 
     if ($conn === null) {
-        error_log($ERROR_DATABASE_CONNECTION, 0);
+        error_log($ERROR_DATABASE_CONNECTION);
         return;
     }
 
     /* get all kajaks and check if the kind is valid */
     $kinds = $config->getKajakKinds();
     if (!in_array($kind, $kinds, true)) {
-        error_log($ERROR_TYPE_NOT_IN_CONFIG, 0);
+        error_log($ERROR_TYPE_NOT_IN_CONFIG);
         return;
     }
 
@@ -232,7 +234,7 @@ function remove_kajak(?mysqli $conn, string $kajak_name): void
     global $ERROR_DATABASE_CONNECTION;
 
     if ($conn === null) {
-        error_log($ERROR_DATABASE_CONNECTION, 0);
+        error_log($ERROR_DATABASE_CONNECTION);
         return;
     }
 
@@ -256,7 +258,7 @@ function get_kajaks(?mysqli $conn): array
     global $ERROR_DATABASE_CONNECTION;
 
     if ($conn === null) {
-        error_log($ERROR_DATABASE_CONNECTION, 0);
+        error_log($ERROR_DATABASE_CONNECTION);
         return [];
     }
 
@@ -296,7 +298,7 @@ function get_reservations(?mysqli $conn): array
     global $ERROR_DATABASE_CONNECTION;
 
     if ($conn === null) {
-        error_log($ERROR_DATABASE_CONNECTION, 0);
+        error_log($ERROR_DATABASE_CONNECTION);
         return [];
     }
 
@@ -308,7 +310,7 @@ function get_reservations(?mysqli $conn): array
         }
     } catch (Exception $e) {
         /** @noinspection ForgottenDebugOutputInspection */
-        error_log($e, 0);
+        error_log($e);
         return [];
     }
 
@@ -327,7 +329,7 @@ function get_reserved_kajaks_by_id(?mysqli $conn): array
     global $ERROR_DATABASE_CONNECTION;
 
     if ($conn === null) {
-        error_log($ERROR_DATABASE_CONNECTION, 0);
+        error_log($ERROR_DATABASE_CONNECTION);
         return [];
     }
 
@@ -338,7 +340,7 @@ function get_reserved_kajaks_by_id(?mysqli $conn): array
             return [];
         }
     } catch (Exception $e) {
-        error_log($e, 0);
+        error_log($e);
         return [];
     }
 
@@ -374,7 +376,7 @@ function drop_all_tables(?mysqli $conn): void
     global $ERROR_DATABASE_CONNECTION;
 
     if ($conn === null) {
-        error_log($ERROR_DATABASE_CONNECTION, 0);
+        error_log($ERROR_DATABASE_CONNECTION);
         return;
     }
 
@@ -400,7 +402,7 @@ function get_available_kajaks(?mysqli $conn, string $date, array $timeslot, stri
     global $ERROR_DATABASE_CONNECTION;
 
     if ($conn === null) {
-        error_log($ERROR_DATABASE_CONNECTION, 0);
+        error_log($ERROR_DATABASE_CONNECTION);
         return [];
     }
 
@@ -408,7 +410,7 @@ function get_available_kajaks(?mysqli $conn, string $date, array $timeslot, stri
     try {
         $timeslot[1] = new DateTime($timeslot[1]);
     } catch (Exception $e) {
-        error_log($e, 0);
+        error_log($e);
         return [];
     }
 
@@ -472,7 +474,7 @@ function insert_reservation(?mysqli $conn, string $name, string $email, string $
     global $ERROR_DATABASE_CONNECTION;
 
     if ($conn === null) {
-        error_log($ERROR_DATABASE_CONNECTION, 0);
+        error_log($ERROR_DATABASE_CONNECTION);
         return '';
     }
 
@@ -505,7 +507,7 @@ INSERT INTO kajak_reservation (kajak_name, reservation_id)
 
         return $reservation_id;
     } catch (Exception $e) {
-        error_log($e, 0);
+        error_log($e);
         return '';
     }
 }
@@ -522,7 +524,7 @@ function reservate_kajak(?mysqli $conn, array $fields, bool $send_email = false)
 {
     global $ERROR_DATABASE_CONNECTION;
     if ($conn === null) {
-        error_log($ERROR_DATABASE_CONNECTION, 0);
+        error_log($ERROR_DATABASE_CONNECTION);
         ReturnValue::error($ERROR_DATABASE_CONNECTION);
     }
 
@@ -622,7 +624,7 @@ function archive_reservation(?mysqli $conn, array $ids): void
     global $ERROR_DATABASE_CONNECTION;
 
     if ($conn === null) {
-        error_log($ERROR_DATABASE_CONNECTION, 0);
+        error_log($ERROR_DATABASE_CONNECTION);
         return;
     }
 
@@ -646,7 +648,7 @@ function cancel_reservation(?mysqli $conn, array $fields, bool $send_email = fal
     global $ERROR_DATABASE_CONNECTION;
 
     if ($conn === null) {
-        error_log($ERROR_DATABASE_CONNECTION, 0);
+        error_log($ERROR_DATABASE_CONNECTION);
         return $ERROR_DATABASE_CONNECTION;
     }
 
@@ -675,13 +677,18 @@ function cancel_reservation(?mysqli $conn, array $fields, bool $send_email = fal
         if ($send_email) {
             $send_mail_status = send_cancellation_email($reservation_id, $email);
             if ($send_mail_status === false) {
-                error_log($ERROR_MAIL_NOT_SENT, 0);
+                error_log($ERROR_MAIL_NOT_SENT);
                 return $ERROR_MAIL_NOT_SENT;
             }
         }
         return $INFO_CANCELLATION_CANCELED;
     }
 
-    error_log($ERROR_CANCELLATION, 0);
+    error_log($ERROR_CANCELLATION);
     return $ERROR_CANCELLATION;
+}
+
+function database_is_connected()
+{
+    return false;
 }
