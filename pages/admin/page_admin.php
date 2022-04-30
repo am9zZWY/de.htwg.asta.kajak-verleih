@@ -38,7 +38,7 @@ echo create_header('Dashboard');
                            name="filter" type="text" placeholder="bsp. Reservierungsnummer"
                            onkeyup="filterReservationTable()"
                            class=" form-control">
-                    <label for="filter">
+                    <label for="reservation-filter">
                         Filter
                     </label>
                 </div>
@@ -77,6 +77,7 @@ echo create_header('Dashboard');
                                             <?php
                                         } else { ?>
                                             <input class="form-check-input" type="checkbox"
+                                                   id="reservation-checkbox-<?php echo $reservation['reservation_id'] ?>"
                                                    value="<?php echo $reservation['reservation_id'] ?>"
                                                    name="id[]">
                                             <?php
@@ -146,7 +147,7 @@ echo create_header('Dashboard');
                                     </option>
                                 <?php } ?>
                             </select>
-                            <label for="date">
+                            <label for="kind">
                                 Typ
                             </label>
                         </div>
@@ -173,7 +174,7 @@ echo create_header('Dashboard');
                                onkeyup="filterKajakTable()"
                                class="form-control"
                         >
-                        <label for="filter">
+                        <label for="kajak-filter">
                             Filter
                         </label>
                     </div>
@@ -322,7 +323,7 @@ echo create_header('Dashboard');
         <div class="col content">
             <div class="content-wrapper">
                 <h4>Datenbank Status</h4>
-                
+
             </div>
         </div>
     </div>
