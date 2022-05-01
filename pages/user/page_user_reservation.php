@@ -2,7 +2,8 @@
 global $config;
 echo create_header('Kajak Reservierung', '/');
 $connection = $_SESSION['connection'];
-$kajaks = $config->getKajaks(true);
+$kajaks = $config->getKajaks();
+$available_kajaks = get_kajak_with_real_amount($connection);
 
 /* create csrf token */
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -29,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 <div class="content-wrapper">
                     <h3>Welche Kajak-Modelle gibt es?</h3>
                     <?php
-                    foreach ($kajaks as $kajak) {
+                    foreach ($available_kajaks as $kajak) {
                         ?>
                         <div>
                             <h4><?php echo $kajak->name ?></h4><br>
@@ -222,7 +223,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
                             <div class="row my-2">
                                 <?php
-                                foreach ($kajaks as $kajak) {
+                                foreach ($available_kajaks as $kajak) {
                                     ?>
                                     <div class="col-md-6">
                                         <div class="form-group form-floating">
@@ -332,3 +333,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         </div>
     </div>
 </div>
+<script>
+    const textInputs = Array.from(document.getElementsByTagName('input'))
+    textInputs.forEach(e => {
+        if (e.type === 'text' || e.type === 'email') {
+            e.addEventListener('blur', () => {
+                e.value = e.value.trim();
+            })
+        }
+    })
+</script>
