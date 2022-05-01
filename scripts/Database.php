@@ -94,7 +94,7 @@ function add_reservation_table(?mysqli $conn): void
 CREATE TABLE IF NOT EXISTS reservations
 (
     reservation_id   VARCHAR(60)     NOT NULL PRIMARY KEY,
-    name             VARCHAR(30)     NOT NULL,
+    name             VARCHAR(40)     NOT NULL,
     email            VARCHAR(50)     NOT NULL,
     phone            VARCHAR(20)     NOT NULL,
     address          VARCHAR(200)    NOT NULL,
@@ -103,9 +103,9 @@ CREATE TABLE IF NOT EXISTS reservations
     from_time        TIME            NOT NULL,
     to_time          TIME            NOT NULL,    
     price            NUMERIC         NOT NULL DEFAULT 0,
-    archived         BOOLEAN         NOT NULL DEFAULT FALSE,
     cancelled        BOOLEAN         NOT NULL DEFAULT FALSE,
-    CONSTRAINT NAME_CHECK CHECK (REGEXP_LIKE(name, '^[A-ZäÄöÖüÜßa-z]+ [A-ZäÄöÖüÜßa-z]+$'))
+    CONSTRAINT NAME_CHECK CHECK (REGEXP_LIKE(name, '^[A-ZäÄöÖüÜßa-z]+ [A-ZäÄöÖüÜßa-z]+$')),
+    CONSTRAINT EMAIL_CHECK CHECK (REGEXP_LIKE(email, '^[A-Za-z0-9\._%+-]+@(htwg-konstanz.de|uni-konstanz.de)$'))
 )");
 
     if ($sql === false) {
@@ -257,9 +257,10 @@ function remove_kajak(?mysqli $conn, string $kajak_name): void
 /**
  * Get all kajak.
  * @param mysqli|null $conn
+ * @param bool $exclude_not_available
  * @return array
  */
-function get_kajaks(?mysqli $conn): array
+function get_kajaks(?mysqli $conn, bool $exclude_not_available = false): array
 {
     global $ERROR_DATABASE_CONNECTION;
 
@@ -269,7 +270,11 @@ function get_kajaks(?mysqli $conn): array
     }
 
     try {
-        $sql = $conn->prepare("SELECT * FROM kajaks");
+        if ($exclude_not_available) {
+            $sql = $conn->prepare("SELECT * FROM kajaks WHERE available = 1 ORDER BY seats, kajak_name");
+        } else {
+            $sql = $conn->prepare("SELECT * FROM kajaks ORDER BY seats, kajak_name");
+        }
         $result_execute = $sql->execute();
         if ($result_execute === false) {
             return [];
@@ -284,15 +289,57 @@ function get_kajaks(?mysqli $conn): array
 }
 
 /**
+ * Get kajaks sorted by kinds.
+ * @return void
+ */
+function get_kajak_with_real_amount(?mysqli $conn): array
+{
+    global $ERROR_DATABASE_CONNECTION;
+
+    if ($conn === null) {
+        error_log($ERROR_DATABASE_CONNECTION);
+        return [];
+    }
+
+    global $config;
+    $kajaks = $config->getKajaks();
+    $kajak_amounts = get_kajak_amounts($conn);
+
+    foreach ($kajaks as $kajak) {
+        $kajak->amount = $kajak_amounts[$kajak->kind]['amount'];
+    }
+
+    return $kajaks;
+}
+
+/**
  * Get all kajak kinds.
  * @param mysqli|null $conn
  * @return array
  */
-function get_kajaks_kinds(?mysqli $conn): array
+function get_kajak_kinds(?mysqli $conn): array
 {
     return array_values(array_unique(array_map(static function ($kajak) {
         return $kajak['kind'];
     }, get_kajaks($conn))));
+}
+
+/**
+ * Get all kajak amounts by kind.
+ * @param mysqli|null $conn
+ * @return array
+ */
+function get_kajak_amounts(?mysqli $conn): array
+{
+    return array_reduce(get_kajaks($conn, true), static function ($carry, $kajak) {
+        $kajak_kind = $kajak['kind'];
+        if (isset($carry[$kajak_kind])) {
+            $carry[$kajak_kind]['amount']++;
+        } else {
+            $carry[$kajak_kind]['amount'] = 1;
+        }
+        return $carry;
+    }, array());
 }
 
 /**
@@ -438,7 +485,6 @@ WHERE kajak_name NOT IN (SELECT kajak_reservation.kajak_name
                                              ON reservations.reservation_id = kajak_reservation.reservation_id
                          WHERE reservations.date = ?
                            AND reservations.cancelled = '0'
-                           AND reservations.archived = '0'
                            AND (reservations.from_time BETWEEN ? AND ?
                              OR reservations.to_time BETWEEN ? AND ?))
   AND kajaks.kind = ? AND kajaks.available = 1");
@@ -562,7 +608,7 @@ function reservate_kajak(?mysqli $conn, array $fields, bool $send_email = false)
     $timeslots = array($min_time, $max_time);
 
     /* get all kajak kinds */
-    $kajak_kinds = get_kajaks_kinds($conn);
+    $kajak_kinds = get_kajak_kinds($conn);
 
     /* check if more than 0 kajaks where selected */
     $amount_kajaks = array_map(static function ($kajak_kind) {
@@ -575,7 +621,7 @@ function reservate_kajak(?mysqli $conn, array $fields, bool $send_email = false)
 
     /* throw error if no kajak was selected */
     if ($sum_kajaks === 0) {
-        ReturnValue::error($ERROR_RESERVATION_KAJAK_NOT_SELECTED);
+        return ReturnValue::error($ERROR_RESERVATION_KAJAK_NOT_SELECTED);
     }
 
     /* check for each kind, if it is available */
@@ -588,7 +634,7 @@ function reservate_kajak(?mysqli $conn, array $fields, bool $send_email = false)
         }
         $available_kajaks = get_available_kajaks($conn, $date, $timeslots, $kajak_kind, $requested_amount);
         if (count($available_kajaks) === 0) {
-            ReturnValue::error($ERROR_RESERVATION_KAJAK_NOT_AVAILABLE);
+            return ReturnValue::error($ERROR_RESERVATION_KAJAK_NOT_AVAILABLE);
         }
 
         /* this will be a matrix which is then flattened */
@@ -621,15 +667,16 @@ function reservate_kajak(?mysqli $conn, array $fields, bool $send_email = false)
     return ReturnValue::success($INFO_RESERVATION_SUCCESS);
 }
 
+
 /**
- * Archive reservations by id.
+ * Recover cancelled reservations by id.
  * USED BY ADMIN.
  *
  * @param mysqli|null $conn
  * @param array<string> $ids
  * @return void
  */
-function archive_reservation(?mysqli $conn, array $ids): void
+function recover_reservations(?mysqli $conn, array $ids): void
 {
     global $ERROR_DATABASE_CONNECTION;
 
@@ -640,7 +687,31 @@ function archive_reservation(?mysqli $conn, array $ids): void
 
     /* concat all strings in array to one string */
     $ids_as_string = implode(',', $ids);
-    $sql = $conn->prepare("UPDATE reservations SET archived = TRUE WHERE find_in_set(reservation_id, ?)");
+    $sql = $conn->prepare("UPDATE reservations SET cancelled = FALSE WHERE find_in_set(reservation_id, ?)");
+    $sql->bind_param("s", $ids_as_string);
+    $sql->execute();
+}
+
+/**
+ * Cancel reservations by id.
+ * USED BY ADMIN.
+ *
+ * @param mysqli|null $conn
+ * @param array<string> $ids
+ * @return void
+ */
+function cancel_reservations(?mysqli $conn, array $ids): void
+{
+    global $ERROR_DATABASE_CONNECTION;
+
+    if ($conn === null) {
+        error_log($ERROR_DATABASE_CONNECTION);
+        return;
+    }
+
+    /* concat all strings in array to one string */
+    $ids_as_string = implode(',', $ids);
+    $sql = $conn->prepare("UPDATE reservations SET cancelled = TRUE WHERE find_in_set(reservation_id, ?)");
     $sql->bind_param("s", $ids_as_string);
     $sql->execute();
 }
@@ -669,7 +740,7 @@ function cancel_reservation(?mysqli $conn, array $fields, bool $send_email = fal
     $email = clean_string($fields['email']);
 
     /* check if reservation exists and is valid */
-    $sql = $conn->prepare("SELECT COUNT(*) as amount FROM reservations WHERE reservation_id = ? AND email = ? AND cancelled = 0 AND archived = 0");
+    $sql = $conn->prepare("SELECT COUNT(*) as amount FROM reservations WHERE reservation_id = ? AND email = ? AND cancelled = 0");
     $sql->bind_param('ss', $reservation_id, $email);
     $sql->execute();
     $result = $sql->get_result();
@@ -696,9 +767,4 @@ function cancel_reservation(?mysqli $conn, array $fields, bool $send_email = fal
 
     error_log($ERROR_CANCELLATION);
     return $ERROR_CANCELLATION;
-}
-
-function database_is_connected()
-{
-    return false;
 }
