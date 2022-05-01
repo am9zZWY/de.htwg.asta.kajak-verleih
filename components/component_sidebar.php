@@ -47,9 +47,6 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') && isset($_POST['logout'])) {
                 <a class="nav-link" href="/admin">Dashboard</a>
             </li>
             <li>
-                <a class="nav-link" href="/config">Konfiguration</a>
-            </li>
-            <li>
                 <form method="POST">
                     <button type="submit" name="logout">Abmelden</button>
                 </form>
