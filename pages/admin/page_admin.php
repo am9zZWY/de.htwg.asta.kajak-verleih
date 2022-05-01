@@ -3,9 +3,12 @@
 $conn = connect_to_database();
 
 if (($_SERVER['REQUEST_METHOD'] === 'POST') && isset($_POST['confirm']) && is_logged_in() && clean_string($_POST['confirm']) === '1') {
-    if (isset($_POST['delete_items'], $_POST['id'])) {
+    if (isset($_POST['archive_items'], $_POST['id'])) {
         $ids = clean_array($_POST['id']);
-        archive_reservation($conn, $ids);
+        cancel_reservations($conn, $ids);
+    } else if (isset($_POST['recover_items'], $_POST['id'])) {
+        $ids = clean_array($_POST['id']);
+        recover_reservations($conn, $ids);
     } else if (isset($_POST['drop_all'])) {
         drop_all_tables($conn);
     } else if (isset($_POST['delete_kajak'])) {
@@ -63,26 +66,20 @@ echo create_header('Dashboard');
 
                             <?php
                             foreach ($reservations as $reservation) {
-                                $is_archived = $reservation['archived'] === 1;
                                 $is_cancelled = $reservation['cancelled'] === 1;
                                 ?>
-                                <tr class="reservation reservation-row <?php echo $is_archived || $is_cancelled ? 'archived' : '' ?>">
+                                <tr class="reservation reservation-row <?php echo $is_cancelled ? 'cancelled' : '' ?>">
                                     <td class="text-center">
                                         <?php
-                                        if ($is_archived) { ?>
-                                            Gelöscht
-                                            <?php
-                                        } else if ($is_cancelled) { ?>
+                                        if ($is_cancelled) { ?>
                                             Storniert
                                             <?php
-                                        } else { ?>
-                                            <input class="form-check-input" type="checkbox"
-                                                   id="reservation-checkbox-<?php echo $reservation['reservation_id'] ?>"
-                                                   value="<?php echo $reservation['reservation_id'] ?>"
-                                                   name="id[]">
-                                            <?php
-                                        }
-                                        ?>
+                                        } ?>
+                                        <input class="form-check-input" type="checkbox"
+                                               id="reservation-checkbox-<?php echo $reservation['reservation_id'] ?>"
+                                               value="<?php echo $reservation['reservation_id'] ?>"
+                                               name="id[]">
+
                                     </td>
                                     <td><?php echo $reservation['reservation_id'] ?></td>
                                     <td><?php echo $reservation['name'] ?></td>
@@ -100,7 +97,10 @@ echo create_header('Dashboard');
                         </table>
                     </div>
                     <div class="btn-group d-flex" role="group">
-                        <button type="submit" class="btn custom-btn mx-1" name="delete_items">Reservierungen stornieren
+                        <button type="submit" class="btn custom-btn mx-1" name="archive_items">Reservierungen stornieren
+                        </button>
+                        <button type="submit" class="btn custom-btn mx-1" name="recover_items">Reservierungen
+                            wiederherstellen
                         </button>
                         <button type="submit" class="btn custom-btn mx-1" name="drop_all">
                             Tabellen löschen
@@ -193,14 +193,14 @@ echo create_header('Dashboard');
                                 </tr>
                                 <?php
                                 foreach ($kajaks as $kajak) {
-                                    $is_available = $kajak['available'] === 1;
+                                    $is_unavailable = $kajak['available'] === 0;
                                     $kajak_name = $kajak['kajak_name'];
                                     ?>
-                                    <tr class="kajak-row">
+                                    <tr class="kajak kajak-row <?php echo $is_unavailable ? 'unavailable' : '' ?>">
                                         <td><?php echo $kajak_name ?></td>
                                         <td><?php echo $kajak['kind'] ?></td>
                                         <td><?php echo $kajak['seats'] ?></td>
-                                        <td><?php echo $is_available ? 'Ja' : 'Nein' ?></td>
+                                        <td><?php echo $is_unavailable ? 'Nein' : 'Ja' ?></td>
                                         <td><?php echo $kajak['comment'] ?></td>
                                     </tr>
                                     <?php
@@ -276,7 +276,7 @@ echo create_header('Dashboard');
                         <strong>Kajaks:</strong>
                         <ul>
                             <?php
-                            foreach ($config->getKajaks(true) as $kajak) {
+                            foreach ($config->getKajaks() as $kajak) {
                                 ?>
                                 <li>
                                     <?php echo $kajak->name ?>:
