@@ -301,7 +301,7 @@ tr:nth-child(even) {
     background-color: lightblue;
 }
 
-tr.reservation.archived td {
+tr.reservation.cancelled td, tr.kajak.unavailable td {
     background-color: #fd5a5a !important;
     opacity: 0.5;
 }
