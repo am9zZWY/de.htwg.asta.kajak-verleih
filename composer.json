@@ -1,15 +1,15 @@
 {
-    "name": "asta/kajak-verleih",
-    "type": "project",
-    "license": "MIT",
-    "require": {
-        "ext-mysqli": "*",
-        "vlucas/phpdotenv": "^5.4",
-        "phpmailer/phpmailer": "^6.6",
-      "ext-simplexml": "*"
-    }
-    ,
-    "require-dev": {
-        "roave/security-advisories": "dev-latest"
-    }
+  "name": "asta/kajak-verleih",
+  "type": "project",
+  "license": "MIT",
+  "require": {
+    "ext-mysqli": "*",
+    "vlucas/phpdotenv": "^5.4",
+    "phpmailer/phpmailer": "^6.6",
+    "ext-simplexml": "*"
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-latest",
+    "rector/rector": "^0.12.22"
+  }
 }
