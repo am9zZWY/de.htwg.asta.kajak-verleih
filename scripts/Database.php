@@ -686,7 +686,7 @@ function reservate_kajak(?mysqli $conn, array $fields, bool $send_email = FALSE)
         return ReturnValue::error($ERROR_DATABASE_CONNECTION);
     }
 
-    global $INFO_RESERVATION_SUCCESS, $ERROR_CHECK_FORM, $ERROR_RESERVATION_KAJAK_NOT_AVAILABLE, $ERROR_RESERVATION_KAJAK_NOT_SELECTED, $ERROR_RESERVATION_TIMESLOT_NOT_SELECTED, $ERROR_SUCCESS_BUT_MAIL_NOT_SENT;
+    global $INFO_RESERVATION_SUCCESS, $ERROR_CHECK_FORM, $ERROR_TIMESLOT_GAP, $ERROR_RESERVATION_KAJAK_NOT_AVAILABLE, $ERROR_RESERVATION_KAJAK_NOT_SELECTED, $ERROR_RESERVATION_TIMESLOT_NOT_SELECTED, $ERROR_SUCCESS_BUT_MAIL_NOT_SENT;
 
     $name = clean_string($fields["name"]);
     $full_name = $name . ' ' . clean_string($fields["surname"]);
@@ -698,9 +698,19 @@ function reservate_kajak(?mysqli $conn, array $fields, bool $send_email = FALSE)
     /****** prepare timeslots ******/
     $raw_timeslots = clean_array($fields['timeslots'] ?? []);
 
+    $amount_timeslots = count($raw_timeslots);
     /* check if timeslot is selected */
-    if (count($raw_timeslots) === 0) {
+    if ($amount_timeslots === 0) {
         return ReturnValue::error($ERROR_RESERVATION_TIMESLOT_NOT_SELECTED);
+    }
+
+    /* check if there is a gap in the timeslots, e.g. if at least 3 timeslots where selected */
+    if ($amount_timeslots > 1) {
+        for ($index = 0, $indexMax = count($raw_timeslots); $index < $indexMax; $index++) {
+            if ($index + 1 !== $indexMax && (int)$raw_timeslots[$index] + 1 !== (int)$raw_timeslots[$index + 1]) {
+                return ReturnValue::error($ERROR_TIMESLOT_GAP);
+            }
+        }
     }
 
     global $config;
