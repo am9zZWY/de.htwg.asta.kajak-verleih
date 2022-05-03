@@ -20,6 +20,7 @@ $reservation_id = clean_string($params['id'] ?? '');
                             <input name="id" type="text" placeholder="12345"
                                    id="id"
                                    class="form-control"
+                                   readonly
                                    value="<?php echo $reservation_id; ?>"
                                    required>
                             <label for="id">
