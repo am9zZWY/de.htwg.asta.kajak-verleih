@@ -55,6 +55,18 @@ function get_post_field(string $field, string $default = ''): string
 }
 
 /**
+ * Get array fields from POST request.
+ *
+ * @param string $field
+ * @param mixed $default
+ * @return array
+ */
+function get_post_fields(string $field, array $default = []): array
+{
+    return clean_array($_POST[$field] ?? $default);
+}
+
+/**
  * Get random token.
  *
  * @return string
