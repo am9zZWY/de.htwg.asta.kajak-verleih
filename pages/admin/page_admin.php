@@ -11,14 +11,21 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') && isset($_POST['confirm']) && is_lo
         recover_reservations($conn, $ids);
     } else if (isset($_POST['drop_all'])) {
         drop_all_tables($conn);
-    } else if (isset($_POST['delete_kajak'])) {
-        $name = clean_string($_POST['name']);
+    } else if (isset($_POST['remove_kajak'])) {
+        $name = clean_string($_POST['kajak_name']);
         remove_kajak($conn, $name);
-    } else if (isset($_POST['add_kajak'])) {
-        $name = clean_string($_POST['name']);
-        $kind = clean_string($_POST['kind']);
-        $seats = (int)clean_string($_POST['seats']);
-        add_kajak($conn, $name, $kind, $seats);
+    } else if (isset($_POST['update_kajak']) || isset($_POST['add_kajak'])) {
+        $name = clean_string($_POST['kajak_name']);
+        $old_name = clean_string($_POST['kajak_old_name']) ?? $name;
+        $kind = clean_string($_POST['kajak_kind']);
+        $seats = (int)clean_string($_POST['kajak_seats']);
+        $available = (int)clean_string($_POST['kajak_available']);
+        $comment = clean_string($_POST['kajak_comment']);
+        if (isset($_POST['update_kajak'])) {
+            update_kajak($conn, $old_name, $name, $kind, $seats, $available, $comment);
+        } else {
+            add_kajak($conn, $name, $kind, $seats);
+        }
     } else if (isset($_POST['delete_bad_person'])) {
         $name = clean_string($_POST['name']);
         $email = clean_string($_POST['email']);
@@ -129,110 +136,137 @@ echo create_header('Dashboard');
     <div class="row content">
         <div class="content-wrapper">
             <h4>Kajaks verwalten</h4>
-            <form method="post" class="needs-validation">
-                <div class="row">
-                    <div class="col-sm-4">
-                        <div class="mb-3 form-floating">
-                            <input name="name" type="text" placeholder="Max"
-                                   value="<?php echo get_post_field('name') ?>"
-                                   id="name"
-                                   class="form-control"
-                                   required>
-                            <label for="name">
-                                Kajak-Name
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group form-floating">
-                            <select name="kind" class="form-select" id="kind" autocomplete="on"
-                                    required>
-                                <?php
-                                foreach ($kajak_kinds as $kajak_kind) {
-                                    ?>
-                                    <option value="<?php echo $kajak_kind ?>">
-                                        <?php echo $kajak_kind ?>
-                                    </option>
-                                <?php } ?>
-                            </select>
-                            <label for="kind">
-                                Typ
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="mb-3 form-floating">
-                            <input type="number"
-                                   min="0" id="seats"
-                                   value="<?php echo get_post_field('seats', 0) ?>"
-                                   name="seats"
-                                   class="amount-kajak form-control"/>
-                            <label class="form-check-label" for="seats">
-                                Anzahl der Sitze
-                            </label>
-                        </div>
-                    </div>
+            <div class="col">
+                <div class="mb-3 form-floating">
+                    <input id="kajak-filter"
+                           name="filter" type="text" placeholder="bsp. Kajakname"
+                           onkeyup="filterKajakTable()"
+                           class="form-control"
+                    >
+                    <label for="kajak-filter">
+                        Filter
+                    </label>
                 </div>
-
-                <div class="col">
-                    <div class="mb-3 form-floating">
-                        <input id="kajak-filter"
-                               name="filter" type="text" placeholder="bsp. Kajakname"
-                               onkeyup="filterKajakTable()"
-                               class="form-control"
-                        >
-                        <label for="kajak-filter">
-                            Filter
-                        </label>
-                    </div>
+            </div>
+            <div class="col">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-sm table-light" id="reservations">
+                        <caption>Auflistung aller Kajaks</caption>
+                        <tr>
+                            <th>Name</th>
+                            <th>Typ</th>
+                            <th>Anzahl der Sitze</th>
+                            <th>Verfügbar</th>
+                            <th>Kommentar</th>
+                            <th>Updaten</th>
+                        </tr>
+                        <?php
+                        foreach ($kajaks as $kajak) {
+                            $is_unavailable = $kajak['available'] === 0;
+                            $kajak_name = $kajak['kajak_name'];
+                            ?>
+                            <tr class="kajak kajak-row <?php echo $is_unavailable ? 'unavailable' : '' ?>">
+                                <form method="post">
+                                    <input type="hidden" value="<?php echo $kajak_name ?>"
+                                           name="kajak_old_name"/>
+                                    <input type="hidden" name="confirm" value="1">
+                                    <td>
+                                        <input type="text" value="<?php echo $kajak_name ?>"
+                                               name="kajak_name"/>
+                                    </td>
+                                    <td>
+                                        <select name="kajak_kind" class="form-select" id="kind" autocomplete="on">
+                                            <?php
+                                            foreach ($kajak_kinds as $kajak_kind) {
+                                                ?>
+                                                <option value="<?php echo $kajak_kind ?>"
+                                                    <?php if ($kajak['kind'] === $kajak_kind) {
+                                                        echo 'selected';
+                                                    } ?>>
+                                                    <?php echo $kajak_kind ?>
+                                                </option>
+                                            <?php } ?>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="number" value="<?php echo $kajak['seats'] ?>" name="kajak_seats"
+                                               min="1"/>
+                                    </td>
+                                    <td>
+                                        <select name="kajak_available">
+                                            <option value="1" <?php if (!$is_unavailable) {
+                                                echo 'selected';
+                                            } ?>>
+                                                Ja
+                                            </option>
+                                            <option value="0" <?php if ($is_unavailable) {
+                                                echo 'selected';
+                                            } ?>>
+                                                Nein
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input value="<?php echo $kajak['comment'] ?>"
+                                               name="kajak_comment"/>
+                                    </td>
+                                    <th>
+                                        <div class="btn-group d-flex">
+                                            <button type="submit" class="btn custom-btn mx-1" name="update_kajak">
+                                                Aktualisieren
+                                            </button>
+                                            <button type="submit" class="btn custom-btn danger mx-1"
+                                                    name="remove_kajak">
+                                                Löschen
+                                            </button>
+                                        </div>
+                                    </th>
+                                </form>
+                            </tr>
+                            <?php
+                        } ?>
+                        <tr class="kajak kajak-row">
+                            <form method="post" class="needs-validation">
+                                <input type="hidden" name="confirm" value="1">
+                                <td>
+                                    <input type="text" name="kajak_name" required/>
+                                </td>
+                                <td>
+                                    <select name="kajak_kind" class="form-select" id="kind" autocomplete="on"
+                                            required>
+                                        <?php
+                                        foreach ($kajak_kinds as $kajak_kind) {
+                                            ?>
+                                            <option value="<?php echo $kajak_kind ?>">
+                                                <?php echo $kajak_kind ?>
+                                            </option>
+                                        <?php } ?>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="number" name="kajak_seats" min="1" value="1" required/>
+                                </td>
+                                <td>
+                                    <select required>
+                                        <option selected>Ja</option>
+                                        <option>Nein</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="text" name="kajak_comment"/>
+                                </td>
+                                <th>
+                                    <div class="btn-group">
+                                        <button type="submit" class="btn custom-btn mx-1" name="add_kajak">
+                                            Hinzufügen
+                                        </button>
+                                    </div>
+                                </th>
+                            </form>
+                        </tr>
+                    </table>
                 </div>
-                <div class="col">
-                    <form method="post" class="needs-validation">
-                        <div class="table-responsive">
-                            <table class="table table-striped table-bordered table-sm table-light" id="reservations">
-                                <caption>Auflistung aller Kajaks</caption>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Typ</th>
-                                    <th>Anzahl der Sitze</th>
-                                    <th>Verfügbar</th>
-                                    <th>Kommentar</th>
-                                </tr>
-                                <?php
-                                foreach ($kajaks as $kajak) {
-                                    $is_unavailable = $kajak['available'] === 0;
-                                    $kajak_name = $kajak['kajak_name'];
-                                    ?>
-                                    <tr class="kajak kajak-row <?php echo $is_unavailable ? 'unavailable' : '' ?>">
-                                        <td><?php echo $kajak_name ?></td>
-                                        <td><?php echo $kajak['kind'] ?></td>
-                                        <td><?php echo $kajak['seats'] ?></td>
-                                        <td><?php echo $is_unavailable ? 'Nein' : 'Ja' ?></td>
-                                        <td><?php echo $kajak['comment'] ?></td>
-                                    </tr>
-                                    <?php
-                                } ?>
-                            </table>
-                        </div>
-
-                        <div class="btn-group d-flex" role="group">
-                            <button type="submit" class="btn custom-btn mx-1" name="delete_kajak">Kajak löschen
-                            </button>
-                            <button type="submit" class="btn custom-btn mx-1" name="add_kajak">Kajak hinzufügen
-                            </button>
-                            <div class="mx-1">
-                                <input type="checkbox" name="confirm" value="1" id="confirm"
-                                       class="form-check-input">
-                                <label for="confirm">
-                                    Bestätigen
-                                </label>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
     <div class="row">
@@ -305,13 +339,6 @@ echo create_header('Dashboard');
                 </ul>
             </div>
         </div>
-        <div class="col content">
-            <div class="content-wrapper">
-                <h4>Datenbank Status</h4>
-
-            </div>
-        </div>
-
         <div class="row content">
             <div class="content-wrapper">
                 <h4>Blacklist</h4>
@@ -418,7 +445,7 @@ echo create_header('Dashboard');
 
                 const filter = (inputElement, elements) => {
                     return Array.from(elements).forEach((row) => {
-                        if (row.textContent.toLowerCase().includes(inputElement.value.toLowerCase())) {
+                        if (row.innerHTML.toLowerCase().includes(inputElement.value.toLowerCase())) {
                             row.style.display = "";
                         } else {
                             row.style.display = "none";

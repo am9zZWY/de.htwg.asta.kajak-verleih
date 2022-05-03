@@ -10,7 +10,7 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') && isset($_POST['logout'])) {
 }
 ?>
 
-<nav class="navbar navbar-expand-lg bg-light fixed-top">
+<nav class="topnav navbar navbar-expand-sm bg-light fixed-top p-0" id="navbar">
     <ul class="navbar-nav">
         <li class="sidenav-burger" id="burger">
             <span onclick="openNav()">&#9776;</span>
@@ -29,10 +29,10 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') && isset($_POST['logout'])) {
         </li>
     </ul>
 </nav>
-<div id="sidenav" class="sidenav">
+<div class="sidenav" id="sidenav">
     <ul class="nav nav-flush flex-column mb-auto">
         <li class="navbar-toggler">
-            <a href="javascript:void(0)" class="close-btn" onclick="closeNav()">&times;</a>
+            <a class="close-btn" href="javascript:void(0)" onclick="closeNav()">&times;</a>
         </li>
         <li>
             <a class="nav-link" href="/">Startseite</a>
@@ -48,7 +48,7 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') && isset($_POST['logout'])) {
             </li>
             <li>
                 <form method="POST">
-                    <button type="submit" name="logout">Abmelden</button>
+                    <button name="logout" type="submit">Abmelden</button>
                 </form>
             </li>
             <?php
@@ -60,12 +60,14 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') && isset($_POST['logout'])) {
     function openNav() {
         document.getElementById("sidenav").style.width = "250px";
         document.getElementById("burger").style.marginLeft = "250px";
+        document.getElementById("navbar").style.display = "none";
         document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
     }
 
     function closeNav() {
         document.getElementById("sidenav").style.width = "0";
         document.getElementById("burger").style.marginLeft = "0";
+        document.getElementById("navbar").style.display = "";
         document.body.style.backgroundColor = "white";
     }
 </script>

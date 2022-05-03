@@ -44,7 +44,7 @@ $reservation_id = clean_string($params['id'] ?? '');
                 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ?>
                     <h2>
-                        <?php echo cancel_reservation($connection, $_POST, true) ?>
+                        <?php echo cancel_reservation($connection, $_POST, TRUE) ?>
                     </h2>
                 <?php }
                 ?>

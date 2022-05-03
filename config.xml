@@ -5,13 +5,11 @@
         <kajak name="Einzelkajak">
             <prop name="kind">single_kajak</prop>
             <prop name="seats">1</prop>
-            <prop name="amount">4</prop>
             <prop name="img">/static/img/einzel-kajak.png</prop>
         </kajak>
         <kajak name="Doppelkajak">
             <prop name="kind">double_kajak</prop>
             <prop name="seats">2</prop>
-            <prop name="amount">2</prop>
             <prop name="img">/static/img/doppel-kajak.png</prop>
         </kajak>
     </kajaks>

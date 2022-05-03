@@ -27,7 +27,7 @@ $PARSED_URL = strtolower(parse_url($URL, PHP_URL_PATH));
 
 /* send headers */
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-header("Cache-Control: post-check=0, pre-check=0", false);
+header("Cache-Control: post-check=0, pre-check=0", FALSE);
 header("Pragma: no-cache");
 
 /* set up the database connection and the tables */
@@ -59,7 +59,7 @@ if ($PARSED_URL === '/api') {
 <div class="container p-0">
     <?php
     /* navigation bar */
-    include 'components/component_sidebar.php';
+    include 'components/component_navigation.php';
     ?>
 </div>
 <div class="container p-0">
