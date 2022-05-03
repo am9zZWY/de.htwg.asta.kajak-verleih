@@ -25,11 +25,11 @@ $ERROR_SUCCESS_BUT_MAIL_NOT_SENT = "Reservierung erfolgreich, aber " . $ERROR_MA
 /* Cancellation */
 $INFO_CANCELLATION_CANCELED = "Reservierung wurde storniert.";
 $ERROR_CANCELLATION = "Reservierung konnte nicht storniert werden.";
-$ERROR_CANCELLATION_NOT_FOUND = "Reservierung konnte gefunden nicht gefunden.";
+$ERROR_CANCELLATION_NOT_FOUND = "Reservierung konnte nicht gefunden werden.";
 
 /* Kajak */
 $ERROR_TYPE_NOT_IN_CONFIG = "Kajak-Typ nicht in Konfiguration gefunden.";
 $ERROR_KAJAK_NOT_CREATED = "Kajak konnte nicht erstellt werden.";
 
 /* Login */
-$ERROR_LOGIN = "Einloggen fehlgeschlagen!";
+$ERROR_LOGIN = "YOU SHALL NOT PASS!";
