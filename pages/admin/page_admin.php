@@ -26,15 +26,21 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') && isset($_POST['confirm']) && is_lo
         } else {
             add_kajak($conn, $name, $kind, $seats);
         }
-    } else if (isset($_POST['delete_bad_person'])) {
+    } else if (isset($_POST['remove_bad_person'])) {
         $name = clean_string($_POST['name']);
         $email = clean_string($_POST['email']);
-        delete_bad_person($conn, $name, $email);
-    } else if (isset($_POST['add_bad_person'])) {
+        remove_bad_person($conn, $name, $email);
+    } else if (isset($_POST['update_bad_person']) || isset($_POST['add_bad_person'])) {
         $name = clean_string($_POST['name']);
+        $old_name = clean_string($_POST['old_name']) ?? $name;
         $email = clean_string($_POST['email']);
+        $old_email = clean_string($_POST['old_email']) ?? $email;
         $comment = clean_string($_POST['comment']);
-        add_bad_person($conn, $name, $email, $comment);
+        if (isset($_POST['update_bad_person'])) {
+            update_bad_person($conn, $name, $email, $comment, $old_name, $old_email);
+        } else {
+            add_bad_person($conn, $name, $email, $comment);
+        }
     }
 }
 
@@ -158,7 +164,7 @@ echo create_header('Dashboard');
                             <th>Anzahl der Sitze</th>
                             <th>Verfügbar</th>
                             <th>Kommentar</th>
-                            <th>Updaten</th>
+                            <th>Aktionen</th>
                         </tr>
                         <?php
                         $seats_per_kajak = $config->getSeatsPerKajak();
@@ -172,11 +178,12 @@ echo create_header('Dashboard');
                                            name="kajak_old_name"/>
                                     <input type="hidden" name="confirm" value="1">
                                     <td>
-                                        <input type="text" value="<?php echo $kajak_name ?>"
-                                               name="kajak_name"/>
+                                        <input class="form-control" name="kajak_name" type="text"
+                                               value="<?php echo $kajak_name ?>"/>
                                     </td>
                                     <td>
-                                        <select name="kajak_kind" class="form-select" id="kind" autocomplete="on">
+                                        <select autocomplete="on" class="form-select" class="form-select" id="kind"
+                                                name="kajak_kind">
                                             <?php
                                             foreach ($kajak_kinds as $kajak_kind) {
                                                 ?>
@@ -190,11 +197,13 @@ echo create_header('Dashboard');
                                         </select>
                                     </td>
                                     <td>
-                                        <input type="number" value="<?php echo $kajak['seats'] ?>" name="kajak_seats"
-                                               min="1"/>
+                                        <input class="form-control" min="1"
+                                               name="kajak_seats"
+                                               type="number"
+                                               value="<?php echo $kajak['seats'] ?>"/>
                                     </td>
                                     <td>
-                                        <select name="kajak_available">
+                                        <select name="kajak_available" class="form-select">
                                             <option value="1" <?php if (!$is_unavailable) {
                                                 echo 'selected';
                                             } ?>>
@@ -208,10 +217,10 @@ echo create_header('Dashboard');
                                         </select>
                                     </td>
                                     <td>
-                                        <input value="<?php echo $kajak['comment'] ?>" type="text"
-                                               name="kajak_comment"/>
+                                        <input class="form-control" name="kajak_comment" type="text"
+                                               value="<?php echo $kajak['comment'] ?>"/>
                                     </td>
-                                    <th>
+                                    <td>
                                         <div class="btn-group d-flex">
                                             <button type="submit" class="btn custom-btn mx-1" name="update_kajak">
                                                 Aktualisieren
@@ -221,7 +230,7 @@ echo create_header('Dashboard');
                                                 Löschen
                                             </button>
                                         </div>
-                                    </th>
+                                    </td>
                                 </form>
                             </tr>
                             <?php
@@ -230,10 +239,11 @@ echo create_header('Dashboard');
                             <form method="post" class="needs-validation">
                                 <input type="hidden" name="confirm" value="1">
                                 <td>
-                                    <input type="text" name="kajak_name" required/>
+                                    <input class="form-control" type="text" name="kajak_name" required/>
                                 </td>
                                 <td>
-                                    <select name="kajak_kind" class="form-select" id="kind" autocomplete="on"
+                                    <select class="form-select" name="kajak_kind" class="form-select" id="kind"
+                                            autocomplete="on"
                                             required>
                                         <?php
                                         foreach ($kajak_kinds as $kajak_kind) {
@@ -245,27 +255,123 @@ echo create_header('Dashboard');
                                     </select>
                                 </td>
                                 <td>
-                                    <input type="number" name="kajak_seats" min="1" value="1" required/>
+                                    <input class="form-control" type="number" name="kajak_seats" min="1" value="1"
+                                           required/>
                                 </td>
                                 <td>
-                                    <select required>
+                                    <select class="form-select" required>
                                         <option selected>Ja</option>
                                         <option>Nein</option>
                                     </select>
                                 </td>
                                 <td>
-                                    <input type="text" name="kajak_comment"/>
+                                    <input class="form-control" type="text" name="kajak_comment"/>
                                 </td>
-                                <th>
+                                <td>
                                     <div class="btn-group">
                                         <button type="submit" class="btn custom-btn mx-1" name="add_kajak">
                                             Hinzufügen
                                         </button>
                                     </div>
-                                </th>
+                                </td>
                             </form>
                         </tr>
                     </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row content">
+        <div class="col">
+            <div class="content-wrapper">
+                <h4>Blacklist</h4>
+                <div class="col">
+                    <div class="mb-3 form-floating">
+                        <input id="blacklist-filter"
+                               name="filter" type="text" placeholder="bsp. Marcel Müller"
+                               onkeyup="filterBlacklistTable()"
+                               class="form-control"
+                        >
+                        <label for="blacklist-filter">
+                            Filter
+                        </label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-sm table-light" id="reservations">
+                            <caption>Auflistung aller gesperrten Personen</caption>
+                            <tr>
+                                <th>Name</th>
+                                <th>E-Mail</th>
+                                <th>Kommentar</th>
+                                <th>Aktionen</th>
+                            </tr>
+                            <?php
+                            $blacklist = get_blacklist($conn);
+                            foreach ($blacklist as $person) {
+                                $name = $person['name'];
+                                $email = $person['email'];
+                                ?>
+                                <tr class="blacklist blacklist-row">
+                                    <form method="post">
+                                        <input type="hidden" value="<?php echo $name ?>"
+                                               name="old_name"/>
+                                        <input type="hidden" value="<?php echo $email ?>"
+                                               name="old_email"/>
+                                        <input type="hidden" name="confirm" value="1">
+                                        <td>
+                                            <input class="form-control" name="name" type="text"
+                                                   value="<?php echo $name ?>"/>
+                                        </td>
+                                        <td>
+                                            <input class="form-control" name="email" type="email"
+                                                   value="<?php echo $email ?>"/>
+                                        </td>
+                                        <td>
+                                            <input class="form-control" name="comment" type="text"
+                                                   value="<?php echo $person['comment'] ?>"/>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group d-flex">
+                                                <button type="submit" class="btn custom-btn mx-1"
+                                                        name="update_bad_person">
+                                                    Aktualisieren
+                                                </button>
+                                                <button type="submit" class="btn custom-btn danger mx-1"
+                                                        name="remove_bad_person">
+                                                    Löschen
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </form>
+                                </tr>
+                                <?php
+                            } ?>
+                            <tr class="blacklist blacklist-row">
+                                <form method="post" class="needs-validation">
+                                    <input type="hidden" name="confirm" value="1">
+                                    <td>
+                                        <input class="form-control" name="name" type="text">
+                                    </td>
+                                    <td>
+                                        <input class="form-control" name="email" type="email">
+                                    </td>
+                                    <td>
+                                        <input class="form-control" name="comment" type="text">
+                                    </td>
+                                    <td>
+                                        <div class="btn-group d-flex">
+                                            <button type="submit" class="btn custom-btn mx-1"
+                                                    name="add_bad_person">
+                                                Hinzufügen
+                                            </button>
+                                        </div>
+                                    </td>
+                                </form>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -340,134 +446,32 @@ echo create_header('Dashboard');
                 </ul>
             </div>
         </div>
-        <div class="row content">
-            <div class="content-wrapper">
-                <h4>Blacklist</h4>
-                <form method="post" class="needs-validation">
-                    <div class="row">
-                        <div class="col-sm-3">
-                            <div class="mb-3 form-floating">
-                                <input name="name" type="text"
-                                       value="<?php echo get_post_field('name') ?>"
-                                       id="name-bad-person"
-                                       class="form-control"
-                                       required>
-                                <label for="name-bad-person">
-                                    Name
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="mb-3 form-floating">
-                                <input name="email" type="email"
-                                       value="<?php echo get_post_field('email') ?>"
-                                       id="email"
-                                       class="form-control"
-                                       required>
-                                <label for="email">
-                                    E-Mail
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="mb-3 form-floating">
-                                <input name="comment" type="text"
-                                       value="<?php echo get_post_field('comment') ?>"
-                                       id="comment"
-                                       class="form-control"
-                                >
-                                <label for="comment">
-                                    Grund
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="mb-3 form-floating">
-                                <input id="blacklist-filter"
-                                       name="blacklist-filter" type="text" placeholder="Josef Müller"
-                                       onkeyup="filterBlacklistTable()"
-                                       class="form-control"
-                                >
-                                <label for="kajak-filter">
-                                    Suchen
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <form method="post" class="needs-validation">
-                                <div class="table-responsive">
-                                    <table class="table table-striped table-bordered table-sm table-light"
-                                           id="reservations">
-                                        <caption>Auflistung aller auf der verbotenen Liste</caption>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>E-Mail</th>
-                                            <th>Grund</th>
-                                        </tr>
-                                        <?php
-                                        $blacklist = get_blacklist($conn);
-                                        foreach ($blacklist as $blacklist_entry) {
-                                            ?>
-                                            <tr class="blacklist-row">
-                                                <td><?php echo $blacklist_entry['name'] ?></td>
-                                                <td><?php echo $blacklist_entry['email'] ?></td>
-                                                <td><?php echo $blacklist_entry['comment'] ?></td>
-                                            </tr>
-                                            <?php
-                                        }
-                                        ?>
-                                    </table>
-                                </div>
-
-                                <div class="btn-group d-flex" role="group">
-                                    <button type="submit" class="btn custom-btn mx-1" name="delete_bad_person">
-                                        Verbotenen
-                                        Löschen
-                                    </button>
-                                    <button type="submit" class="btn custom-btn mx-1" name="add_bad_person">Verbotenen
-                                        Hinzufügen
-                                    </button>
-                                    <div class="mx-1">
-                                        <input type="checkbox" name="confirm" value="1" id="confirm"
-                                               class="form-check-input">
-                                        <label for="confirm">
-                                            Bestätigen
-                                        </label>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                </form>
-            </div>
-            <script>
-                const reservationFilter = document.getElementById('reservation-filter')
-                const kajakFilter = document.getElementById('kajak-filter')
-                const blacklistFilter = document.getElementById('blacklist-filter')
-
-                const filter = (inputElement, elements) => {
-                    return Array.from(elements).forEach((row) => {
-                        if (row.innerHTML.toLowerCase().includes(inputElement.value.toLowerCase())) {
-                            row.style.display = "";
-                        } else {
-                            row.style.display = "none";
-                        }
-                    })
-                }
-
-                function filterReservationTable() {
-                    const reservations = document.getElementsByClassName('reservation-row')
-                    filter(reservationFilter, reservations);
-                }
-
-                function filterKajakTable() {
-                    const kajaks = document.getElementsByClassName('kajak-row')
-                    filter(kajakFilter, kajaks);
-                }
-                function filterBlacklistTable(){
-                    const blacklist = document.getElementsByClassName('blacklist-row')
-                    filter(blacklistFilter, blacklist);
-                }
-            </script>
-        </div>
     </div>
+    <script>
+        const reservationFilter = document.getElementById('reservation-filter')
+        const kajakFilter = document.getElementById('kajak-filter')
+        const blacklistFilter = document.getElementById('blacklist-filter')
+
+        const filter = (inputElement, elements) => {
+            return Array.from(elements).forEach((row) => {
+                if (row.innerHTML.toLowerCase().includes(inputElement.value.toLowerCase())) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            })
+        }
+
+        function filterReservationTable() {
+            filter(reservationFilter, document.getElementsByClassName('reservation-row'));
+        }
+
+        function filterKajakTable() {
+            filter(kajakFilter, document.getElementsByClassName('kajak-row'));
+        }
+
+        function filterBlacklistTable() {
+            filter(blacklistFilter, document.getElementsByClassName('blacklist-row'));
+        }
+    </script>
 </div>

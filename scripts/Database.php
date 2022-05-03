@@ -2,18 +2,10 @@
 /** @noinspection ForgottenDebugOutputInspection */
 
 global $config;
-/* kajaks for each kajak type */
-$config_timeslots = $config->getTimeslots(TRUE);
 
 class ReturnValue
 {
-    /**
-     * @var bool
-     */
     public $status;
-    /**
-     * @var string
-     */
     public $statusMessage;
 
     public function __construct($status, $statusMessage)
@@ -22,24 +14,14 @@ class ReturnValue
         $this->statusMessage = $statusMessage;
     }
 
-    public static function error($statusMessage = 'Aktion fehlgeschlagen'): ReturnValue
+    public static function error($statusMessage): ReturnValue
     {
         return new ReturnValue(FALSE, $statusMessage);
     }
 
-    public static function success($statusMessage = 'Aktion erfolgreich'): ReturnValue
+    public static function success($statusMessage): ReturnValue
     {
         return new ReturnValue(TRUE, $statusMessage);
-    }
-
-    public function isSuccess(): bool
-    {
-        return $this->status;
-    }
-
-    public function getMessage(): string
-    {
-        return $this->statusMessage;
     }
 }
 
@@ -372,7 +354,6 @@ function remove_kajak(?mysqli $conn, string $kajak_name): void
 function get_kajaks(?mysqli $conn, bool $exclude_not_available = FALSE): array
 {
     global $ERROR_DATABASE_CONNECTION;
-
     if ($conn === null) {
         error_log($ERROR_DATABASE_CONNECTION);
         return [];
@@ -405,7 +386,6 @@ function get_kajaks(?mysqli $conn, bool $exclude_not_available = FALSE): array
 function get_kajak_with_real_amount(?mysqli $conn): array
 {
     global $ERROR_DATABASE_CONNECTION;
-
     if ($conn === null) {
         error_log($ERROR_DATABASE_CONNECTION);
         return [];
@@ -430,6 +410,12 @@ function get_kajak_with_real_amount(?mysqli $conn): array
  */
 function get_kajak_amounts(?mysqli $conn): array
 {
+    global $ERROR_DATABASE_CONNECTION;
+    if ($conn === null) {
+        error_log($ERROR_DATABASE_CONNECTION);
+        return [];
+    }
+
     return array_reduce(get_kajaks($conn, TRUE), static function ($carry, $kajak) {
         $kajak_kind = $kajak['kind'];
         if (isset($carry[$kajak_kind])) {
@@ -449,6 +435,12 @@ function get_kajak_amounts(?mysqli $conn): array
  */
 function get_kajak_kinds(?mysqli $conn): array
 {
+    global $ERROR_DATABASE_CONNECTION;
+    if ($conn === null) {
+        error_log($ERROR_DATABASE_CONNECTION);
+        return [];
+    }
+
     return array_values(array_unique(array_map(static function ($kajak) {
         return $kajak['kind'];
     }, get_kajaks($conn))));
@@ -463,7 +455,6 @@ function get_kajak_kinds(?mysqli $conn): array
 function get_reservations(?mysqli $conn): array
 {
     global $ERROR_DATABASE_CONNECTION;
-
     if ($conn === null) {
         error_log($ERROR_DATABASE_CONNECTION);
         return [];
@@ -493,7 +484,6 @@ function get_reservations(?mysqli $conn): array
 function get_reserved_kajaks_by_id(?mysqli $conn): array
 {
     global $ERROR_DATABASE_CONNECTION;
-
     if ($conn === null) {
         error_log($ERROR_DATABASE_CONNECTION);
         return [];
@@ -540,7 +530,6 @@ function get_reserved_kajaks_by_id(?mysqli $conn): array
 function drop_all_tables(?mysqli $conn): void
 {
     global $ERROR_DATABASE_CONNECTION;
-
     if ($conn === null) {
         error_log($ERROR_DATABASE_CONNECTION);
         return;
@@ -694,7 +683,7 @@ function reservate_kajak(?mysqli $conn, array $fields, bool $send_email = FALSE)
     global $ERROR_DATABASE_CONNECTION;
     if ($conn === null) {
         error_log($ERROR_DATABASE_CONNECTION);
-        ReturnValue::error($ERROR_DATABASE_CONNECTION);
+        return ReturnValue::error($ERROR_DATABASE_CONNECTION);
     }
 
     global $INFO_RESERVATION_SUCCESS, $ERROR_CHECK_FORM, $ERROR_RESERVATION_KAJAK_NOT_AVAILABLE, $ERROR_RESERVATION_KAJAK_NOT_SELECTED, $ERROR_RESERVATION_TIMESLOT_NOT_SELECTED, $ERROR_SUCCESS_BUT_MAIL_NOT_SENT;
@@ -714,7 +703,8 @@ function reservate_kajak(?mysqli $conn, array $fields, bool $send_email = FALSE)
         return ReturnValue::error($ERROR_RESERVATION_TIMESLOT_NOT_SELECTED);
     }
 
-    global $config_timeslots;
+    global $config;
+    $config_timeslots = $config->getTimeslots(TRUE);
     $min_time_index = $raw_timeslots[0];
     $max_time_index = end($raw_timeslots);
     $min_time = $config_timeslots[$min_time_index][0];
@@ -775,6 +765,7 @@ function reservate_kajak(?mysqli $conn, array $fields, bool $send_email = FALSE)
         return true;
     }, $raw_timeslots), $amount_kajaks);
 
+    /****** insert reservation ******/
     $reservation_id = insert_reservation($conn, $full_name, $email, $phone, $address, $date, $timeslots, $kajak_names, $price);
     if ($reservation_id === '') {
         return ReturnValue::error($ERROR_CHECK_FORM);
@@ -892,6 +883,12 @@ function cancel_reservation(?mysqli $conn, array $fields, bool $send_email = FAL
     return $ERROR_CANCELLATION;
 }
 
+/**
+ * Get blacklist from database.
+ *
+ * @param mysqli|null $conn
+ * @return array
+ */
 function get_blacklist(?mysqli $conn): array
 {
     global $ERROR_DATABASE_CONNECTION;
@@ -908,7 +905,6 @@ function get_blacklist(?mysqli $conn): array
             return [];
         }
     } catch (Exception $e) {
-        /** @noinspection ForgottenDebugOutputInspection */
         error_log($e);
         return [];
     }
@@ -925,7 +921,7 @@ function get_blacklist(?mysqli $conn): array
  * @param string $email
  * @return void
  */
-function delete_bad_person(?mysqli $conn, string $name, string $email): void
+function remove_bad_person(?mysqli $conn, string $name, string $email): void
 {
     global $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY;
 
@@ -958,8 +954,8 @@ function add_bad_person(?mysqli $conn, string $name, string $email, string $comm
         error_log($ERROR_DATABASE_CONNECTION);
         return;
     }
-    try {
 
+    try {
         $sql = $conn->prepare("INSERT INTO blacklist (name, email, comment) VALUES (?, ?, ?)");
         $sql->bind_param('sss', $name, $email, $comment);
         if ($sql->execute()) {
@@ -969,4 +965,48 @@ function add_bad_person(?mysqli $conn, string $name, string $email, string $comm
         error_log($e);
     }
     error_log($ERROR_DATABASE_QUERY);
+}
+
+/**
+ * Update kajak in the database.
+ *
+ * @param mysqli|null $conn
+ * @param string $old_name
+ * @param string $name
+ * @param string $old_email
+ * @param string $email
+ * @param string $comment
+ * @return void
+ */
+function update_bad_person(?mysqli $conn, string $name, string $email, string $comment, string $old_name, string $old_email): void
+{
+    global $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY, $ERROR_EXECUTION;
+
+    if ($conn === null) {
+        error_log($ERROR_DATABASE_CONNECTION);
+        return;
+    }
+
+    /* add kajak to list of kajaks */
+    try {
+        $sql = $conn->prepare("
+        UPDATE blacklist
+        SET name = ?, email = ?, comment = ?
+        WHERE name = ? AND email = ?
+        ");
+
+        if ($sql === FALSE) {
+            error_log($ERROR_DATABASE_QUERY);
+            return;
+        }
+
+        $sql->bind_param('sssss', $name, $email, $comment, $old_name, $old_email);
+        if ($sql->execute()) {
+            return;
+        }
+        error_log($ERROR_EXECUTION);
+    } catch (Exception $e) {
+        error_log($e);
+        return;
+    }
 }

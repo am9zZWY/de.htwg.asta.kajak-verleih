@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
         <div class="col-lg-6 mx-auto">
             <div class="row content">
-                <div class="kajak-form">
+                <div class="custom-form">
                     <form action="/" method="post" class="needs-validation">
                         <input type="hidden"
                                name="<?php echo $_SESSION['token_field'] ?? '' ?>"
@@ -337,10 +337,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                     $ret_val = reservate_kajak($connection, $_POST, TRUE);
                     ?>
                         <h3>
-                            <?php echo $ret_val->getMessage(); ?>
+                            <?php echo $ret_val->statusMessage; ?>
                         </h3>
                     <?php
-                    if ($ret_val->isSuccess()) {
+                    if ($ret_val->status) {
                     ?>
 
 
