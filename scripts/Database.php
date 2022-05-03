@@ -558,12 +558,12 @@ function drop_all_tables(?mysqli $conn): void
  *
  * @param mysqli|null $conn
  * @param string $date
- * @param array<string> $timeslot
+ * @param array<string> $timeslots
  * @param string $kajak_kind
  * @param int $requested_amount
  * @return array
  */
-function get_available_kajaks(?mysqli $conn, string $date, array $timeslot, string $kajak_kind, int $requested_amount): array
+function get_available_kajaks(?mysqli $conn, string $date, array $timeslots, string $kajak_kind, int $requested_amount): array
 {
     global $ERROR_DATABASE_CONNECTION;
 
@@ -572,19 +572,23 @@ function get_available_kajaks(?mysqli $conn, string $date, array $timeslot, stri
         return [];
     }
 
+    if (count($timeslots) === 0) {
+        return [];
+    }
+
     /* convert date to DateTime to be able to subtract one second */
     try {
-        $timeslot[1] = new DateTime($timeslot[1]);
+        $timeslots[1] = new DateTime(end($timeslots));
     } catch (Exception $e) {
         error_log($e);
         return [];
     }
 
     /* it is important to exclude the current time from the next timeslot */
-    $timeslot[1]->modify("-1 second");
-    $timeslot[1] = $timeslot[1]->format("H:i:s");
+    $timeslots[1]->modify("-1 second");
+    $timeslots[1] = $timeslots[1]->format("H:i:s");
 
-    $timeslots = array((string)$timeslot[0], $timeslot[1]);
+    $timeslots = array((string)$timeslots[0], $timeslots[1]);
 
     /* select all the kajak names of a type that are available in the requested timeslot */
     $sql = $conn->prepare("
@@ -693,27 +697,26 @@ function reservate_kajak(?mysqli $conn, array $fields, bool $send_email = FALSE)
         ReturnValue::error($ERROR_DATABASE_CONNECTION);
     }
 
-    global $INFO_RESERVATION_SUCCESS, $ERROR_RESERVATION, $ERROR_RESERVATION_KAJAK_NOT_AVAILABLE, $ERROR_RESERVATION_KAJAK_NOT_SELECTED, $ERROR_RESERVATION_TIMESLOT_NOT_SELECTED, $ERROR_SUCCESS_BUT_MAIL_NOT_SENT;
+    global $INFO_RESERVATION_SUCCESS, $ERROR_CHECK_FORM, $ERROR_RESERVATION_KAJAK_NOT_AVAILABLE, $ERROR_RESERVATION_KAJAK_NOT_SELECTED, $ERROR_RESERVATION_TIMESLOT_NOT_SELECTED, $ERROR_SUCCESS_BUT_MAIL_NOT_SENT;
 
     $name = clean_string($fields["name"]);
     $full_name = $name . ' ' . clean_string($fields["surname"]);
-    $email = clean_string($fields['email']);
+    $email = mb_strtolower(clean_string($fields['email']));
     $phone = clean_string($fields['phone']);
     $address = clean_string($fields['street'] . ' ' . $fields['plz'] . ', ' . $fields['city'] . ', ' . $fields['country']);
     $date = clean_string($fields['date']);
 
     /****** prepare timeslots ******/
-    $timeslots = clean_array($fields['timeslots'] ?? []);
-    $amount_timeslots = count($timeslots);
+    $raw_timeslots = clean_array($fields['timeslots'] ?? []);
 
     /* check if timeslot is selected */
-    if (count($timeslots) === 0) {
+    if (count($raw_timeslots) === 0) {
         return ReturnValue::error($ERROR_RESERVATION_TIMESLOT_NOT_SELECTED);
     }
 
     global $config_timeslots;
-    $min_time_index = $timeslots[0];
-    $max_time_index = end($timeslots);
+    $min_time_index = $raw_timeslots[0];
+    $max_time_index = end($raw_timeslots);
     $min_time = $config_timeslots[$min_time_index][0];
     $max_time = $config_timeslots[$max_time_index][1];
     $timeslots = array($min_time, $max_time);
@@ -722,13 +725,19 @@ function reservate_kajak(?mysqli $conn, array $fields, bool $send_email = FALSE)
     $kajak_kinds = get_kajak_kinds($conn);
 
     /* check if more than 0 kajaks where selected */
-    $amount_kajaks = array_map(static function ($kajak_kind) {
-        if (!isset($_POST[$kajak_kind])) {
-            return 0;
-        }
-        return (int)clean_string($_POST[$kajak_kind]);
-    }, $kajak_kinds);
-    $sum_kajaks = array_sum($amount_kajaks);
+    $amount_kajaks = array_reduce($kajak_kinds, static function ($carry, $kajak_kind) {
+        $amount = (int)clean_string($_POST[$kajak_kind] ?? '0');
+        $carry[] = array(
+            'kind' => $kajak_kind,
+            'amount' => $amount
+        );
+        return $carry;
+    }, []);
+
+    /* sum up kajaks to check if any kajak was selected */
+    $sum_kajaks = array_reduce($amount_kajaks, static function ($carry, $kajak) {
+        return $carry + $kajak['amount'];
+    }, 0);
 
     /* throw error if no kajak was selected */
     if ($sum_kajaks === 0) {
@@ -755,17 +764,20 @@ function reservate_kajak(?mysqli $conn, array $fields, bool $send_email = FALSE)
     /* flatten array */
     $reserved_kajaks = array_merge(...$reserved_kajaks);
 
-    /* calculate price */
-    global $config;
-    $price = $config->calculatePrice($amount_timeslots, $sum_kajaks);
-
     /* insert reservation into database and get reservation_id back */
     $kajak_names = array_map(static function ($available_kajak) {
         return $available_kajak["kajak_name"];
     }, $reserved_kajaks);
+
+    /* calculate price */
+    global $config;
+    $price = $config->calculatePrice(array_map(static function () {
+        return true;
+    }, $raw_timeslots), $amount_kajaks);
+
     $reservation_id = insert_reservation($conn, $full_name, $email, $phone, $address, $date, $timeslots, $kajak_names, $price);
     if ($reservation_id === '') {
-        return ReturnValue::error($ERROR_RESERVATION);
+        return ReturnValue::error($ERROR_CHECK_FORM);
     }
 
     /* send email */
