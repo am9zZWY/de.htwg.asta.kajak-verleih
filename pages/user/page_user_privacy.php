@@ -88,39 +88,56 @@ echo create_header('Datenschutz');
                                     <br><br>
                                     <strong> Maßgebliche Rechtsgrundlagen</strong>
                                     <br><br>
-                                    Nachfolgend finden Sie eine Übersicht über die Rechtsgrundlagen der DSGVO, auf denen wir
-                                    personenbezogene Daten verarbeiten. Bitte beachten Sie, dass zusätzlich zu den Bestimmungen der
-                                    DSGVO nationale Datenschutzvorschriften für Ihr bzw. unser Wohnsitz- bzw. Wohnsitzland gelten
+                                    Nachfolgend finden Sie eine Übersicht über die Rechtsgrundlagen der DSGVO, auf denen
+                                    wir
+                                    personenbezogene Daten verarbeiten. Bitte beachten Sie, dass zusätzlich zu den
+                                    Bestimmungen der
+                                    DSGVO nationale Datenschutzvorschriften für Ihr bzw. unser Wohnsitz- bzw.
+                                    Wohnsitzland gelten
                                     können. Soweit im Einzelfall eine speziellere Rechtsgrundlage vorliegt, informieren
                                     wir Sie in der Datenschutzerklärung.
 
                                     <br><br>
                                     <strong>
-                                        - Vertragserfüllung und vorvertragliche Anfragen (Artikel 6 § 1 S. 1 b. b. DSGVO)
+                                        - Vertragserfüllung und vorvertragliche Anfragen (Artikel 6 § 1 S. 1 b. b.
+                                        DSGVO)
                                         <br><br>
                                         - Die Verarbeitung ist zur Erfüllung eines Vertrages, dessen Vertragspartei die
                                         betroffene Person ist, oder zur Durchführung eines Vorvertrages erforderlich
                                         <br><br>
                                         - Vertragliche Maßnahmen bei die Anfrage der betroffenen Person.
                                         <br><br>
-                                        - Rechtliche Verpflichtung (Art. 6 Abs. 1 S. 1 lit. c. DSGVO) - Die Verarbeitung ist zur
-                                        Erfüllung einer rechtlichen Verpflichtung erforderlich, der der Verantwortliche unterliegt.
+                                        - Rechtliche Verpflichtung (Art. 6 Abs. 1 S. 1 lit. c. DSGVO) - Die Verarbeitung
+                                        ist zur
+                                        Erfüllung einer rechtlichen Verpflichtung erforderlich, der der Verantwortliche
+                                        unterliegt.
                                         <br><br>
-                                        - Berechtigte Interessen (Art. 6 Abs. 1 S. 1 lit. f. DSGVO) - Die Verarbeitung ist zur Wahrung
-                                        der berechtigten Interessen des Verantwortlichen oder eines Dritten erforderlich, sofern nicht
+                                        - Berechtigte Interessen (Art. 6 Abs. 1 S. 1 lit. f. DSGVO) - Die Verarbeitung
+                                        ist zur Wahrung
+                                        der berechtigten Interessen des Verantwortlichen oder eines Dritten
+                                        erforderlich, sofern nicht
                                         die Interessen oder Grundrechte und Grundfreiheiten der betroffenen Person, die
                                         den Schutz personenbezogener Daten erfordern, überwiegen.
                                     </strong>
                                     <br><br>
-                                    Neben den Datenschutzbestimmungen der Datenschutz-Grundverordnung gelten in Deutschland auch
-                                    nationale Datenschutzbestimmungen. Hierzu zählt insbesondere das Gesetz zur Verhinderung des
-                                    Missbrauchs personenbezogener Daten bei der Datenverarbeitung (Bundesdatenschutzgesetz – BDSG).
-                                    Das BDSG enthält insbesondere besondere Regelungen zum Auskunftsrecht, zum Löschungsrecht, zum
-                                    Widerspruchsrecht, zur Verarbeitung besonderer Kategorien personenbezogener Daten, zur
-                                    Verarbeitung und Übermittlung zu anderen Zwecken und zur automatisierten Entscheidungsfindung im
-                                    Einzelfall einschließlich Profiling. Darüber hinaus regelt es die Verarbeitung von Daten zu
-                                    Zwecken des Beschäftigungsverhältnisses (§ 26 BDSG), insbesondere im Hinblick auf die
-                                    Begründung, Durchführung oder Beendigung des Beschäftigungsverhältnisses und die Einwilligung
+                                    Neben den Datenschutzbestimmungen der Datenschutz-Grundverordnung gelten in
+                                    Deutschland auch
+                                    nationale Datenschutzbestimmungen. Hierzu zählt insbesondere das Gesetz zur
+                                    Verhinderung des
+                                    Missbrauchs personenbezogener Daten bei der Datenverarbeitung
+                                    (Bundesdatenschutzgesetz – BDSG).
+                                    Das BDSG enthält insbesondere besondere Regelungen zum Auskunftsrecht, zum
+                                    Löschungsrecht, zum
+                                    Widerspruchsrecht, zur Verarbeitung besonderer Kategorien personenbezogener Daten,
+                                    zur
+                                    Verarbeitung und Übermittlung zu anderen Zwecken und zur automatisierten
+                                    Entscheidungsfindung im
+                                    Einzelfall einschließlich Profiling. Darüber hinaus regelt es die Verarbeitung von
+                                    Daten zu
+                                    Zwecken des Beschäftigungsverhältnisses (§ 26 BDSG), insbesondere im Hinblick auf
+                                    die
+                                    Begründung, Durchführung oder Beendigung des Beschäftigungsverhältnisses und die
+                                    Einwilligung
                                     des Arbeitnehmers. Darüber hinaus können die Landesdatenschutzgesetze der einzelnen
                                     Bundesländer gelten.
                                 </p><br>
@@ -130,7 +147,8 @@ echo create_header('Datenschutz');
                                 <strong>Vertragliche Leistungen</strong>
 
                                 <br><br>
-                                Wir verarbeiten die Daten unserer Kunden welche eine erfolgreiche Reservierung abgeschlossen
+                                Wir verarbeiten die Daten unserer Kunden welche eine erfolgreiche Reservierung
+                                abgeschlossen
                                 haben, im Rahmen von vertraglichen und vergleichbaren Rechtsverhältnissen sowie damit
                                 verbundenen Maßnahmen und im Rahmen der Kommunikation mit den Kunden (oder
                                 vorvertraglich/ ohne Reservierung) um Anfragen zu beantworten.
@@ -150,7 +168,8 @@ echo create_header('Datenschutz');
                                 <br><br>
                                 <strong>
                                     Wir löschen die Daten nach Ablauf der gesetzlichen Pflichten, Grundsätzlich 4 Jahre.
-                                    Daten die im Rahmen einer Buchung offengelegt wurden, werden nach 120 Tagen gelöscht, nach
+                                    Daten die im Rahmen einer Buchung offengelegt wurden, werden nach 120 Tagen
+                                    gelöscht, nach
                                     Beendigung des Auftrags.
                                 </strong>
                                 <br><br>
@@ -177,15 +196,18 @@ echo create_header('Datenschutz');
                                 ----------------------------------------------------------------------------------------------
                                 <li><h4 id="löschung"><strong>Löschung von Daten</strong></h4></li>
                                 <br>
-                                Die von uns verarbeitet Daten werden nach Maßgaben der gesetzlichen Vorgabe gelöscht, ab dem
-                                Moment wo die Einwilligung der Verarbeitung widerrufen wird oder sonstige Erlaubnisse entfallen.
+                                Die von uns verarbeitet Daten werden nach Maßgaben der gesetzlichen Vorgabe gelöscht, ab
+                                dem
+                                Moment wo die Einwilligung der Verarbeitung widerrufen wird oder sonstige Erlaubnisse
+                                entfallen.
                                 Daten, welche nicht gelöscht werden, die für andere oder gesetzliche Zulässige Zwecke
                                 erforderlich sind, werden für die Verarbeitung auf diese Zwecke beschränkt. Die Daten
                                 werden gesperrt und nicht für andere Zwecke verarbeitet.
 
                                 <br><br>
                                 Dies gilt <strong>nicht? oder doch</strong> für Daten welche auch handels- oder
-                                steuerrechtlichen Gründen aufbewahrt werden müssen. Genauso zur Geltendmachung, Ausübung oder
+                                steuerrechtlichen Gründen aufbewahrt werden müssen. Genauso zur Geltendmachung, Ausübung
+                                oder
                                 Verteidigung von Rechtsansprüchen oder zum Schutz der Rechte einer anderen natürlichen
                                 oder juristischen Person erforderlich ist.<br><br>
 
@@ -207,19 +229,23 @@ echo create_header('Datenschutz');
                                 <br><br>
                                 <strong>Auskunftsrecht:</strong>
                                 <br><br>
-                                Die betroffene Person hat das Recht, von dem Verantwortlichen eine Bestätigung darüber zu
-                                verlangen, ob sie betreffende personenbezogene Daten verarbeitet werden; ist dies der Fall, so
+                                Die betroffene Person hat das Recht, von dem Verantwortlichen eine Bestätigung darüber
+                                zu
+                                verlangen, ob sie betreffende personenbezogene Daten verarbeitet werden; ist dies der
+                                Fall, so
                                 hat sie ein Recht auf Auskunft über diese personenbezogenen Daten und auf folgende
                                 Informationen:
                                 <br><br>
                                 <ol>
                                     <li> die Verarbeitungszwecke;</li>
                                     <li> die Kategorien personenbezogener Daten, die verarbeitet werden;</li>
-                                    <li> die Empfänger oder Kategorien von Empfängern, gegenüber denen die personenbezogenen Daten
+                                    <li> die Empfänger oder Kategorien von Empfängern, gegenüber denen die
+                                        personenbezogenen Daten
                                         offengelegt worden sind oder noch offengelegt werden, insbesondere bei
                                         Empfängern in Drittländern oder bei internationalen Organisationen;
                                     </li>
-                                    <li> falls möglich die geplante Dauer, für die die personenbezogenen Daten gespeichert werden,
+                                    <li> falls möglich die geplante Dauer, für die die personenbezogenen Daten
+                                        gespeichert werden,
                                         oder, falls dies nicht möglich ist, die Kriterien für die Festlegung dieser
                                         Dauer;
                                     </li>
@@ -231,9 +257,11 @@ echo create_header('Datenschutz');
                                     <li> wenn die personenbezogenen Daten nicht bei der betroffenen Person erhoben
                                         werden, alle verfügbaren Informationen über die Herkunft der Daten;
                                     </li>
-                                    <li> das Bestehen einer automatisierten Entscheidungsfindung einschließlich Profiling gemäß
+                                    <li> das Bestehen einer automatisierten Entscheidungsfindung einschließlich
+                                        Profiling gemäß
                                         Artikel 22 Absätze 1 und 4 und – zumindest in diesen Fällen – aussagekräftige
-                                        Informationen über die involvierte Logik sowie die Tragweite und die angestrebten Auswirkungen
+                                        Informationen über die involvierte Logik sowie die Tragweite und die
+                                        angestrebten Auswirkungen
                                         einer derartigen Verarbeitung für die betroffene Person.
                                     </li>
                                 </ol>
@@ -268,7 +296,8 @@ echo create_header('Datenschutz');
                                 Berichtigung sie
                                 betreffender unrichtiger personenbezogener Daten zu verlangen.
                                 <br>
-                                2. Unter Berücksichtigung der Zwecke der Verarbeitung hat die betroffene Person das Recht, die
+                                2. Unter Berücksichtigung der Zwecke der Verarbeitung hat die betroffene Person das
+                                Recht, die
                                 Vervollständigung unvollständiger personenbezogener Daten – auch mittels einer
                                 ergänzenden Erklärung – zu verlangen.
                                 <br><br>
@@ -276,8 +305,10 @@ echo create_header('Datenschutz');
                                 <strong>Recht auf Löschung:</strong>
                                 <br><br>
                                 <ol>
-                                    <li> Die betroffene Person hat das Recht, von dem Verantwortlichen zu verlangen, dass sie
-                                        betreffende personenbezogene Daten unverzüglich gelöscht werden, und der Verantwortliche ist
+                                    <li> Die betroffene Person hat das Recht, von dem Verantwortlichen zu verlangen,
+                                        dass sie
+                                        betreffende personenbezogene Daten unverzüglich gelöscht werden, und der
+                                        Verantwortliche ist
                                         verpflichtet, personenbezogene Daten unverzüglich zu löschen, sofern einer der
                                         folgenden Gründe zutrifft:
                                     </li>
@@ -292,8 +323,10 @@ echo create_header('Datenschutz');
                                         </li>
                                         <li> Die betroffene Person legt gemäß Artikel 21 Absatz 1 Widerspruch gegen die
                                             Verarbeitung ein
-                                            und es liegen keine vorrangigen berechtigten Gründe für die Verarbeitung vor, oder die
-                                            betroffene Person legt gemäß Artikel 21 Absatz 2 Widerspruch gegen die Verarbeitung ein.
+                                            und es liegen keine vorrangigen berechtigten Gründe für die Verarbeitung
+                                            vor, oder die
+                                            betroffene Person legt gemäß Artikel 21 Absatz 2 Widerspruch gegen die
+                                            Verarbeitung ein.
                                         </li>
                                         <li> Die personenbezogenen Daten wurden unrechtmäßig verarbeitet.</li>
                                         <li> Die Löschung der personenbezogenen Daten ist zur Erfüllung einer
@@ -307,10 +340,14 @@ echo create_header('Datenschutz');
                                     </ol>
 
                                     <br><br>
-                                    <li> Hat der Verantwortliche die personenbezogenen Daten öffentlich gemacht und ist er gemäß
-                                        Absatz 1 zu deren Löschung verpflichtet, so trifft er unter Berücksichtigung der verfügbaren
-                                        Technologie und der Implementierungskosten angemessene Maßnahmen, auch technischer Art, um für
-                                        die Datenverarbeitung Verantwortliche, die die personenbezogenen Daten verarbeiten, darüber zu
+                                    <li> Hat der Verantwortliche die personenbezogenen Daten öffentlich gemacht und ist
+                                        er gemäß
+                                        Absatz 1 zu deren Löschung verpflichtet, so trifft er unter Berücksichtigung der
+                                        verfügbaren
+                                        Technologie und der Implementierungskosten angemessene Maßnahmen, auch
+                                        technischer Art, um für
+                                        die Datenverarbeitung Verantwortliche, die die personenbezogenen Daten
+                                        verarbeiten, darüber zu
                                         informieren, dass eine betroffene Person von ihnen die Löschung aller Links zu
                                         diesen personenbezogenen Daten oder von Kopien oder Replikationen dieser
                                         personenbezogenen Daten verlangt hat.
@@ -322,20 +359,24 @@ echo create_header('Datenschutz');
                                             Zur Ausübung des Rechts auf freie Meinungsäußerung und Information:<br><br>
                                             <ol>
                                                 <li> zur Erfüllung einer rechtlichen Verpflichtung, die die Verarbeitung
-                                                    nach dem Recht der Union oder der Mitgliedstaaten, dem der Verantwortliche unterliegt,
+                                                    nach dem Recht der Union oder der Mitgliedstaaten, dem der
+                                                    Verantwortliche unterliegt,
                                                     erfordert, oder zur Wahrnehmung
                                                     einer Aufgabe, die im öffentlichen Interesse liegt oder in Ausübung
-                                                    öffentlicher Gewalt erfolgt, die dem Verantwortlichen übertragen wurde;
+                                                    öffentlicher Gewalt erfolgt, die dem Verantwortlichen übertragen
+                                                    wurde;
                                                 </li>
 
                                                 <li> aus Gründen des öffentlichen Interesses im Bereich der öffentlichen
-                                                    Gesundheit gemäß Artikel 9 Absatz 2 Buchstaben h und i sowie Artikel 9 Absatz 3;<br></li>
+                                                    Gesundheit gemäß Artikel 9 Absatz 2 Buchstaben h und i sowie Artikel
+                                                    9 Absatz 3;<br></li>
                                                 <li> für im öffentlichen Interesse liegende Archivzwecke,
                                                     wissenschaftliche oder historische
                                                     Forschungszwecke oder für statistische Zwecke gemäß Artikel 89
                                                     Absatz 1, soweit das in Absatz 1 genannte Recht voraussichtlich die
                                                     Verwirklichung der Ziele
-                                                    dieser Verarbeitung unmöglich macht oder ernsthaft beeinträchtigt, oder
+                                                    dieser Verarbeitung unmöglich macht oder ernsthaft beeinträchtigt,
+                                                    oder
                                                 </li>
 
                                                 <li> zur Geltendmachung, Ausübung oder Verteidigung von
@@ -349,12 +390,14 @@ echo create_header('Datenschutz');
                                 <strong>Recht auf Einschränkung der Verarbeitung:</strong>
                                 <br><br>
                                 <ol>
-                                    <li> Die betroffene Person hat das Recht, von dem Verantwortlichen die Einschränkung der
+                                    <li> Die betroffene Person hat das Recht, von dem Verantwortlichen die Einschränkung
+                                        der
                                         Verarbeitung zu verlangen, wenn eine der folgenden Voraussetzungen
                                         gegeben ist:
                                         <br><br>
                                         <ol>
-                                            <li> die Richtigkeit der personenbezogenen Daten von der betroffenen Person bestritten wird, und
+                                            <li> die Richtigkeit der personenbezogenen Daten von der betroffenen Person
+                                                bestritten wird, und
                                                 zwar für eine Dauer, die es dem Verantwortlichen ermöglicht, die
                                                 Richtigkeit der personenbezogenen Daten zu überprüfen,
                                             </li>
@@ -364,12 +407,14 @@ echo create_header('Datenschutz');
                                                 Einschränkung der Nutzung der personenbezogenen Daten verlangt;
                                             </li>
                                             <br>
-                                            <li> der Verantwortliche die personenbezogenen Daten für die Zwecke der Verarbeitung nicht
+                                            <li> der Verantwortliche die personenbezogenen Daten für die Zwecke der
+                                                Verarbeitung nicht
                                                 länger benötigt, die betroffene Person sie jedoch zur Geltendmachung,
                                                 Ausübung oder Verteidigung von Rechtsansprüchen benötigt, oder
                                             </li>
                                             <br>
-                                            <li> die betroffene Person Widerspruch gegen die Verarbeitung gemäß Artikel 21 Absatz 1 eingelegt
+                                            <li> die betroffene Person Widerspruch gegen die Verarbeitung gemäß Artikel
+                                                21 Absatz 1 eingelegt
                                                 hat, solange noch nicht feststeht, ob die berechtigten Gründe
                                                 des Verantwortlichen gegenüber denen der betroffenen Person
                                             </li>
@@ -383,14 +428,18 @@ echo create_header('Datenschutz');
                                         – von ihrer Speicherung abgesehen<br>
                                         – nur mit Einwilligung der betroffenen Person oder zur
                                         <br><br>
-                                        Geltendmachung, Ausübung oder Verteidigung von Rechtsansprüchen oder zum Schutz der Rechte einer
+                                        Geltendmachung, Ausübung oder Verteidigung von Rechtsansprüchen oder zum Schutz
+                                        der Rechte einer
                                         anderen natürlichen oder juristischen Person oder aus Gründen eines wichtigen
-                                        öffentlichen Interesses der Union oder eines Mitgliedstaats verarbeitet werden.<br>
+                                        öffentlichen Interesses der Union oder eines Mitgliedstaats verarbeitet
+                                        werden.<br>
                                     </li>
                                     <br>
 
-                                    <li> Eine betroffene Person, die eine Einschränkung der Verarbeitung gemäß Absatz 1 erwirkt hat,
-                                        wird von dem Verantwortlichen unterrichtet, bevor die Einschränkung aufgehoben wird.
+                                    <li> Eine betroffene Person, die eine Einschränkung der Verarbeitung gemäß Absatz 1
+                                        erwirkt hat,
+                                        wird von dem Verantwortlichen unterrichtet, bevor die Einschränkung aufgehoben
+                                        wird.
                                     </li>
                                 </ol>
                                 <br><br>
@@ -398,7 +447,8 @@ echo create_header('Datenschutz');
                                 <strong>Mitteilungspflicht mit Berechtigung und Löschung personenbezogener Daten oder
                                     Einschränkung der Verarbeitung:</strong>
                                 <br><br>
-                                Der Verantwortliche teilt allen Empfängern, denen personenbezogenen Daten offengelegt wurden,
+                                Der Verantwortliche teilt allen Empfängern, denen personenbezogenen Daten offengelegt
+                                wurden,
                                 jede Berichtigung oder Löschung der personenbezogenen Daten oder eine Einschränkung der
                                 Verarbeitung nach Artikel 16, Artikel 17 Absatz 1 und Artikel 18 mit, es sei denn, dies
                                 erweist sich als unmöglich oder ist mit einem unverhältnismäßigen Aufwand verbunden.
@@ -414,7 +464,8 @@ echo create_header('Datenschutz');
                                     <li> Die betroffene Person hat das Recht, die sie betreffenden personenbezogenen
                                         Daten, die sie
                                         einem Verantwortlichen bereitgestellt hat, in einem strukturierten, gängigen und
-                                        maschinenlesbaren Format zu erhalten, und sie hat das Recht, diese Daten einem anderen
+                                        maschinenlesbaren Format zu erhalten, und sie hat das Recht, diese Daten einem
+                                        anderen
                                         Verantwortlichen ohne Behinderung durch den Verantwortlichen, dem die
                                         personenbezogenen Daten bereitgestellt wurden, zu übermitteln, sofern
                                     </li>
@@ -429,7 +480,8 @@ echo create_header('Datenschutz');
 
                                         <li> Bei der Ausübung ihres Rechts auf Datenübertragbarkeit gemäß Absatz 1 hat
                                             die betroffene
-                                            Person das Recht, zu erwirken, dass die personenbezogenen Daten direkt von einem
+                                            Person das Recht, zu erwirken, dass die personenbezogenen Daten direkt von
+                                            einem
                                             Verantwortlichen einem anderen Verantwortlichen übermittelt werden, soweit
                                             dies technisch machbar ist.
                                         </li>
@@ -593,9 +645,11 @@ echo create_header('Datenschutz');
                                     <li> Die IP-Adresse der Nutzerin/ des Nutzers</li>
                                     <li> Datum und Uhrzeit des Zugriffs</li>
                                     <li> Websites, von denen das System der Nutzerin/ des Nutzers auf unsere
-                                        Internetseite gelangt</li>
+                                        Internetseite gelangt
+                                    </li>
                                     <li> Websites, die vom System der Nutzerin/ des Nutzers über unsere Website
-                                        aufgerufen werden</li>
+                                        aufgerufen werden
+                                    </li>
                                 </ol>
                                 <br>
                                 Im Falle einer fehlerhaften Browseranfrage werden zusätzlich folgende Daten in einer
@@ -618,7 +672,8 @@ echo create_header('Datenschutz');
 
                                 <strong>Rechtsgrundlage für die Datenverarbeitung</strong>
                                 <br>
-                                Rechtsgrundlage für die Speicherung der Logfiles ist Art. 6 Abs. 1 lit. e) i.V.m. Abs. 3 DSGVO
+                                Rechtsgrundlage für die Speicherung der Logfiles ist Art. 6 Abs. 1 lit. e) i.V.m. Abs. 3
+                                DSGVO
                                 i.V.m § 4 Landesdaten-schutzgesetzt BW (im Folgenden: LDSG) in der ab dem 25.04.2018
                                 geltenden Fassung.
                                 <br><br>

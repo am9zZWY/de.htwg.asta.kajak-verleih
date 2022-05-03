@@ -36,8 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                             <h4><?php echo $kajak->name ?></h4><br>
                             Das <?php echo $kajak->name ?>
                             hat <?php echo $kajak->seats . ((int)$kajak->seats === 1 ? ' Sitz' : ' Sitze') ?>. Insgesamt
-                            gibt
-                            es <?php echo $kajak->amount ?> Stück dieses Modells.<br>
+                            sind derzeit <?php echo $kajak->amount ?? 0 ?> Stück dieses Modells verfügbar.<br>
                             <img alt="Bild von <?php echo $kajak->name ?>" src="<?php echo $kajak->img ?>"
                                  class="img-fluid" style="width: 300px; height: 200px;"/>
                         </div>
@@ -227,7 +226,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                     ?>
                                     <div class="col-md-6">
                                         <div class="form-group form-floating">
-                                            <input type="number" max="<?php echo $kajak->amount ?>"
+                                            <input type="number" max="<?php echo $kajak->amount ?? 0 ?>"
                                                    min="0" id="<?php echo $kajak->kind ?>"
                                                    value="<?php echo get_post_field($kajak->kind, 0) ?>"
                                                    name="<?php echo $kajak->kind ?>"
@@ -313,7 +312,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                     exit();
                     }
 
-                    $ret_val = reservate_kajak($connection, $_POST, true);
+                    $ret_val = reservate_kajak($connection, $_POST, TRUE);
                     ?>
                         <h3>
                             <?php echo $ret_val->getMessage(); ?>
@@ -321,6 +320,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                     <?php
                     if ($ret_val->isSuccess()) {
                     ?>
+
+
                         <script>
                             setTimeout(() => {
                                 window.location = '/';

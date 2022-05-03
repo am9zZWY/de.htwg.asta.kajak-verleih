@@ -9,12 +9,12 @@
  */
 function login(string $username, string $password): bool
 {
-    if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
-        return true;
+    if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === TRUE) {
+        return TRUE;
     }
 
     if (!isset($_ENV['ADMIN_USERNAME'], $_ENV['ADMIN_PASSWORD'])) {
-        return false;
+        return FALSE;
     }
 
     $admin_username = $_ENV['ADMIN_USERNAME'];
@@ -43,5 +43,5 @@ function logout(): void
  */
 function is_logged_in(): bool
 {
-    return isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true;
+    return isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === TRUE;
 }

@@ -5,6 +5,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 
 /**
  * Create email signature.
+ *
  * @return string
  */
 function get_email_signature(): string
@@ -97,7 +98,7 @@ function send_mail(string $email_address_to, string $subject, string $body): boo
 {
     $email_address = get_env('MAIL_ADDRESS');
 
-    $mail = new PHPMailer(true);
+    $mail = new PHPMailer(TRUE);
     try {
         /* $mail->SMTPDebug = SMTP::DEBUG_SERVER; // Enable verbose debug output. */
         $mail->isSMTP();
@@ -106,14 +107,14 @@ function send_mail(string $email_address_to, string $subject, string $body): boo
         $mail->Encoding = 'base64';
         $mail->CharSet = 'UTF-8';
 
-        $mail->SMTPAuth = true;
-        $mail->SMTPKeepAlive = true;
+        $mail->SMTPAuth = TRUE;
+        $mail->SMTPKeepAlive = TRUE;
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->SMTPOptions = array(
             'ssl' => array(
-                'verify_peer' => false,
-                'verify_peer_name' => false,
-                'allow_self_signed' => true
+                'verify_peer' => FALSE,
+                'verify_peer_name' => FALSE,
+                'allow_self_signed' => TRUE
             )
         );
         $mail->Host = get_env('MAIL_HOST');
@@ -124,13 +125,13 @@ function send_mail(string $email_address_to, string $subject, string $body): boo
         $mail->setFrom($email_address, 'AStA Kajak-Reservierungsservice');
         $mail->addAddress($email_address_to === '' ? $email_address : $email_address_to);
 
-        $mail->isHTML(true);
+        $mail->isHTML(TRUE);
         $mail->Subject = $subject;
         $mail->Body = $body;
 
         $mail->send();
-        return true;
+        return TRUE;
     } catch (Exception $e) {
-        return false;
+        return FALSE;
     }
 }

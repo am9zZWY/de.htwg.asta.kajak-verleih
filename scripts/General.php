@@ -61,5 +61,5 @@ function get_post_field(string $field, string $default = ''): string
  */
 function get_random_token(): string
 {
-    return md5(uniqid(mt_rand(), true));
+    return md5(uniqid(mt_rand(), TRUE));
 }

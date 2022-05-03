@@ -235,11 +235,11 @@ echo create_header('Dashboard');
                                     </select>
                                 </td>
                                 <td>
-                                    <input type="number" name="kajak_seats" min="1" required/>
+                                    <input type="number" name="kajak_seats" min="1" value="1" required/>
                                 </td>
                                 <td>
                                     <select required>
-                                        <option>Ja</option>
+                                        <option selected>Ja</option>
                                         <option>Nein</option>
                                     </select>
                                 </td>
