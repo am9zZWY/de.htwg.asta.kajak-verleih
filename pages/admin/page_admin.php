@@ -19,6 +19,15 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') && isset($_POST['confirm']) && is_lo
         $kind = clean_string($_POST['kind']);
         $seats = (int)clean_string($_POST['seats']);
         add_kajak($conn, $name, $kind, $seats);
+    } else if (isset($_POST['delete_bad_person'])) {
+        $name = clean_string($_POST['name']);
+        $email = clean_string($_POST['email']);
+        delete_bad_person($conn, $name, $email);
+    } else if (isset($_POST['add_bad_person'])) {
+        $name = clean_string($_POST['name']);
+        $email = clean_string($_POST['email']);
+        $comment = clean_string($_POST['comment']);
+        add_bad_person($conn, $name, $email, $comment);
     }
 }
 
@@ -225,30 +234,6 @@ echo create_header('Dashboard');
                 </div>
             </form>
         </div>
-        <script>
-            const reservationFilter = document.getElementById('reservation-filter')
-            const kajakFilter = document.getElementById('kajak-filter')
-
-            const filter = (inputElement, elements) => {
-                return Array.from(elements).forEach((row) => {
-                    if (row.textContent.toLowerCase().includes(inputElement.value.toLowerCase())) {
-                        row.style.display = "";
-                    } else {
-                        row.style.display = "none";
-                    }
-                })
-            }
-
-            function filterReservationTable() {
-                const reservations = document.getElementsByClassName('reservation-row')
-                filter(reservationFilter, reservations);
-            }
-
-            function filterKajakTable() {
-                const kajaks = document.getElementsByClassName('kajak-row')
-                filter(kajakFilter, kajaks);
-            }
-        </script>
     </div>
     <div class="row">
         <div class="col content">
@@ -325,6 +310,136 @@ echo create_header('Dashboard');
                 <h4>Datenbank Status</h4>
 
             </div>
+        </div>
+
+        <div class="row content">
+            <div class="content-wrapper">
+                <h4>Blacklist</h4>
+                <form method="post" class="needs-validation">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="mb-3 form-floating">
+                                <input name="name" type="text"
+                                       value="<?php echo get_post_field('name') ?>"
+                                       id="name-bad-person"
+                                       class="form-control"
+                                       required>
+                                <label for="name-bad-person">
+                                    Name
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="mb-3 form-floating">
+                                <input name="email" type="email"
+                                       value="<?php echo get_post_field('email') ?>"
+                                       id="email"
+                                       class="form-control"
+                                       required>
+                                <label for="email">
+                                    E-Mail
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="mb-3 form-floating">
+                                <input name="comment" type="text"
+                                       value="<?php echo get_post_field('comment') ?>"
+                                       id="comment"
+                                       class="form-control"
+                                >
+                                <label for="comment">
+                                    Grund
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="mb-3 form-floating">
+                                <input id="blacklist-filter"
+                                       name="blacklist-filter" type="text" placeholder="Josef Müller"
+                                       onkeyup="filterBlacklistTable()"
+                                       class="form-control"
+                                >
+                                <label for="kajak-filter">
+                                    Suchen
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <form method="post" class="needs-validation">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered table-sm table-light"
+                                           id="reservations">
+                                        <caption>Auflistung aller auf der verbotenen Liste</caption>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>E-Mail</th>
+                                            <th>Grund</th>
+                                        </tr>
+                                        <?php
+                                        $blacklist = get_blacklist($conn);
+                                        foreach ($blacklist as $blacklist_entry) {
+                                            ?>
+                                            <tr class="blacklist-row">
+                                                <td><?php echo $blacklist_entry['name'] ?></td>
+                                                <td><?php echo $blacklist_entry['email'] ?></td>
+                                                <td><?php echo $blacklist_entry['comment'] ?></td>
+                                            </tr>
+                                            <?php
+                                        }
+                                        ?>
+                                    </table>
+                                </div>
+
+                                <div class="btn-group d-flex" role="group">
+                                    <button type="submit" class="btn custom-btn mx-1" name="delete_bad_person">
+                                        Verbotenen
+                                        Löschen
+                                    </button>
+                                    <button type="submit" class="btn custom-btn mx-1" name="add_bad_person">Verbotenen
+                                        Hinzufügen
+                                    </button>
+                                    <div class="mx-1">
+                                        <input type="checkbox" name="confirm" value="1" id="confirm"
+                                               class="form-check-input">
+                                        <label for="confirm">
+                                            Bestätigen
+                                        </label>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                </form>
+            </div>
+            <script>
+                const reservationFilter = document.getElementById('reservation-filter')
+                const kajakFilter = document.getElementById('kajak-filter')
+                const blacklistFilter = document.getElementById('blacklist-filter')
+
+                const filter = (inputElement, elements) => {
+                    return Array.from(elements).forEach((row) => {
+                        if (row.textContent.toLowerCase().includes(inputElement.value.toLowerCase())) {
+                            row.style.display = "";
+                        } else {
+                            row.style.display = "none";
+                        }
+                    })
+                }
+
+                function filterReservationTable() {
+                    const reservations = document.getElementsByClassName('reservation-row')
+                    filter(reservationFilter, reservations);
+                }
+
+                function filterKajakTable() {
+                    const kajaks = document.getElementsByClassName('kajak-row')
+                    filter(kajakFilter, kajaks);
+                }
+                function filterBlacklistTable(){
+                    const blacklist = document.getElementsByClassName('blacklist-row')
+                    filter(blacklistFilter, blacklist);
+                }
+            </script>
         </div>
     </div>
 </div>

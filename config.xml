@@ -31,7 +31,7 @@
         </price>
         <price name="kaution">
             <prop name="description">Kaution pro Kajak</prop>
-            <prop name="value">100</prop>
+            <prop name="value">50</prop>
             <prop name="dependOn">kajak</prop>
         </price>
     </prices>

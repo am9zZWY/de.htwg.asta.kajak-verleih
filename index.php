@@ -36,6 +36,7 @@ $_SESSION['connection'] = $connection;
 add_reservation_table($connection);
 add_kajak_table($connection);
 add_reservation_kajak_table($connection);
+add_blacklist_table($connection);
 
 /* API */
 if ($PARSED_URL === '/api') {

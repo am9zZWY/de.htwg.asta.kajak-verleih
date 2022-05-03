@@ -76,6 +76,37 @@ function connect_to_database(): ?mysqli
     return $conn;
 }
 
+
+function add_blacklist_table(?mysqli $conn): void
+{
+    global $ERROR_TABLE_CREATION, $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY;
+
+    if ($conn === null) {
+        error_log($ERROR_DATABASE_CONNECTION);
+        return;
+    }
+
+    $sql = $conn->prepare("
+CREATE TABLE IF NOT EXISTS blacklist
+(
+    
+    name             VARCHAR(40)     NOT NULL,
+    email            VARCHAR(50)     NOT NULL,
+    comment          VARCHAR(255)    NOT NULL,
+    PRIMARY KEY(name, email)
+)");
+
+    if ($sql === false) {
+        error_log($ERROR_DATABASE_QUERY);
+        return;
+    }
+
+    if ($sql->execute()) {
+        return;
+    }
+    error_log($ERROR_TABLE_CREATION);
+}
+
 /**
  * Create the table for reservations.
  *
@@ -767,4 +798,83 @@ function cancel_reservation(?mysqli $conn, array $fields, bool $send_email = fal
 
     error_log($ERROR_CANCELLATION);
     return $ERROR_CANCELLATION;
+}
+
+function get_blacklist(?mysqli $conn): array
+{
+    global $ERROR_DATABASE_CONNECTION;
+
+    if ($conn === null) {
+        error_log($ERROR_DATABASE_CONNECTION);
+        return [];
+    }
+
+    try {
+        $sql = $conn->prepare("SELECT * FROM blacklist");
+        $result_execute = $sql->execute();
+        if ($result_execute === false) {
+            return [];
+        }
+    } catch (Exception $e) {
+        /** @noinspection ForgottenDebugOutputInspection */
+        error_log($e);
+        return [];
+    }
+
+    $result = $sql->get_result();
+    return mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
+
+/**
+ * Remove a bad person who really nice though e.g. Marcel Geiss.
+ *
+ * @param mysqli|null $conn
+ * @param string $name
+ * @param string $email
+ * @return void
+ */
+function delete_bad_person(?mysqli $conn, string $name, string $email): void
+{
+    global $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY;
+
+    if ($conn === null) {
+        error_log($ERROR_DATABASE_CONNECTION);
+        return;
+    }
+
+    $sql = $conn->prepare("DELETE FROM blacklist WHERE name = ? AND email = ?");
+    $sql->bind_param('ss', $name, $email);
+    if ($sql->execute()) {
+        return;
+    }
+    error_log($ERROR_DATABASE_QUERY);
+}
+
+/**
+ * Add a bad bad person e.g. Matthias Asche.
+ * @param mysqli|null $conn
+ * @param string $name
+ * @param string $email
+ * @param string $comment
+ * @return void
+ */
+function add_bad_person(?mysqli $conn, string $name, string $email, string $comment): void
+{
+    global $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY;
+
+    if ($conn === null) {
+        error_log($ERROR_DATABASE_CONNECTION);
+        return;
+    }
+    try {
+
+        $sql = $conn->prepare("INSERT INTO blacklist (name, email, comment) VALUES (?, ?, ?)");
+        $sql->bind_param('sss', $name, $email, $comment);
+        if ($sql->execute()) {
+            return;
+        }
+    } catch (Exception $e) {
+        error_log($e);
+    }
+    error_log($ERROR_DATABASE_QUERY);
 }
