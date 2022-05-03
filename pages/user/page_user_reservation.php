@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             <div class="row content">
                 <div class="kajak-form">
                     <form action="/" method="post" class="needs-validation">
-                        <input type="hidden" id="<?php echo $_SESSION['token_field'] ?? '' ?>"
+                        <input type="hidden"
                                name="<?php echo $_SESSION['token_field'] ?? '' ?>"
                                value="<?php echo $_SESSION['token'] ?? '' ?>">
                         <div class="row my-2">
