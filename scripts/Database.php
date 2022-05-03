@@ -3,7 +3,6 @@
 
 global $config;
 /* kajaks for each kajak type */
-$amount_kajaks = $config->getAmountKajaks();
 $config_timeslots = $config->getTimeslots(true);
 
 class ReturnValue
@@ -195,12 +194,12 @@ CREATE TABLE IF NOT EXISTS kajak_reservation
  * @param mysqli|null $conn
  * @param string $name
  * @param string $kind
- * @param int $amount_seats
+ * @param int $seats
  * @return void
  */
-function add_kajak(?mysqli $conn, string $name, string $kind, int $amount_seats): void
+function add_kajak(?mysqli $conn, string $name, string $kind, int $seats): void
 {
-    global $ERROR_DATABASE_CONNECTION, $ERROR_TYPE_NOT_IN_CONFIG, $config;
+    global $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY, $ERROR_TYPE_NOT_IN_CONFIG, $ERROR_EXECUTION, $config;
 
     if ($conn === null) {
         error_log($ERROR_DATABASE_CONNECTION);
@@ -220,8 +219,57 @@ function add_kajak(?mysqli $conn, string $name, string $kind, int $amount_seats)
         INSERT INTO kajaks (kajak_name, kind, seats)
             VALUES (?, ?, ?);
         ");
-        $sql->bind_param('sss', $name, $kind, $amount_seats);
-        $sql->execute();
+
+        if ($sql === false) {
+            error_log($ERROR_DATABASE_QUERY);
+            return;
+        }
+
+        $sql->bind_param('sss', $name, $kind, $seats);
+        if ($sql->execute()) {
+            return;
+        }
+        error_log($ERROR_EXECUTION);
+    } catch (Exception $e) {
+        error_log($e);
+        return;
+    }
+}
+
+function update_kajak(?mysqli $conn, string $old_name, string $name, string $kind, int $seats, int $available, string $comment): void
+{
+    global $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY, $ERROR_TYPE_NOT_IN_CONFIG, $ERROR_EXECUTION, $config;
+
+    if ($conn === null) {
+        error_log($ERROR_DATABASE_CONNECTION);
+        return;
+    }
+
+    /* get all kajaks and check if the kind is valid */
+    $kinds = $config->getKajakKinds();
+    if (!in_array($kind, $kinds, true)) {
+        error_log($ERROR_TYPE_NOT_IN_CONFIG);
+        return;
+    }
+
+    /* add kajak to list of kajaks */
+    try {
+        $sql = $conn->prepare("
+        UPDATE kajaks
+        SET kajak_name = ?, kind = ?, seats = ?, available = ?, comment = ?
+        WHERE kajak_name = ?;
+        ");
+
+        if ($sql === false) {
+            error_log($ERROR_DATABASE_QUERY);
+            return;
+        }
+
+        $sql->bind_param('ssssss', $name, $kind, $seats, $available, $comment, $old_name);
+        if ($sql->execute()) {
+            return;
+        }
+        error_log($ERROR_EXECUTION);
     } catch (Exception $e) {
         error_log($e);
         return;
@@ -237,7 +285,7 @@ function add_kajak(?mysqli $conn, string $name, string $kind, int $amount_seats)
  */
 function remove_kajak(?mysqli $conn, string $kajak_name): void
 {
-    global $ERROR_DATABASE_CONNECTION;
+    global $ERROR_DATABASE_CONNECTION, $ERROR_EXECUTION;
 
     if ($conn === null) {
         error_log($ERROR_DATABASE_CONNECTION);
@@ -247,7 +295,10 @@ function remove_kajak(?mysqli $conn, string $kajak_name): void
     try {
         $sql = $conn->prepare("DELETE FROM kajaks WHERE kajak_name = ?");
         $sql->bind_param('s', $kajak_name);
-        $sql->execute();
+        if ($sql->execute()) {
+            return;
+        }
+        error_log($ERROR_EXECUTION);
     } catch (Exception $e) {
         error_log($e);
         return;
@@ -313,18 +364,6 @@ function get_kajak_with_real_amount(?mysqli $conn): array
 }
 
 /**
- * Get all kajak kinds.
- * @param mysqli|null $conn
- * @return array
- */
-function get_kajak_kinds(?mysqli $conn): array
-{
-    return array_values(array_unique(array_map(static function ($kajak) {
-        return $kajak['kind'];
-    }, get_kajaks($conn))));
-}
-
-/**
  * Get all kajak amounts by kind.
  * @param mysqli|null $conn
  * @return array
@@ -340,6 +379,18 @@ function get_kajak_amounts(?mysqli $conn): array
         }
         return $carry;
     }, array());
+}
+
+/**
+ * Get all kajak kinds.
+ * @param mysqli|null $conn
+ * @return array
+ */
+function get_kajak_kinds(?mysqli $conn): array
+{
+    return array_values(array_unique(array_map(static function ($kajak) {
+        return $kajak['kind'];
+    }, get_kajaks($conn))));
 }
 
 /**
