@@ -28,9 +28,9 @@
             <prop name="amountTimeslots">all</prop>
         </price>
         <price name="kaution">
-            <prop name="description">Kaution pro Kajak</prop>
+            <prop name="description">Kaution pro Person</prop>
             <prop name="value">50</prop>
-            <prop name="dependOn">kajak</prop>
+            <prop name="dependOn">seat</prop>
         </price>
     </prices>
     <!-- TIMESLOTS -->

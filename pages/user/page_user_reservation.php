@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                             <h4><?php echo $kajak->name ?></h4><br>
                             Das <?php echo $kajak->name ?>
                             hat <?php echo $kajak->seats . ((int)$kajak->seats === 1 ? ' Sitz' : ' Sitze') ?>. Insgesamt
-                            <?php echo((int)$kajak->seats === 1 ? ' ist' : ' sind') ?>
+                            <?php echo((int)$kajak->amount === 1 ? ' ist' : ' sind') ?>
                             derzeit <?php echo $kajak->amount ?? 0 ?> Stück dieses Modells verfügbar.<br>
                             <img alt="Bild von <?php echo $kajak->name ?>" src="<?php echo $kajak->img ?>"
                                  class="img-fluid" style="width: 300px; height: 200px;"/>
@@ -279,9 +279,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         const calculated_price_element = document.getElementById('calculated-price');
                         const calculate_price = () => {
                             /* get necessary fields and information */
-                            const kajaks = Array.from(document.getElementsByClassName('amount-kajak'));
-                            const amount_kajaks = Array.from(kajaks).reduce((sum, amount) => parseInt(amount.value) + sum, 0);
-                            const amount_timeslots = Array.from(document.getElementsByClassName('timeslot')).filter(timeslot => timeslot.checked).length;
+                            const amount_kajaks_by_kind = Array.from(document.getElementsByClassName('amount-kajak')).reduce((carry, kajak) => ([
+                                ...carry,
+                                {
+                                    kind: kajak.name,
+                                    amount: parseInt(kajak.value)
+                                }
+                            ]), []);
+                            const timeslots = Array.from(document.getElementsByClassName('timeslot')).map(timeslot => timeslot.checked);
+                            /* encode everything :) */
+                            const encoded = btoa(JSON.stringify({
+                                amount_kajaks: amount_kajaks_by_kind,
+                                timeslots
+                            }))
 
                             const xmlhttp = new XMLHttpRequest();
                             xmlhttp.onreadystatechange = function () {
@@ -290,7 +300,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                 }
                             };
                             /* send request to own api to calculate price */
-                            xmlhttp.open("GET", "/api?price&amount_kajaks=" + amount_kajaks + "&amount_timeslots=" + amount_timeslots, true);
+                            xmlhttp.open("GET", "/api?price&payload_price=" + encoded, true);
                             xmlhttp.send();
                         }
 
@@ -321,6 +331,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                     <?php
                     if ($ret_val->isSuccess()) {
                     ?>
+
 
                         <script>
                             setTimeout(() => {

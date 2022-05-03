@@ -230,7 +230,7 @@ CREATE TABLE IF NOT EXISTS kajak_reservation
  */
 function add_kajak(?mysqli $conn, string $name, string $kind, int $seats): void
 {
-    global $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY, $ERROR_TYPE_NOT_IN_CONFIG, $ERROR_EXECUTION, $config;
+    global $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY, $ERROR_TYPE_NOT_IN_CONFIG, $ERROR_TOO_MANY_SEATS, $ERROR_EXECUTION, $config;
 
     if ($conn === null) {
         error_log($ERROR_DATABASE_CONNECTION);
@@ -241,6 +241,13 @@ function add_kajak(?mysqli $conn, string $name, string $kind, int $seats): void
     $kinds = $config->getKajakKinds();
     if (!in_array($kind, $kinds, TRUE)) {
         error_log($ERROR_TYPE_NOT_IN_CONFIG);
+        return;
+    }
+
+    /* get seats per kajak and check if number does not exceed config. It can be less if one seat is e.g. damaged */
+    $seats_per_kajak = $config->getSeatsPerKajak();
+    if ($seats_per_kajak[$kind] < $seats) {
+        error_log($ERROR_TOO_MANY_SEATS);
         return;
     }
 
@@ -267,9 +274,21 @@ function add_kajak(?mysqli $conn, string $name, string $kind, int $seats): void
     }
 }
 
+/**
+ * Update kajak in the database.
+ *
+ * @param mysqli|null $conn
+ * @param string $old_name
+ * @param string $name
+ * @param string $kind
+ * @param int $seats
+ * @param int $available
+ * @param string $comment
+ * @return void
+ */
 function update_kajak(?mysqli $conn, string $old_name, string $name, string $kind, int $seats, int $available, string $comment): void
 {
-    global $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY, $ERROR_TYPE_NOT_IN_CONFIG, $ERROR_EXECUTION, $config;
+    global $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY, $ERROR_TYPE_NOT_IN_CONFIG, $ERROR_TOO_MANY_SEATS, $ERROR_EXECUTION, $config;
 
     if ($conn === null) {
         error_log($ERROR_DATABASE_CONNECTION);
@@ -280,6 +299,13 @@ function update_kajak(?mysqli $conn, string $old_name, string $name, string $kin
     $kinds = $config->getKajakKinds();
     if (!in_array($kind, $kinds, TRUE)) {
         error_log($ERROR_TYPE_NOT_IN_CONFIG);
+        return;
+    }
+
+    /* get seats per kajak and check if number does not exceed config. It can be less if one seat is e.g. damaged */
+    $seats_per_kajak = $config->getSeatsPerKajak();
+    if ($seats_per_kajak[$kind] < $seats) {
+        error_log($ERROR_TOO_MANY_SEATS);
         return;
     }
 
@@ -444,13 +470,12 @@ function get_reservations(?mysqli $conn): array
     }
 
     try {
-        $sql = $conn->prepare("SELECT * FROM reservations WHERE reservation_date >=current_Date() ORDER BY Date;");
+        $sql = $conn->prepare("SELECT * FROM reservations WHERE reservation_date >=CURRENT_DATE() ORDER BY Date;");
         $result_execute = $sql->execute();
         if ($result_execute === FALSE) {
             return [];
         }
     } catch (Exception $e) {
-        /** @noinspection ForgottenDebugOutputInspection */
         error_log($e);
         return [];
     }
@@ -671,7 +696,7 @@ function reservate_kajak(?mysqli $conn, array $fields, bool $send_email = FALSE)
     global $INFO_RESERVATION_SUCCESS, $ERROR_RESERVATION, $ERROR_RESERVATION_KAJAK_NOT_AVAILABLE, $ERROR_RESERVATION_KAJAK_NOT_SELECTED, $ERROR_RESERVATION_TIMESLOT_NOT_SELECTED, $ERROR_SUCCESS_BUT_MAIL_NOT_SENT;
 
     $name = clean_string($fields["name"]);
-    $fullname = $name . ' ' . clean_string($fields["surname"]);
+    $full_name = $name . ' ' . clean_string($fields["surname"]);
     $email = clean_string($fields['email']);
     $phone = clean_string($fields['phone']);
     $address = clean_string($fields['street'] . ' ' . $fields['plz'] . ', ' . $fields['city'] . ', ' . $fields['country']);
@@ -738,7 +763,7 @@ function reservate_kajak(?mysqli $conn, array $fields, bool $send_email = FALSE)
     $kajak_names = array_map(static function ($available_kajak) {
         return $available_kajak["kajak_name"];
     }, $reserved_kajaks);
-    $reservation_id = insert_reservation($conn, $fullname, $email, $phone, $address, $date, $timeslots, $kajak_names, $price);
+    $reservation_id = insert_reservation($conn, $full_name, $email, $phone, $address, $date, $timeslots, $kajak_names, $price);
     if ($reservation_id === '') {
         return ReturnValue::error($ERROR_RESERVATION);
     }
@@ -773,7 +798,7 @@ function recover_reservations(?mysqli $conn, array $ids): void
 
     /* concat all strings in array to one string */
     $ids_as_string = implode(',', $ids);
-    $sql = $conn->prepare("UPDATE reservations SET cancelled = FALSE WHERE find_in_set(reservation_id, ?)");
+    $sql = $conn->prepare("UPDATE reservations SET cancelled = FALSE WHERE FIND_IN_SET(reservation_id, ?)");
     $sql->bind_param("s", $ids_as_string);
     $sql->execute();
 }
@@ -797,7 +822,7 @@ function cancel_reservations(?mysqli $conn, array $ids): void
 
     /* concat all strings in array to one string */
     $ids_as_string = implode(',', $ids);
-    $sql = $conn->prepare("UPDATE reservations SET cancelled = TRUE WHERE find_in_set(reservation_id, ?)");
+    $sql = $conn->prepare("UPDATE reservations SET cancelled = TRUE WHERE FIND_IN_SET(reservation_id, ?)");
     $sql->bind_param("s", $ids_as_string);
     $sql->execute();
 }
@@ -826,7 +851,7 @@ function cancel_reservation(?mysqli $conn, array $fields, bool $send_email = FAL
     $email = clean_string($fields['email']);
 
     /* check if reservation exists and is valid */
-    $sql = $conn->prepare("SELECT COUNT(*) as amount FROM reservations WHERE reservation_id = ? AND email = ? AND cancelled = 0");
+    $sql = $conn->prepare("SELECT COUNT(*) AS amount FROM reservations WHERE reservation_id = ? AND email = ? AND cancelled = 0");
     $sql->bind_param('ss', $reservation_id, $email);
     $sql->execute();
     $result = $sql->get_result();

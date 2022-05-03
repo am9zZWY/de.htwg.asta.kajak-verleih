@@ -161,6 +161,7 @@ echo create_header('Dashboard');
                             <th>Updaten</th>
                         </tr>
                         <?php
+                        $seats_per_kajak = $config->getSeatsPerKajak();
                         foreach ($kajaks as $kajak) {
                             $is_unavailable = $kajak['available'] === 0;
                             $kajak_name = $kajak['kajak_name'];
@@ -207,7 +208,7 @@ echo create_header('Dashboard');
                                         </select>
                                     </td>
                                     <td>
-                                        <input value="<?php echo $kajak['comment'] ?>"
+                                        <input value="<?php echo $kajak['comment'] ?>" type="text"
                                                name="kajak_comment"/>
                                     </td>
                                     <th>

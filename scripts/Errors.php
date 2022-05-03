@@ -29,6 +29,7 @@ $ERROR_CANCELLATION_NOT_FOUND = "Reservierung konnte nicht gefunden werden.";
 
 /* Kajak */
 $ERROR_TYPE_NOT_IN_CONFIG = "Kajak-Typ nicht in Konfiguration gefunden.";
+$ERROR_TOO_MANY_SEATS = "Kajak hat zu viele Sitze.";
 $ERROR_KAJAK_NOT_CREATED = "Kajak konnte nicht erstellt werden.";
 
 /* Login */

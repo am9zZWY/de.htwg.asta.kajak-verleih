@@ -82,7 +82,7 @@ SELECT *
 FROM reservations;
 
 # Select all reservations for a given date
-SELECT COUNT(kajaks.kind) as amount
+SELECT COUNT(kajaks.kind) AS amount
 FROM ((kajak_reservation
     INNER JOIN reservations
        ON reservations.reservation_id = kajak_reservation.reservation_id)
