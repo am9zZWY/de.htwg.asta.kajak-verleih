@@ -16,6 +16,7 @@ $ERROR_RESERVATION_KAJAK_TYPE_NOT_FOUND = "Kajak-Typ nicht gefunden.";
 $ERROR_RESERVATION_KAJAK_NOT_AVAILABLE = "Kajaks nicht verfügbar.";
 $ERROR_RESERVATION_KAJAK_NOT_SELECTED = "Bitte wähle einen Kajak aus.";
 $ERROR_RESERVATION = $ERROR_EXECUTION;
+$ERROR_CHECK_FORM = "Deine Angaben sind fehlerhaft. Bitte überprüfe sie.";
 $INFO_RESERVATION_SUCCESS = "Reservierung erfolgreich!";
 
 /* E-Mail */
