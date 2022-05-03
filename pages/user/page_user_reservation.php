@@ -154,11 +154,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
                             <div class="col-sm-6">
                                 <div class="form-group form-floating">
+                                    <?php
+                                    $countries = array('Deutschland', 'Schweiz', 'Österreich');
+                                    $selected_country = get_post_field('country')
+                                    ?>
                                     <select name="country" class="form-select" id="country" autocomplete="on"
                                             required>
-                                        <option>Deutschland</option>
-                                        <option>Schweiz</option>
-                                        <option>Österreich</option>
+                                        <?php
+                                        foreach ($countries as $country) {
+                                            ?>
+                                            <option <?php echo $country === $selected_country ? 'selected' : '' ?>><?php echo $country ?></option>
+                                            <?php
+                                        }
+                                        ?>
                                     </select>
                                     <label for="country">
                                         Land
@@ -175,13 +183,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                     <?php
                                     /* is put here for better debug, better NOT move it further down */
                                     $days = $config->getFormattedDays();
+                                    $selected_date = get_post_field('date');
                                     ?>
                                     <select name="date" class="form-select" id="date" autocomplete="on"
                                             required>
                                         <?php
                                         foreach ($days as $day) {
                                             ?>
-                                            <option value="<?php echo $day[1] ?>">
+                                            <option value="<?php echo $day[1] ?>" <?php echo $day[1] === $selected_date ? 'selected' : '' ?>>
                                                 <?php echo $day[0] ?>
                                             </option>
                                         <?php } ?>
@@ -197,10 +206,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                     <span class="form-label">Zeitslots</span><br>
                                     <!-- select time slots -->
                                     <?php
+                                    $selected_timeslots = get_post_fields('timeslots');
                                     foreach ($config->getFormattedTimeslots() as $index => $timeslot) { ?>
                                         <span class="form-check-label">
                                                 <input type="checkbox" name="timeslots[]"
                                                        value="<?php echo $index ?>"
+                                                       <?php echo in_array((string)($index), $selected_timeslots, true) ? 'checked' : '' ?>
                                                        class="form-check-input timeslot">
                                                 <?php echo $timeslot ?>
                                             </span>
