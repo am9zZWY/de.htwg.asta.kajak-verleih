@@ -36,7 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                             <h4><?php echo $kajak->name ?></h4><br>
                             Das <?php echo $kajak->name ?>
                             hat <?php echo $kajak->seats . ((int)$kajak->seats === 1 ? ' Sitz' : ' Sitze') ?>. Insgesamt
-                            sind derzeit <?php echo $kajak->amount ?? 0 ?> Stück dieses Modells verfügbar.<br>
+                            <?php echo((int)$kajak->seats === 1 ? ' ist' : ' sind') ?>
+                            derzeit <?php echo $kajak->amount ?? 0 ?> Stück dieses Modells verfügbar.<br>
                             <img alt="Bild von <?php echo $kajak->name ?>" src="<?php echo $kajak->img ?>"
                                  class="img-fluid" style="width: 300px; height: 200px;"/>
                         </div>
@@ -320,7 +321,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                     <?php
                     if ($ret_val->isSuccess()) {
                     ?>
-
 
                         <script>
                             setTimeout(() => {
