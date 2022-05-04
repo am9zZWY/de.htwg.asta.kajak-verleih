@@ -19,10 +19,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 <div class="content-wrapper">
                     <h3 class="content-header">Was bieten wir an?</h3>
                     <p>
-                        Wir bieten für die HTWG Konstanz und für Universität Konstanz die Möglichkeit, Kajaks zu
+                        Wir bieten für die HTWG Konstanz und für die Universität Konstanz die Möglichkeit, Kajaks zu
                         reservieren.
-                        Bitte fülle das Formular aus, damit wir überprüfen können, ob an deinem gewünschten
-                        Datum und Zeit Kajaks frei sind.
+                        Bitte fülle das Formular aus, damit wir überprüfen können, ob zu deinem gewünschten
+                        Zeitslot und Datum Kajaks frei sind.
                     </p>
                 </div>
             </div>
@@ -35,8 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         <div>
                             <h4><?php echo $kajak->name ?></h4><br>
                             Das <?php echo $kajak->name ?>
-                            hat <?php echo $kajak->seats . ((int)$kajak->seats === 1 ? ' Sitz' : ' Sitze') ?>. Insgesamt
-                            <?php echo((int)$kajak->seats === 1 ? ' ist' : ' sind') ?>
+                            hat <?php echo $kajak->seats . ((int)$kajak->seats === 1 ? ' Sitz' : ' Sitze') ?>. Derzeit ist dieses Modell x mal verfügbar                 <?php echo((int)$kajak->seats === 1 ? ' ist' : ' sind') ?>
                             derzeit <?php echo $kajak->amount ?? 0 ?> Stück dieses Modells verfügbar.<br>
                             <img alt="Bild von <?php echo $kajak->name ?>" src="<?php echo $kajak->img ?>"
                                  class="img-fluid" style="width: 300px; height: 200px;"/>
@@ -92,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                            class="form-control"
                                            required>
                                     <label for="email">
-                                        HTWG E-Mail
+                                        HTWG / Uni E-Mail
                                     </label>
                                 </div>
                             </div>
@@ -105,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                            class="form-control"
                                            required>
                                     <label for="phone">
-                                        Telefonnummer
+                                        Telefonnummer nicht gerade !
                                     </label>
                                 </div>
                             </div>
@@ -248,7 +247,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                         <input type="checkbox" name="is_studi" value="1"
                                                required <?php echo get_post_field('is_studi') === '1' ? 'checked' : '' ?>
                                                class="form-check-input">
-                                        Hiermit bestätige ich, dass ich eine studierende Person an der HTWG
+                                        Hiermit bestätige ich, dass ich Angehörige*r an der HTWG
                                         Konstanz oder der Universität Konstanz bin.
                                     </label>
                                 </div>
@@ -257,7 +256,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                         <input type="checkbox" name="terms" value="1"
                                                required <?php echo get_post_field('terms') === '1' ? 'checked' : '' ?>
                                                class="form-check-input">
-                                        Ich habe die <a href="/about" target="_blank">Nutzungsbedingungen</a> gelesen
+                                        Ich habe die <a href="/about" target="_blank">! link schön deutlich machen!Nutzungsbedingungen</a> gelesen
                                         und
                                         akzeptiere sie.
                                     </label>
@@ -270,7 +269,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    <button type="submit" class="btn custom-btn">Anfrage senden</button>
+                                    <button type="submit" class="btn custom-btn">Jetzt buchen</button>
                                 </div>
                             </div>
                         </div>

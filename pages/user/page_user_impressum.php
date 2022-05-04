@@ -5,17 +5,18 @@ echo create_header('Impressum')
     <div class="row">
         <div class="col content">
             <div class="content-wrapper">
-                <h3>AStA</h3>
+                <h3>Allgemeiner Studierendenausschuss (AStA)</h3>
+                <br>
                 <p>
-                    <strong>Hochschule Konstanz</strong>
+                    <strong>HTWG Konstanz</strong>
                 </p>
                 <p>
                     Alfred-Wachtel-Straße 8 <br>
                     78462 Konstanz<br>
-                    Gebäude D<br><br><br>
-                    <strong>Kontaktaufnahme</strong><br>
-                    Tel.: 07531 206-431/-122<br>
-                    E-Mail: asta-kajak (at) htwg-konstanz.de
+                    Gebäude D<br><br>
+                    <strong>Kontaktaufnahme</strong><br><br>
+                    Tel.: 07531 206...<br>
+                    E-Mail: asta-kajak@htwg-konstanz.de
                 </p>
             </div>
         </div>
@@ -24,6 +25,7 @@ echo create_header('Impressum')
         <div class="col content">
             <div class="content-wrapper">
                 <h4>Urheberrecht</h4>
+                <br>
                 <p>
                     <strong>Die auf unseren Internetseiten enthaltene Werke und Inhalte unterstehen dem
                         Urheberrecht.</strong>
@@ -39,6 +41,7 @@ echo create_header('Impressum')
         <div class="col content">
             <div class="content-wrapper">
                 <h4>Haftung für Inhalte</h4>
+                <br>
                 <p>
                     <strong>Sämtliche Inhalte unserer Internetseite sind mit größtmöglicher Sorgfalt erstellt
                         worden.</strong>

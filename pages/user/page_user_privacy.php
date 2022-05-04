@@ -38,11 +38,9 @@ echo create_header('Datenschutz');
 
                                 <li><h4 id="verantwortliche"><strong>Verantwortliche</strong></h4></li>
                                 <br>
-                                <p><strong>Der Verantwortliche im Sinne der Datenschutz-Grundverordnung und anderen
-                                        nationaler
-                                        Datenschutzgesetze der Mitgliedsstaaten sowie sonstiger datenschutzrechtlicher
-                                        Bestimmung ist
-                                        die:
+                                <p><strong>Verantwortlich im Sinne der Datenschutz-Grundverordnung und anderen
+                                        nationaler Datenschutzgesetze der Mitgliedsstaaten sowie sonstiger datenschutzrechtlicher
+                                        Bestimmung ist die:
 
                                         <br><br>
                                         Hochschule Konstanz<br>
@@ -55,7 +53,6 @@ echo create_header('Datenschutz');
                                         E-Mail: kontakt@htwg-konstanz.de<br>
                                         Website: www.htwg-konstanz.de<br>
                                         <br><br>
-                                        Namen und Anschrift des Datenschutzbeauftragten<br>
                                         Der Datenschutzbeauftragte des Verantwortlichen ist:<br>
                                         <br>
                                         Vasilij Slabinski<br>
@@ -64,7 +61,7 @@ echo create_header('Datenschutz');
                                         78462 Konstanz<br>
                                         Deutschland<br>
                                         Tel.: 07531 206…<br>
-                                        E-Mail: kajak-datenschutz@htwg-konstanz.de<br>
+                                        E-Mail: kajak-datenschutz@htwg-konstanz.de TTTToooo DOOOOO<br>
                                         <br></strong><br>
 
                                     -------------------------------------------------------------------------------
@@ -76,7 +73,7 @@ echo create_header('Datenschutz');
                                     Die nachfolgende Übersicht fasst die Arten der verarbeiteten Daten und die Zwecke
                                     ihrer Verarbeitung zusammen und verweist auf die betroffenen Personen.
                                     <br><br>
-                                    <strong> Arten der verarbeiten Daten</strong><br>
+                                    <strong> Arten der verarbeiteten Daten</strong><br>
                                     - Reservierungsdaten<br>
                                     - Kontaktdaten
 
@@ -101,18 +98,22 @@ echo create_header('Datenschutz');
                                     <strong>
                                         - Vertragserfüllung und vorvertragliche Anfragen (Artikel 6 § 1 S. 1 b. b.
                                         DSGVO)
-                                        <br><br>
+                                        <br>
                                         - Die Verarbeitung ist zur Erfüllung eines Vertrages, dessen Vertragspartei die
                                         betroffene Person ist, oder zur Durchführung eines Vorvertrages erforderlich
-                                        <br><br>
-                                        - Vertragliche Maßnahmen bei die Anfrage der betroffenen Person.
-                                        <br><br>
-                                        - Rechtliche Verpflichtung (Art. 6 Abs. 1 S. 1 lit. c. DSGVO) - Die Verarbeitung
+                                        <br>
+                                        - Vertragliche Maßnahmen bei der Anfrage der betroffenen Person.
+                                        <br>
+                                        - Rechtliche Verpflichtung (Art. 6 Abs. 1 S. 1 lit. c. DSGVO)
+                                        <br>
+                                        - Die Verarbeitung
                                         ist zur
                                         Erfüllung einer rechtlichen Verpflichtung erforderlich, der der Verantwortliche
                                         unterliegt.
-                                        <br><br>
-                                        - Berechtigte Interessen (Art. 6 Abs. 1 S. 1 lit. f. DSGVO) - Die Verarbeitung
+                                        <br>
+                                        - Berechtigte Interessen (Art. 6 Abs. 1 S. 1 lit. f. DSGVO)
+                                        <br>
+                                        - Die Verarbeitung
                                         ist zur Wahrung
                                         der berechtigten Interessen des Verantwortlichen oder eines Dritten
                                         erforderlich, sofern nicht
@@ -147,9 +148,8 @@ echo create_header('Datenschutz');
                                 <strong>Vertragliche Leistungen</strong>
 
                                 <br><br>
-                                Wir verarbeiten die Daten unserer Kunden welche eine erfolgreiche Reservierung
-                                abgeschlossen
-                                haben, im Rahmen von vertraglichen und vergleichbaren Rechtsverhältnissen sowie damit
+                                Wir verarbeiten die Daten unserer Kundenschaft, welche eine erfolgreiche Reservierung
+                                abgeschlossen hat, im Rahmen von vertraglichen und vergleichbaren Rechtsverhältnissen sowie damit
                                 verbundenen Maßnahmen und im Rahmen der Kommunikation mit den Kunden (oder
                                 vorvertraglich/ ohne Reservierung) um Anfragen zu beantworten.
                                 <br><br>
@@ -157,34 +157,34 @@ echo create_header('Datenschutz');
                                 verarbeiten wir die Daten zur Wahrung unserer Rechte und zum Zwecke der
                                 Verwaltungsaufgaben sowie der internen Organisation.
                                 <br><br>
-                                Im Rahmen des geltenden Rechts geben wir die Daten von Kunden
+                                Im Rahmen des geltenden Rechts geben wir die Daten von Kunden/innen
                                 nur an Dritte weiter, an die vorhin genannten Zwecke und zur Erfüllung gesetzlicher
                                 Pflichten, sofern es erforderlich ist.
 
                                 <br><br>
-                                Welche Daten für die vorgenannten Zwecke erforderlich sind, teilen wir den Kunden im
-                                Rahmen der Datenerheben in Onlineformularen mit.
+                                Welche Daten für die vorgenannten Zwecke erforderlich sind, teilen wir den Kunden/innen im
+                                Rahmen der Datenerhebung in Onlineformularen mit.
 
                                 <br><br>
                                 <strong>
-                                    Wir löschen die Daten nach Ablauf der gesetzlichen Pflichten, Grundsätzlich 4 Jahre.
+                                    Wir löschen die Daten nach Ablauf der gesetzlichen Pflichten, (grundsätzlich 4 Jahre).
                                     Daten die im Rahmen einer Buchung offengelegt wurden, werden nach 120 Tagen
                                     gelöscht, nach
                                     Beendigung des Auftrags.
                                 </strong>
                                 <br><br>
 
-                                <strong> Verarbeite Daten:</strong>
+                                <strong> Verarbeitete Daten:</strong>
                                 <br><br>
                                 <strong>
-                                    - Name, Anschrift, E-Mail, Telefonnummer, Vertragsgegenstand, Laufzeit und
+                                    - Name, Anschrift, E-Mail, Telefonnummer, Vertragsgegenstand, Laufzeit,
                                     Reservierungsdatum und Buchungsdatum</strong>
                                 <br><br>
 
                                 <strong>Zweck der Verarbeitung:</strong>
                                 <br>
                                 Erbringung vertraglicher Leistung,
-                                Kommunikation, Verwaltung und Beantwortung der Anfragen, und interne Organisation.
+                                Kommunikation,interne Organisation, Verwaltung und Beantwortung der Anfragen.
                                 <br><br>
 
                                 <strong> - Rechtsgrundlagen:</strong> <br>Vertragserfüllung und vorvertragliche Anfragen
@@ -196,11 +196,9 @@ echo create_header('Datenschutz');
                                 ----------------------------------------------------------------------------------------------
                                 <li><h4 id="löschung"><strong>Löschung von Daten</strong></h4></li>
                                 <br>
-                                Die von uns verarbeitet Daten werden nach Maßgaben der gesetzlichen Vorgabe gelöscht, ab
-                                dem
-                                Moment wo die Einwilligung der Verarbeitung widerrufen wird oder sonstige Erlaubnisse
-                                entfallen.
-                                Daten, welche nicht gelöscht werden, die für andere oder gesetzliche Zulässige Zwecke
+                                Die von uns verarbeiteten Daten werden nach Maßgaben der gesetzlichen Vorgabe gelöscht, ab dem
+                                Moment wo die Einwilligung der Verarbeitung widerrufen wird oder sonstige Erlaubnisse entfallen.
+                                Daten, welche nicht gelöscht werden, die für andere oder gesetzliche zulässige Zwecke
                                 erforderlich sind, werden für die Verarbeitung auf diese Zwecke beschränkt. Die Daten
                                 werden gesperrt und nicht für andere Zwecke verarbeitet.
 
@@ -211,7 +209,7 @@ echo create_header('Datenschutz');
                                 Verteidigung von Rechtsansprüchen oder zum Schutz der Rechte einer anderen natürlichen
                                 oder juristischen Person erforderlich ist.<br><br>
 
-                                Es können weitere Angaben zu der Aufbewahrung und Löschung von Daten beinhalten, die für
+                                Es können weitere Angaben zu der Aufbewahrung und Löschung von Daten beinhaltet sein, die für
                                 die jeweiligen Verarbeitungen vorrangig gelten.
                                 <br><br>
 
@@ -224,7 +222,7 @@ echo create_header('Datenschutz');
 
                                 <li><h4 id="rechte"><strong>Rechte der Betroffenen</strong></h4></li>
                                 <br>
-                                Als Betroffene Person steht Ihnen nach der DSGVO verschiedene rechte zu, die sich
+                                Als betroffene Person steht Ihnen nach der DSGVO verschiedene rechte zu, die sich
                                 insbesondere aus Art. 15 bis 21 DSGVO ergeben:
                                 <br><br>
                                 <strong>Auskunftsrecht:</strong>
@@ -596,7 +594,7 @@ echo create_header('Datenschutz');
                                     <li> Die Website, von der die Nutzerin/ der Nutzer auf die aufgerufene Webseite
                                         gelangt ist
                                     </li>
-                                    <br><br>
+                                    <br>
                                     <li> Die Unterseiten, die von der aufgerufenen Webseite aus aufgerufen werden</li>
                                     <br>
                                     <li> Die Verweildauer auf der Webseite</li>
@@ -614,7 +612,7 @@ echo create_header('Datenschutz');
                                 </ol>
                                 Die Software läuft dabei ausschließlich auf den Servern der HTWG Konstanz. Eine
                                 Speicherung der
-                                Daten der Nutzerin/ der Nutzer findet nur dort statt. Eine Weitergabe der Daten an
+                                Daten der Nutzenden findet nur dort statt. Eine Weitergabe der Daten an
                                 Dritte erfolgt nicht.
                                 <br><br>
                                 Die Software ist so eingestellt, das die IP-Adressen nicht vollständig gespeichert
@@ -624,7 +622,7 @@ echo create_header('Datenschutz');
                                 Auf diese Weise ist eine Zuordnung der gekürzten IP-Adresse zum aufrufenden Rechner
                                 nicht mehr möglich.
                                 <br>
-                                Die Herstellung eines Bezugs auf die Person der Nutzerin/ des Nutzers kann nicht
+                                Die Herstellung eines Bezugs auf die Person der Nutzenden kann nicht
                                 hergestellt werden und ist auch nicht beabsichtigt.
                                 <br><br>
 
@@ -641,13 +639,13 @@ echo create_header('Datenschutz');
                                 <strong>Folgende Daten werden hierbei erhoben:</strong>
                                 <ol>
                                     <li>Informationen über den Browsertyp und die verwendete Version</li>
-                                    <li> Das Betriebssystem der Nutzerin/ des Nutzers</li>
-                                    <li> Die IP-Adresse der Nutzerin/ des Nutzers</li>
+                                    <li> Das Betriebssystem der Nutzenden</li>
+                                    <li> Die IP-Adresse der Nutzenden</li>
                                     <li> Datum und Uhrzeit des Zugriffs</li>
-                                    <li> Websites, von denen das System der Nutzerin/ des Nutzers auf unsere
+                                    <li> Websites, von denen das System der Nutzenden auf unsere
                                         Internetseite gelangt
                                     </li>
-                                    <li> Websites, die vom System der Nutzerin/ des Nutzers über unsere Website
+                                    <li> Websites, die vom System der Nutzenden über unsere Website
                                         aufgerufen werden
                                     </li>
                                 </ol>
@@ -656,18 +654,17 @@ echo create_header('Datenschutz');
                                 Fehler-Logdatei gespeichert:
                                 <br><br>
                                 <ol>
-                                    <li> Die IP-Adresse der Nutzerin/ des Nutzers</li>
+                                    <li> Die IP-Adresse der Nutzenden</li>
                                     <li> Datum und Uhrzeit des Zugriffs</li>
                                     <li> Fehlercode</li>
-                                    <li> Website, die vom System der Nutzerin/ des Nutzers über unsere Website
+                                    <li> Website, die vom System der Nutzenden über unsere Website
                                         aufgerufen werden
                                     </li>
                                 </ol>
                                 <br><br>
                                 Die Daten werden ebenfalls in den Logfiles unseres Systems gespeichert. Eine Speicherung
                                 dieser
-                                Daten zusammen mit anderen personenbezogenen Daten der Nutzerin/ des Nutzers findet
-                                nicht statt.
+                                Daten zusammen mit anderen personenbezogenen Daten der Nutzenden findet nicht statt.
                                 <br><br>
 
                                 <strong>Rechtsgrundlage für die Datenverarbeitung</strong>
@@ -688,27 +685,27 @@ echo create_header('Datenschutz');
                                 <br><br>
 
                                 <strong> Dauer der Speicherung</strong><br><br>
-                                Gespeicherte Daten in Logfiles werden nach spätestens sieben tagen gelöscht. Eine
-                                darüberhinausgehende Speicherung ist möglich. In diesem Fall werden die IP-Adressen der
-                                Nutzerin/ des Nutzers gelöscht oder verfremdet, sodass eine Zuordnung des aufrufenden
-                                Clients nicht mehr möglich ist.
+                                Gespeicherte Daten in Logfiles werden nach spätestens sieben Tagen gelöscht. Eine
+                                darüberhinausgehende Speicherung ist möglich. In diesem Fall werden die IP-Adressen des Nutzenden
+                                gelöscht oder verfremdet, sodass eine Zuordnung des aufrufenden Clients nicht mehr möglich ist.
                                 <br><br>
                                 ------------------------------------------------------------------------------------------------------
 
                                 <li><h4 id="cookies"><strong>Verwendung von Cookies</strong></h4></li>
                                 <br>
-                                Beschreibung und Umfang der Datenverarbeitung
+                               <strong> Beschreibung und Umfang der Datenverarbeitung</strong>
+                                   <br><br>
                                 Unsere Webseite verwendet Cookies.<br> Bei Cookies handelt es sich um Textdateien, die
-                                im Internetbrowser bzw. vom Internetbrowser auf dem Computersystem des Nutzers
+                                im Internetbrowser bzw. vom Internetbrowser auf dem Computersystem des Nutzenden
                                 gespeichert werden.
                                 <br>
-                                Ruft eine Nutzerin/ ein Nutzer eine Website auf, so kann ein Cookie auf dem
-                                Betriebssystem der Nutzerin/ des Nutzers gespeichert werden. Dieser Cookie enthält eine
+                                Ruft ein Nutzender eine Website auf, so kann ein Cookie auf dem
+                                Betriebssystem der Nutzenden gespeichert werden. Dieser Cookie enthält eine
                                 charakteristische
                                 Zeichenfolge, die eine eindeutige Identifizierung des Browsers beim erneuten Aufrufen
                                 der Website ermöglicht.
                                 <br><br>
-                                Wir setzen Cookies ein, um unsere Website nutzerfreundlicher zu gestalten. Einige
+                                Wir setzen Cookies ein, um unsere Website nutzungsfreundlicher zu gestalten. Einige
                                 Elemente unserer Internetseite erfordern es, dass der aufrufende Browser auch nach einem
                                 Seitenwechsel
                                 identifiziert werden kann. Ein Personenbezug kann jedoch nicht hergestellt werden uns
@@ -718,22 +715,21 @@ echo create_header('Datenschutz');
                                 <strong>Zweck der Datenverarbeitung</strong>
                                 <br><br>
                                 Der Zweck der Verwendung technisch notwendiger Cookies ist, die Nutzung von Websites für
-                                die
-                                Nutzerin/ die Nutzer zu vereinfachen. Einige Funktionen unserer Internetseite können
+                                die Nutzenden zu vereinfachen. Einige Funktionen unserer Internetseite können
                                 ohne den Einsatz von Cookies nicht angeboten werden. Für diese ist es erforderlich, dass
                                 der
                                 Browser auch nach einem Seitenwechsel wiedererkannt wird.
                                 <br><br>
-                                Die durch technisch notwendige Cookies erhobenen Nutzerdaten werden nicht zur
-                                Erstellung von Nutzerprofilen verwendet.
+                                Die durch technisch notwendige Cookies erhobenen Nutzungsdaten werden nicht zur
+                                Erstellung von Nutzungsprofilen verwendet.
                                 <br><br>
 
                                 <strong> Beseitigungsmöglichkeiten</strong>
                                 <br><br>
-                                Cookies werden auf dem Rechner der Nutzerin/ des Nutzers gespeichert und von diesem
+                                Cookies werden auf dem Rechner der Nutzenden gespeichert und von diesem
                                 an unsere Seite übermittelt.
                                 <br><br>
-                                Daher haben Sie als Nutzerin/ Nutzer auch die volle Kontrolle
+                                Daher haben Sie als Nutzender auch die volle Kontrolle
                                 über die Verwendung von Cookies.
                                 <br>
                                 Durch eine Änderung der Einstellung in Ihrem Internetbrowser
@@ -754,7 +750,7 @@ echo create_header('Datenschutz');
                                 <strong> Beschreibung und Umfang der Datenverarbeitung</strong>
                                 <br><br>
                                 Auf unserer Internetseite sind für verschiedene Verarbeitung Formulare enthalten.
-                                Nimmt eine Nutzerin/ Nutzer diese Möglichkeit wahr, so werden über die in den
+                                Nimmt ein Nutzender diese Möglichkeit wahr, so werden über die in den
                                 Abschnitten
                                 III.(und ggfs. IV.) genannten Daten hinaus personenbezogene Daten verarbeitet.
                                 <br><br>
@@ -776,8 +772,7 @@ echo create_header('Datenschutz');
                                 <br><br>
                                 Alternativ zur Speicherung ist ein Versand über die bereitgestellte E-Mail-Adresse
                                 möglich. In
-                                diesem Fall werden die mit der E-Mail übermittelten personenbezogen Daten der Nutzerin/
-                                des Nutzers gespeichert.
+                                diesem Fall werden die mit der E-Mail übermittelten personenbezogen Daten der Nutzenden gespeichert.
                                 <br><br>
                                 -------------------------------------------------------------------------------
                                 <br>
@@ -789,12 +784,12 @@ echo create_header('Datenschutz');
                                 Verarbeitung erforderlich machen.
                                 <br><br>
                                 <strong>Sollten Änderungen eine Mitwirkungshandlung (Einwilligung)
-                                    Ihrerseits oder individuelle Benachrichtigung erforderlich wird, informieren wir sie
+                                    Ihrerseits oder individuelle Benachrichtigung erfordern, informieren wir Sie
                                     schnellstmöglich.
                                 </strong>
                                 <br><br>
                                 In unserer Datenschutzerklärung haben wir Adressen und Kontaktinformationen
-                                hinterlegt, bitte beachten sie das die sich von Zeit zur Zeit ändern können und prüfen
+                                hinterlegt, bitte beachten Sie, dass die sich von Zeit zu Zeit ändern können und prüfen
                                 Sie die Angaben vor Kontaktaufnahmen.
                                 <br>
                             </div>

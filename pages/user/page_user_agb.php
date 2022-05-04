@@ -6,13 +6,14 @@ echo create_header('Informationen zur Reservierung');
         <div class="content-wrapper">
             <div>
                 <h3>Mietsachen</h3>
-                <p>Vermietet werden Kajaks, mit einem Mietvertrag festgehalten Ausrüstungsgegenstände.
+                <br>
+                <p>Im Mietvertrag sind sämtliche Ausrüstungsgegenstände festgehalten, die bei einer Kajakausleihe mit eingeschlossen sind.
                     Diese werden für einen sicheren Betrieb der Kajaks benötigt.
-                    Der Mieter verpflichtet sich, die Mietgegenstände mit Sorgfalt zu behandeln. Schäden und
-                    Verschmutzungen werden auf Kosten des Mieters entfernt. Zum festgelegten Abhol-/Rückholtermin
-                    hat der Mieter die Mietgegenstände vollständig und persönlich dem Vermieter zurückzugeben.
-                    Fehlende
-                    oder kaputte Gegenstände werden zum Wiederbeschaffungswert berechnet.
+                    <br><br>
+                    Die mietende Person verpflichtet sich, die Mietgegenstände mit Sorgfalt zu behandeln. Schäden und
+                    Verschmutzungen werden auf Kosten des Mietenden entfernt. Zum festgelegten Abhol-/Rückholtermin
+                    hat der Mietende die Mietgegenstände vollständig und persönlich dem Vermietenden zurückzugeben.
+                    Fehlende oder kaputte Gegenstände werden zum Wiederbeschaffungswert berechnet.
                 </p>
             </div>
         </div>
@@ -27,15 +28,15 @@ echo create_header('Informationen zur Reservierung');
         <div class="col content">
             <div class="content-wrapper">
                 <h4>Sicherheit</h4>
-                <p><strong>Jeder in einem Kajak Fahrende muss schwimmen können und eine Schwimmweste
+                <p><strong>Jede Person in einem Kajak muss schwimmen können und eine Schwimmweste
                         tragen.</strong>
                 </p>
                 <p>
-                    Aus Sicherheitsgründen dürfen Kinder mit uns nur <strong>ab dem 12. Lebensjahr</strong>
+                    Aus Sicherheitsgründen dürfen Kinder nur <strong>ab dem 12. Lebensjahr</strong>
                     an Kajakfahrten teilnehmen.
-                    Die erwachsenen Aufsichtspersonen tragen die volle Verantwortung.
-                    Eigene Westen sind unerwünscht. Aufblasbare Schwimmhilfen sind nicht erlaubt.
-                    Bei Missachtung dieser Vorsichtsmaßnahmen sind wir berechtigt, die Tour sofort abzubrechen.
+                    Die erwachsene Aufsichtsperson trägt die volle Verantwortung.
+                    Eigene Westen und aufblasbare Schwimmhilfen sind nicht erlaubt und ersetzen nicht die Rettungsweste.
+                    Bei Missachtung dieser Vorsichtsmaßnahmen sind wir berechtigt, die Ausleihe sofort abzubrechen.
                 </p>
             </div>
         </div>
@@ -44,26 +45,29 @@ echo create_header('Informationen zur Reservierung');
         <div class="col content">
             <div class="content-wrapper">
                 <h4>Höhere Gewalt</h4>
+                <br>
                 <p>
                     <strong>Der AStA der HTWG</strong> ist bei einer Gesundheit gefährdenden Situation aufgrund der
                     Wetterlage
                     (Sturm, Unwetter, Überschwemmungen, extremes Niedrigwasser oder starker Nebel) berechtigt,
-                    <strong>Touren
-                        abzusagen.</strong>
+                    <strong>eine Kajakbuchung kurzfristig abzusagen.</strong>
                 </p>
                 <p>
                     In diesem Falle hat der Mieter <strong>keinen Anspruch</strong> auf Kostenerstattung von
                     Nebenkosten
                     (Anreise, Hotelübernachtung etc.).
-                    Dieses gilt auch für den Fall, dass die Tour aufgrund niedriger Wasserstände nicht stattfindet
+                    Dies gilt auch für den Fall, dass die Tour aufgrund niedriger Wasserstände nicht stattfindet
                     oder
                     auf ein anderes Gewässer verlegt werden muss.
+                    <br><br>
+                    <strong>Buchungskosten für die Kajaks müssen in diesem Fall nicht gezahlt werden.</strong>
                 </p>
             </div>
         </div>
         <div class="col content">
             <div class="content-wrapper">
                 <h4>Sorgfaltspflicht</h4>
+                <br>
                 <p>
                     <strong>Fahrverbote und private Gebote in Bereichen nicht öffentlicher Grundstücke sind
                         einzuhalten.</strong>
@@ -77,9 +81,9 @@ echo create_header('Informationen zur Reservierung');
                     öffentlich aufgestellten Mülleimern zu entsorgen oder dem Hausmüll zuzuführen.
                     Sämtliche Rastplätze sind absolut sauber zu hinterlassen.
                     Bei Missachtung der Natur, grobem Fehlverhalten – auch durch Alkoholmissbrauch -, Lärm,
-                    Materialmissbrauch und unzulässiger Müllentsorgung kann der Vermieter den sofortigen Abbruch der
+                    Materialmissbrauch und unzulässiger Müllentsorgung kann der Vermietende den sofortigen Abbruch der
                     Tour fordern.
-                    Sämtliche Kosten und Folgekosten sind vom Auftragsgeber zu zahlen.
+                    Sämtliche Kosten und Folgekosten sind vom Mietenden zu zahlen.
                 </p>
             </div>
         </div>

@@ -301,10 +301,10 @@ echo create_header('Dashboard');
                                     <?php echo $kajak->name ?>:
                                     <ul>
                                         <li>
-                                            Sitze: <?php echo $kajak->seats ?>
+                                            Typ: <?php echo $kajak->kind ?>
                                         </li>
                                         <li>
-                                            Anzahl: <?php echo $kajak->amount ?>
+                                            Sitze: <?php echo $kajak->seats ?>
                                         </li>
                                     </ul>
                                 </li>
