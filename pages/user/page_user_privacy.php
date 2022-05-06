@@ -37,35 +37,42 @@ echo create_header('Datenschutz');
                                 ------------------------------------------------------------------
 
                                 <li><h4 id="verantwortliche"><strong>Verantwortliche</strong></h4></li>
-                                <br>
-                                <p><strong>Verantwortlich im Sinne der Datenschutz-Grundverordnung und anderen
-                                        nationaler Datenschutzgesetze der Mitgliedsstaaten sowie sonstiger datenschutzrechtlicher
-                                        Bestimmung ist die:
+                                <div>
+                                    <p>
+                                        <strong>Verantwortlich im Sinne der Datenschutz-Grundverordnung und anderen
+                                            nationaler Datenschutzgesetze der Mitgliedsstaaten sowie sonstiger
+                                            datenschutzrechtlicher Bestimmung ist die:</strong>
+                                        <br/><br/>
 
-                                        <br><br>
-                                        Hochschule Konstanz<br>
-                                        Vertreten durch die Präsidentin<br>
-                                        Prof. Dr. Sabine Rein<br>
-                                        Alfred-Wachtel-Str. 8<br>
-                                        78462 Konstanz<br>
-                                        Deutschland<br>
-                                        Tel.: 07531 206 0<br>
-                                        E-Mail: kontakt@htwg-konstanz.de<br>
-                                        Website: www.htwg-konstanz.de<br>
-                                        <br><br>
-                                        Der Datenschutzbeauftragte des Verantwortlichen ist:<br>
-                                        <br>
-                                        Vasilij Slabinski<br>
-                                        Hochschule Konstanz<br>
-                                        Alfred-Wachtel-Str. 8<br>
-                                        78462 Konstanz<br>
-                                        Deutschland<br>
-                                        Tel.: 07531 206…<br>
-                                        E-Mail: kajak-datenschutz@htwg-konstanz.de TTTToooo DOOOOO<br>
-                                        <br></strong><br>
-
-                                    -------------------------------------------------------------------------------
-                                </p>
+                                        <i>Hochschule Konstanz<br/>
+                                            Vertreten durch die Präsidentin<br/>
+                                            Prof. Dr. Sabine Rein<br/>
+                                            Alfred-Wachtel-Str. 8<br/>
+                                            78462 Konstanz<br/>
+                                            Deutschland<br/>
+                                            Tel.: 07531 206-0<br/>
+                                            E-Mail: <a
+                                                    href="mailto:kontakt@htwg-konstanz.de">kontakt@htwg-konstanz.de</a><br/>
+                                            Website: <a
+                                                    href="https://www.htwg-konstanz.de">www.htwg-konstanz.de</a><br/>
+                                        </i>
+                                    </p>
+                                    <p>
+                                        <br/>
+                                        <strong>Der Datenschutzbeauftragte des Verantwortlichen ist:</strong>
+                                        <br/><br/>
+                                        <i>
+                                            Vasilij Slabinski<br/>
+                                            Hochschule Konstanz<br/>
+                                            Alfred-Wachtel-Str. 8<br/>
+                                            78462 Konstanz<br/>
+                                            Deutschland<br/>
+                                            Tel.: 07531 206-431<br/>
+                                            E-Mail: <a href="mailto:asta-kajak-datenschutz@htwg-konstanz.de">asta-kajak-datenschutz@htwg-konstanz.de</a><br/>
+                                            Website: <a href="https://www.htwg-konstanz.de/asta">www.htwg-konstanz.de/asta</a><br/>
+                                        </i>
+                                    </p>
+                                </div>
 
                                 <li><h4 id="datenerfassung"><strong>Datenerfassung der Webseite</strong></h4></li>
                                 <br>
@@ -149,7 +156,8 @@ echo create_header('Datenschutz');
 
                                 <br><br>
                                 Wir verarbeiten die Daten unserer Kundenschaft, welche eine erfolgreiche Reservierung
-                                abgeschlossen hat, im Rahmen von vertraglichen und vergleichbaren Rechtsverhältnissen sowie damit
+                                abgeschlossen hat, im Rahmen von vertraglichen und vergleichbaren Rechtsverhältnissen
+                                sowie damit
                                 verbundenen Maßnahmen und im Rahmen der Kommunikation mit den Kunden (oder
                                 vorvertraglich/ ohne Reservierung) um Anfragen zu beantworten.
                                 <br><br>
@@ -162,12 +170,14 @@ echo create_header('Datenschutz');
                                 Pflichten, sofern es erforderlich ist.
 
                                 <br><br>
-                                Welche Daten für die vorgenannten Zwecke erforderlich sind, teilen wir den Kunden/innen im
+                                Welche Daten für die vorgenannten Zwecke erforderlich sind, teilen wir den Kunden/innen
+                                im
                                 Rahmen der Datenerhebung in Onlineformularen mit.
 
                                 <br><br>
                                 <strong>
-                                    Wir löschen die Daten nach Ablauf der gesetzlichen Pflichten, (grundsätzlich 4 Jahre).
+                                    Wir löschen die Daten nach Ablauf der gesetzlichen Pflichten, (grundsätzlich 4
+                                    Jahre).
                                     Daten die im Rahmen einer Buchung offengelegt wurden, werden nach 120 Tagen
                                     gelöscht, nach
                                     Beendigung des Auftrags.
@@ -196,8 +206,10 @@ echo create_header('Datenschutz');
                                 ----------------------------------------------------------------------------------------------
                                 <li><h4 id="löschung"><strong>Löschung von Daten</strong></h4></li>
                                 <br>
-                                Die von uns verarbeiteten Daten werden nach Maßgaben der gesetzlichen Vorgabe gelöscht, ab dem
-                                Moment wo die Einwilligung der Verarbeitung widerrufen wird oder sonstige Erlaubnisse entfallen.
+                                Die von uns verarbeiteten Daten werden nach Maßgaben der gesetzlichen Vorgabe gelöscht,
+                                ab dem
+                                Moment wo die Einwilligung der Verarbeitung widerrufen wird oder sonstige Erlaubnisse
+                                entfallen.
                                 Daten, welche nicht gelöscht werden, die für andere oder gesetzliche zulässige Zwecke
                                 erforderlich sind, werden für die Verarbeitung auf diese Zwecke beschränkt. Die Daten
                                 werden gesperrt und nicht für andere Zwecke verarbeitet.
@@ -209,7 +221,8 @@ echo create_header('Datenschutz');
                                 Verteidigung von Rechtsansprüchen oder zum Schutz der Rechte einer anderen natürlichen
                                 oder juristischen Person erforderlich ist.<br><br>
 
-                                Es können weitere Angaben zu der Aufbewahrung und Löschung von Daten beinhaltet sein, die für
+                                Es können weitere Angaben zu der Aufbewahrung und Löschung von Daten beinhaltet sein,
+                                die für
                                 die jeweiligen Verarbeitungen vorrangig gelten.
                                 <br><br>
 
@@ -686,15 +699,17 @@ echo create_header('Datenschutz');
 
                                 <strong> Dauer der Speicherung</strong><br><br>
                                 Gespeicherte Daten in Logfiles werden nach spätestens sieben Tagen gelöscht. Eine
-                                darüberhinausgehende Speicherung ist möglich. In diesem Fall werden die IP-Adressen des Nutzenden
-                                gelöscht oder verfremdet, sodass eine Zuordnung des aufrufenden Clients nicht mehr möglich ist.
+                                darüberhinausgehende Speicherung ist möglich. In diesem Fall werden die IP-Adressen des
+                                Nutzenden
+                                gelöscht oder verfremdet, sodass eine Zuordnung des aufrufenden Clients nicht mehr
+                                möglich ist.
                                 <br><br>
                                 ------------------------------------------------------------------------------------------------------
 
                                 <li><h4 id="cookies"><strong>Verwendung von Cookies</strong></h4></li>
                                 <br>
-                               <strong> Beschreibung und Umfang der Datenverarbeitung</strong>
-                                   <br><br>
+                                <strong> Beschreibung und Umfang der Datenverarbeitung</strong>
+                                <br><br>
                                 Unsere Webseite verwendet Cookies.<br> Bei Cookies handelt es sich um Textdateien, die
                                 im Internetbrowser bzw. vom Internetbrowser auf dem Computersystem des Nutzenden
                                 gespeichert werden.
@@ -772,7 +787,8 @@ echo create_header('Datenschutz');
                                 <br><br>
                                 Alternativ zur Speicherung ist ein Versand über die bereitgestellte E-Mail-Adresse
                                 möglich. In
-                                diesem Fall werden die mit der E-Mail übermittelten personenbezogen Daten der Nutzenden gespeichert.
+                                diesem Fall werden die mit der E-Mail übermittelten personenbezogen Daten der Nutzenden
+                                gespeichert.
                                 <br><br>
                                 -------------------------------------------------------------------------------
                                 <br>
