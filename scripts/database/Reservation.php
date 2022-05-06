@@ -272,11 +272,13 @@ function reservate_kajak(?mysqli $conn, array $fields, bool $send_email = FALSE)
 
     global $config;
     $config_timeslots = $config->getTimeslots();
+    var_dump($config_timeslots);
     $min_time_index = $raw_timeslots[0];
     $max_time_index = end($raw_timeslots);
     $min_time = $config_timeslots[$min_time_index][0];
     $max_time = $config_timeslots[$max_time_index][1];
     $timeslots = array($min_time, $max_time);
+    var_dump($max_time);
 
     /* get all kajak kinds */
     $kajak_kinds = get_kajak_kinds($conn);
@@ -327,8 +329,7 @@ function reservate_kajak(?mysqli $conn, array $fields, bool $send_email = FALSE)
     }, $reserved_kajaks);
 
     /* calculate price */
-    global $config;
-    $price = $config->calculatePrice(array_map(static function () {
+    $price = calculatePrice($conn, array_map(static function () {
         return true;
     }, $raw_timeslots), $amount_kajaks);
 
