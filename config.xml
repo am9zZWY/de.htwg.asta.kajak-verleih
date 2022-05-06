@@ -16,27 +16,21 @@
     <!-- PRICES -->
     <prices>
         <price name="single">
-            <prop name="description">Ein Zeitslot (pro Kajak)</prop>
+            <prop name="description">Ein Zeitslot (pro Person)</prop>
             <prop name="value">5</prop>
-            <prop name="dependOn">timeslot</prop>
-            <prop name="amountTimeslots">1</prop>
+            <prop name="dependOn" amount="1">timeslot</prop>
+            <prop name="dependOn" amount="per">seat</prop>
         </price>
-        <!-- <price name="double">
-            <prop name="description">Zwei Zeitslots (pro Kajak)</prop>
-            <prop name="value">7</prop>
-            <prop name="dependOn">timeslot</prop>
-            <prop name="amountTimeslots">2</prop>
-        </price> -->
         <price name="complete">
-            <prop name="description">Alle Zeitslots (pro Kajak)</prop>
+            <prop name="description">Alle Zeitslots (pro Person)</prop>
             <prop name="value">8</prop>
-            <prop name="dependOn">timeslot</prop>
-            <prop name="amountTimeslots">all</prop>
+            <prop name="dependOn" amount="all">timeslot</prop>
+            <prop name="dependOn" amount="per">seat</prop>
         </price>
         <price name="kaution">
             <prop name="description">Kaution (pro Person)</prop>
             <prop name="value">50</prop>
-            <prop name="dependOn">seat</prop>
+            <prop name="dependOn" amount="per">seat</prop>
         </price>
     </prices>
     <!-- TIMESLOTS -->
