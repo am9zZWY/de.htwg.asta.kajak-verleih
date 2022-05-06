@@ -389,7 +389,7 @@ echo create_header('Dashboard');
                             foreach ($config->getPrices() as $price) {
                                 ?>
                                 <li>
-                                    <?php echo $price->description ?>: <?php echo $price->value ?>
+                                    <?php echo $price["description"] ?>: <?php echo $price["value"] ?>
                                 </li>
                                 <?php
                             }
@@ -427,7 +427,7 @@ echo create_header('Dashboard');
                             foreach ($config->getTimeslots() as $timeslot) {
                                 ?>
                                 <li>
-                                    <?php echo $timeslot->name ?>: <?php echo $config->formatTimeslot($timeslot) ?>
+                                    <?php echo $timeslot["name"] ?>: <?php echo $config->formatTimeslot($timeslot) ?>
                                 </li>
                             <?php } ?>
                         </ul>
@@ -439,7 +439,7 @@ echo create_header('Dashboard');
                         <ul>
                             <li>
                                 <?php $days = $config->getDays(); ?>
-                                Reservierungszeitraum: <?php echo $days->min_days . ' - ' . $days->max_days ?> Tage
+                                Reservierungszeitraum: <?php echo $days["min_days"] . ' - ' . $days["max_days"] ?> Tage
                             </li>
                         </ul>
                     </li>

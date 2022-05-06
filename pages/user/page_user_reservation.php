@@ -221,7 +221,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                         <p>
                                             <?php
                                             foreach ($config->getPrices() as $price) {
-                                                echo $price->description . ": <strong>" . $price->value . "€</strong>";
+                                                echo $price["description"] . ": <strong>" . $price["value"] . "€</strong>";
                                                 ?>
                                                 <br>
                                                 <?php
