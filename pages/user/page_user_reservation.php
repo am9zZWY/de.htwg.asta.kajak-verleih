@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                     <h3 class="content-header">Was bieten wir an?</h3>
                     <p>
                         Wir bieten für die HTWG Konstanz und für die Universität Konstanz die Möglichkeit, Kajaks zu
-                        reservieren.
+                        reservieren.<br/>
                         Bitte fülle das Formular aus, damit wir überprüfen können, ob zu deinem gewünschten
                         Zeitslot und Datum Kajaks frei sind.
                     </p>
@@ -97,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                 </div>
                             </div>
 
-                            <div class="col-sm-6">
+                            <!-- <div class="col-sm-6">
                                 <div class="mb-3 form-floating">
                                     <input name="phone" type="tel" placeholder="+49 (0) 123 456789"
                                            value="<?php echo get_post_field('phone') ?>"
@@ -108,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                         Telefonnummer nicht gerade !
                                     </label>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
 
                         <div class="row my-2">
@@ -268,9 +268,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                         <input type="checkbox" name="terms" value="1"
                                                required <?php echo get_post_field('terms') === '1' ? 'checked' : '' ?>
                                                class="form-check-input">
-                                        Ich habe die <a href="/about" target="_blank">! link schön deutlich machen!Nutzungsbedingungen</a> gelesen
-                                        und
-                                        akzeptiere sie.
+                                        Ich habe die <a href="/about" class="text-danger" target="_blank"><strong>Nutzungsbedingungen</strong></a>
+                                        gelesen
+                                        und akzeptiere sie.
                                     </label>
                                 </div>
                             </div>
