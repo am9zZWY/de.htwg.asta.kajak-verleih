@@ -8,15 +8,21 @@ use Dotenv\Dotenv;
 $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->safeLoad();
 
-/* initialize scripts */
+/* initialize config */
 require __DIR__ . '/scripts/Config.php';
 $config = new Config();
+/* general / important scripts */
 require __DIR__ . '/scripts/General.php';
+require __DIR__ . '/scripts/Errors.php';
+/* reservation */
+require __DIR__ . '/scripts/database/Blacklist.php';
+require __DIR__ . '/scripts/database/General.php';
+require __DIR__ . '/scripts/database/Kajak.php';
+require __DIR__ . '/scripts/database/Reservation.php';
+/* miscellaneous scripts */
 require __DIR__ . '/scripts/Login.php';
-require __DIR__ . '/scripts/Database.php';
 require __DIR__ . '/scripts/Templates.php';
 require __DIR__ . '/scripts/Email.php';
-require __DIR__ . '/scripts/Errors.php';
 
 /* if session is not set start it */
 session_start();
