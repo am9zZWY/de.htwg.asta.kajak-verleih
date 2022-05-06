@@ -13,13 +13,14 @@ $reservation_id = clean_string($params['id'] ?? '');
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-5 content mx-auto">
-            <div class="kajak-form">
+            <div class="custom-form">
                 <form method="post" class="needs-validation">
                     <div class="col-sm">
                         <div class="mb-3 form-floating">
                             <input name="id" type="text" placeholder="12345"
                                    id="id"
                                    class="form-control"
+                                   readonly
                                    value="<?php echo $reservation_id; ?>"
                                    required>
                             <label for="id">

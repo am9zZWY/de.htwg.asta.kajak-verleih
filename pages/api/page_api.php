@@ -1,14 +1,17 @@
 <?php
 global $config, $URL;
 
+$conn = connect_to_database();
+
 $PARSED_URL = parse_url($URL, PHP_URL_QUERY);
 if ($PARSED_URL !== NULL) {
     parse_str($PARSED_URL, $params);
 }
 
 /* calculate prices and return value */
-if (isset($params['amount_timeslots'], $params['amount_kajaks'], $params['price'])) {
-    $amount_timeslots = (int)clean_string($params['amount_timeslots']);
-    $amount_kajaks = (int)clean_string($params['amount_kajaks']);
-    echo $config->calculatePrice($amount_timeslots, $amount_kajaks);
+if (isset($params['price'], $params['payload_price'])) {
+    $decoded_payload = json_decode(base64_decode(clean_string($params['payload_price']), $strict = false), true);
+    $timeslots = $decoded_payload['timeslots'];
+    $amount_kajaks_per_kind = $decoded_payload['amount_kajaks'];
+    echo calculatePrice($conn, $timeslots, $amount_kajaks_per_kind);
 }

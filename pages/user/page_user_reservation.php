@@ -35,7 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         <div>
                             <h4><?php echo $kajak->name ?></h4><br>
                             Das <?php echo $kajak->name ?>
-                            hat <?php echo $kajak->seats . ((int)$kajak->seats === 1 ? ' Sitz' : ' Sitze') ?>. Derzeit ist dieses Modell x mal verfügbar                 <?php echo((int)$kajak->seats === 1 ? ' ist' : ' sind') ?>
+                            hat <?php echo $kajak->seats . ((int)$kajak->seats === 1 ? ' Sitz' : ' Sitze') ?>. Insgesamt
+                            <?php echo((int)$kajak->amount === 1 ? ' ist' : ' sind') ?>
                             derzeit <?php echo $kajak->amount ?? 0 ?> Stück dieses Modells verfügbar.<br>
                             <img alt="Bild von <?php echo $kajak->name ?>" src="<?php echo $kajak->img ?>"
                                  class="img-fluid" style="width: 300px; height: 200px;"/>
@@ -49,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
         <div class="col-lg-6 mx-auto">
             <div class="row content">
-                <div class="kajak-form">
+                <div class="custom-form">
                     <form action="/" method="post" class="needs-validation">
                         <input type="hidden"
                                name="<?php echo $_SESSION['token_field'] ?? '' ?>"
@@ -153,11 +154,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
                             <div class="col-sm-6">
                                 <div class="form-group form-floating">
+                                    <?php
+                                    $countries = array('Deutschland', 'Schweiz', 'Österreich');
+                                    $selected_country = get_post_field('country')
+                                    ?>
                                     <select name="country" class="form-select" id="country" autocomplete="on"
                                             required>
-                                        <option>Deutschland</option>
-                                        <option>Schweiz</option>
-                                        <option>Österreich</option>
+                                        <?php
+                                        foreach ($countries as $country) {
+                                            ?>
+                                            <option <?php echo $country === $selected_country ? 'selected' : '' ?>><?php echo $country ?></option>
+                                            <?php
+                                        }
+                                        ?>
                                     </select>
                                     <label for="country">
                                         Land
@@ -174,13 +183,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                     <?php
                                     /* is put here for better debug, better NOT move it further down */
                                     $days = $config->getFormattedDays();
+                                    $selected_date = get_post_field('date');
                                     ?>
                                     <select name="date" class="form-select" id="date" autocomplete="on"
                                             required>
                                         <?php
                                         foreach ($days as $day) {
                                             ?>
-                                            <option value="<?php echo $day[1] ?>">
+                                            <option value="<?php echo $day[1] ?>" <?php echo $day[1] === $selected_date ? 'selected' : '' ?>>
                                                 <?php echo $day[0] ?>
                                             </option>
                                         <?php } ?>
@@ -196,10 +206,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                     <span class="form-label">Zeitslots</span><br>
                                     <!-- select time slots -->
                                     <?php
+                                    $selected_timeslots = get_post_fields('timeslots');
                                     foreach ($config->getFormattedTimeslots() as $index => $timeslot) { ?>
                                         <span class="form-check-label">
                                                 <input type="checkbox" name="timeslots[]"
                                                        value="<?php echo $index ?>"
+                                                       <?php echo in_array((string)($index), $selected_timeslots, true) ? 'checked' : '' ?>
                                                        class="form-check-input timeslot">
                                                 <?php echo $timeslot ?>
                                             </span>
@@ -209,7 +221,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                         <p>
                                             <?php
                                             foreach ($config->getPrices() as $price) {
-                                                echo $price->description . ": <strong>" . $price->value . "€</strong>";
+                                                echo $price["description"] . ": <strong>" . $price["value"] . "€</strong>";
                                                 ?>
                                                 <br>
                                                 <?php
@@ -278,9 +290,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         const calculated_price_element = document.getElementById('calculated-price');
                         const calculate_price = () => {
                             /* get necessary fields and information */
-                            const kajaks = Array.from(document.getElementsByClassName('amount-kajak'));
-                            const amount_kajaks = Array.from(kajaks).reduce((sum, amount) => parseInt(amount.value) + sum, 0);
-                            const amount_timeslots = Array.from(document.getElementsByClassName('timeslot')).filter(timeslot => timeslot.checked).length;
+                            const amount_kajaks_by_kind = Array.from(document.getElementsByClassName('amount-kajak')).reduce((carry, kajak) => ([
+                                ...carry,
+                                {
+                                    kind: kajak.name,
+                                    amount: parseInt(kajak.value)
+                                }
+                            ]), []);
+                            const timeslots = Array.from(document.getElementsByClassName('timeslot')).map(timeslot => timeslot.checked);
+                            /* encode everything :) */
+                            const encoded = btoa(JSON.stringify({
+                                amount_kajaks: amount_kajaks_by_kind,
+                                timeslots
+                            }))
 
                             const xmlhttp = new XMLHttpRequest();
                             xmlhttp.onreadystatechange = function () {
@@ -289,7 +311,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                 }
                             };
                             /* send request to own api to calculate price */
-                            xmlhttp.open("GET", "/api?price&amount_kajaks=" + amount_kajaks + "&amount_timeslots=" + amount_timeslots, true);
+                            xmlhttp.open("GET", "/api?price&payload_price=" + encoded, true);
                             xmlhttp.send();
                         }
 
@@ -315,12 +337,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                     $ret_val = reservate_kajak($connection, $_POST, TRUE);
                     ?>
                         <h3>
-                            <?php echo $ret_val->getMessage(); ?>
+                            <?php echo $ret_val->statusMessage; ?>
                         </h3>
                     <?php
-                    if ($ret_val->isSuccess()) {
+                    if ($ret_val->status) {
                     ?>
-
                         <script>
                             setTimeout(() => {
                                 window.location = '/';

@@ -2,18 +2,10 @@
 /** @noinspection ForgottenDebugOutputInspection */
 
 global $config;
-/* kajaks for each kajak type */
-$config_timeslots = $config->getTimeslots(TRUE);
 
 class ReturnValue
 {
-    /**
-     * @var bool
-     */
     public $status;
-    /**
-     * @var string
-     */
     public $statusMessage;
 
     public function __construct($status, $statusMessage)
@@ -22,24 +14,14 @@ class ReturnValue
         $this->statusMessage = $statusMessage;
     }
 
-    public static function error($statusMessage = 'Aktion fehlgeschlagen'): ReturnValue
+    public static function error($statusMessage): ReturnValue
     {
         return new ReturnValue(FALSE, $statusMessage);
     }
 
-    public static function success($statusMessage = 'Aktion erfolgreich'): ReturnValue
+    public static function success($statusMessage): ReturnValue
     {
         return new ReturnValue(TRUE, $statusMessage);
-    }
-
-    public function isSuccess(): bool
-    {
-        return $this->status;
-    }
-
-    public function getMessage(): string
-    {
-        return $this->statusMessage;
     }
 }
 
@@ -230,7 +212,7 @@ CREATE TABLE IF NOT EXISTS kajak_reservation
  */
 function add_kajak(?mysqli $conn, string $name, string $kind, int $seats): void
 {
-    global $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY, $ERROR_TYPE_NOT_IN_CONFIG, $ERROR_EXECUTION, $config;
+    global $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY, $ERROR_TYPE_NOT_IN_CONFIG, $ERROR_TOO_MANY_SEATS, $ERROR_EXECUTION, $config;
 
     if ($conn === null) {
         error_log($ERROR_DATABASE_CONNECTION);
@@ -241,6 +223,13 @@ function add_kajak(?mysqli $conn, string $name, string $kind, int $seats): void
     $kinds = $config->getKajakKinds();
     if (!in_array($kind, $kinds, TRUE)) {
         error_log($ERROR_TYPE_NOT_IN_CONFIG);
+        return;
+    }
+
+    /* get seats per kajak and check if number does not exceed config. It can be less if one seat is e.g. damaged */
+    $seats_per_kajak = $config->getSeatsPerKajak();
+    if ($seats_per_kajak[$kind] < $seats) {
+        error_log($ERROR_TOO_MANY_SEATS);
         return;
     }
 
@@ -267,9 +256,21 @@ function add_kajak(?mysqli $conn, string $name, string $kind, int $seats): void
     }
 }
 
+/**
+ * Update kajak in the database.
+ *
+ * @param mysqli|null $conn
+ * @param string $old_name
+ * @param string $name
+ * @param string $kind
+ * @param int $seats
+ * @param int $available
+ * @param string $comment
+ * @return void
+ */
 function update_kajak(?mysqli $conn, string $old_name, string $name, string $kind, int $seats, int $available, string $comment): void
 {
-    global $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY, $ERROR_TYPE_NOT_IN_CONFIG, $ERROR_EXECUTION, $config;
+    global $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY, $ERROR_TYPE_NOT_IN_CONFIG, $ERROR_TOO_MANY_SEATS, $ERROR_EXECUTION, $config;
 
     if ($conn === null) {
         error_log($ERROR_DATABASE_CONNECTION);
@@ -280,6 +281,13 @@ function update_kajak(?mysqli $conn, string $old_name, string $name, string $kin
     $kinds = $config->getKajakKinds();
     if (!in_array($kind, $kinds, TRUE)) {
         error_log($ERROR_TYPE_NOT_IN_CONFIG);
+        return;
+    }
+
+    /* get seats per kajak and check if number does not exceed config. It can be less if one seat is e.g. damaged */
+    $seats_per_kajak = $config->getSeatsPerKajak();
+    if ($seats_per_kajak[$kind] < $seats) {
+        error_log($ERROR_TOO_MANY_SEATS);
         return;
     }
 
@@ -346,7 +354,6 @@ function remove_kajak(?mysqli $conn, string $kajak_name): void
 function get_kajaks(?mysqli $conn, bool $exclude_not_available = FALSE): array
 {
     global $ERROR_DATABASE_CONNECTION;
-
     if ($conn === null) {
         error_log($ERROR_DATABASE_CONNECTION);
         return [];
@@ -379,7 +386,6 @@ function get_kajaks(?mysqli $conn, bool $exclude_not_available = FALSE): array
 function get_kajak_with_real_amount(?mysqli $conn): array
 {
     global $ERROR_DATABASE_CONNECTION;
-
     if ($conn === null) {
         error_log($ERROR_DATABASE_CONNECTION);
         return [];
@@ -404,6 +410,12 @@ function get_kajak_with_real_amount(?mysqli $conn): array
  */
 function get_kajak_amounts(?mysqli $conn): array
 {
+    global $ERROR_DATABASE_CONNECTION;
+    if ($conn === null) {
+        error_log($ERROR_DATABASE_CONNECTION);
+        return [];
+    }
+
     return array_reduce(get_kajaks($conn, TRUE), static function ($carry, $kajak) {
         $kajak_kind = $kajak['kind'];
         if (isset($carry[$kajak_kind])) {
@@ -423,6 +435,12 @@ function get_kajak_amounts(?mysqli $conn): array
  */
 function get_kajak_kinds(?mysqli $conn): array
 {
+    global $ERROR_DATABASE_CONNECTION;
+    if ($conn === null) {
+        error_log($ERROR_DATABASE_CONNECTION);
+        return [];
+    }
+
     return array_values(array_unique(array_map(static function ($kajak) {
         return $kajak['kind'];
     }, get_kajaks($conn))));
@@ -437,20 +455,18 @@ function get_kajak_kinds(?mysqli $conn): array
 function get_reservations(?mysqli $conn): array
 {
     global $ERROR_DATABASE_CONNECTION;
-
     if ($conn === null) {
         error_log($ERROR_DATABASE_CONNECTION);
         return [];
     }
 
     try {
-        $sql = $conn->prepare("SELECT * FROM reservations WHERE reservation_date >=current_Date() ORDER BY Date;");
+        $sql = $conn->prepare("SELECT * FROM reservations WHERE reservation_date >=CURRENT_DATE() ORDER BY Date;");
         $result_execute = $sql->execute();
         if ($result_execute === FALSE) {
             return [];
         }
     } catch (Exception $e) {
-        /** @noinspection ForgottenDebugOutputInspection */
         error_log($e);
         return [];
     }
@@ -468,7 +484,6 @@ function get_reservations(?mysqli $conn): array
 function get_reserved_kajaks_by_id(?mysqli $conn): array
 {
     global $ERROR_DATABASE_CONNECTION;
-
     if ($conn === null) {
         error_log($ERROR_DATABASE_CONNECTION);
         return [];
@@ -515,7 +530,6 @@ function get_reserved_kajaks_by_id(?mysqli $conn): array
 function drop_all_tables(?mysqli $conn): void
 {
     global $ERROR_DATABASE_CONNECTION;
-
     if ($conn === null) {
         error_log($ERROR_DATABASE_CONNECTION);
         return;
@@ -529,16 +543,120 @@ function drop_all_tables(?mysqli $conn): void
 }
 
 /**
+ * Calculate price.
+ *
+ * @param mysqli|null $conn
+ * @param $timeslots
+ * @param $amount_kajaks_per_kind
+ * @return int
+ */
+function calculatePrice(?mysqli $conn, $timeslots, $amount_kajaks_per_kind): int
+{
+    global $config, $ERROR_DATABASE_CONNECTION;
+    if ($conn === null) {
+        error_log($ERROR_DATABASE_CONNECTION);
+        return 0;
+    }
+
+    /* get all kajaks */
+    $amount_kajaks = array_reduce($amount_kajaks_per_kind, static function ($carry, $kajak) {
+        return $carry + $kajak['amount'];
+    }, 0);
+
+    /* get amount timeslots */
+    $amount_timeslots = count(array_filter($timeslots, static function ($timeslot) {
+        return $timeslot;
+    }));
+
+    $seats_per_kajak = $config->getSeatsPerKajak();
+    $amount_seats = array_reduce($amount_kajaks_per_kind, static function ($carry, $kajak) use ($seats_per_kajak) {
+        return $carry + ($seats_per_kajak[$kajak['kind']] * (int)$kajak['amount']);
+    }, 0);
+
+    /* max values when "all" is passed */
+    $max_timeslots = count($config->getTimeslots());
+    $kajaks = get_kajaks($conn, TRUE);
+    $max_kajaks = count($kajaks);
+    $max_seats = array_reduce($kajaks, static function ($carry, $kajak) use ($seats_per_kajak) {
+        return $carry + $seats_per_kajak[$kajak['kind']];
+    }, 0);
+
+    /* prepare prices */
+    $prices = $config->getPrices();
+    $calculated_price = 0;
+    foreach ($prices as $price) {
+        $price_value = (int)$price['value'];
+
+        $price_dependencies = $price['dependOn'];
+        /* first check if requirements are met */
+        $require_check = true;
+        foreach ($price_dependencies as $dep) {
+            $dep_name = $dep['name'];
+            $dep_amount = $dep['amount'];
+
+            if ($dep_amount === 'per') {
+                continue;
+            }
+
+            $amount = 0;
+            $max = 0;
+            if ($dep_name === 'timeslot') {
+                $amount = $amount_timeslots;
+                $max = $max_timeslots;
+            } else if ($dep_name === 'seat') {
+                $amount = $amount_seats;
+                $max = $max_seats;
+            } else if ($dep_name === 'kajak') {
+                $amount = $amount_kajaks;
+                $max = $max_kajaks;
+            }
+
+            /* check if either the dep_amount as a number is the same as amount or if amount is max */
+            $require_check = $require_check && (((string)(int)$dep_amount === $dep_amount && (int)$dep_amount === $amount)
+                    || ($dep_amount === 'all' && $amount === $max));
+        }
+
+        /* if requirements are specified in dependsOn are not met, continue with next price */
+        if (!$require_check) {
+            continue;
+        }
+
+        /* calculate price */
+        foreach ($price_dependencies as $dep) {
+            $dep_name = $dep['name'];
+            $dep_amount = $dep['amount'];
+
+            if ($dep_amount !== 'per') {
+                continue;
+            }
+
+            $amount = 0;
+            if ($dep_name === 'timeslot') {
+                $amount = $amount_timeslots;
+            } else if ($dep_name === 'seat') {
+                $amount = $amount_seats;
+            } else if ($dep_name === 'kajak') {
+                $amount = $amount_kajaks;
+            }
+
+            $calculated_price += $price_value * $amount;
+        }
+    }
+
+    return $calculated_price;
+}
+
+/**
  * Returns the amount of kajaks of a kajak type.
  *
  * @param mysqli|null $conn
  * @param string $date
- * @param array<string> $timeslot
+ * @param array<string> $timeslots
  * @param string $kajak_kind
  * @param int $requested_amount
  * @return array
  */
-function get_available_kajaks(?mysqli $conn, string $date, array $timeslot, string $kajak_kind, int $requested_amount): array
+function get_available_kajaks(?mysqli $conn, string $date, array $timeslots, string $kajak_kind, int $requested_amount): array
 {
     global $ERROR_DATABASE_CONNECTION;
 
@@ -547,19 +665,23 @@ function get_available_kajaks(?mysqli $conn, string $date, array $timeslot, stri
         return [];
     }
 
+    if (count($timeslots) === 0) {
+        return [];
+    }
+
     /* convert date to DateTime to be able to subtract one second */
     try {
-        $timeslot[1] = new DateTime($timeslot[1]);
+        $timeslots[1] = new DateTime(end($timeslots));
     } catch (Exception $e) {
         error_log($e);
         return [];
     }
 
     /* it is important to exclude the current time from the next timeslot */
-    $timeslot[1]->modify("-1 second");
-    $timeslot[1] = $timeslot[1]->format("H:i:s");
+    $timeslots[1]->modify("-1 second");
+    $timeslots[1] = $timeslots[1]->format("H:i:s");
 
-    $timeslots = array((string)$timeslot[0], $timeslot[1]);
+    $timeslots = array((string)$timeslots[0], $timeslots[1]);
 
     /* select all the kajak names of a type that are available in the requested timeslot */
     $sql = $conn->prepare("
@@ -665,30 +787,40 @@ function reservate_kajak(?mysqli $conn, array $fields, bool $send_email = FALSE)
     global $ERROR_DATABASE_CONNECTION;
     if ($conn === null) {
         error_log($ERROR_DATABASE_CONNECTION);
-        ReturnValue::error($ERROR_DATABASE_CONNECTION);
+        return ReturnValue::error($ERROR_DATABASE_CONNECTION);
     }
 
-    global $INFO_RESERVATION_SUCCESS, $ERROR_RESERVATION, $ERROR_RESERVATION_KAJAK_NOT_AVAILABLE, $ERROR_RESERVATION_KAJAK_NOT_SELECTED, $ERROR_RESERVATION_TIMESLOT_NOT_SELECTED, $ERROR_SUCCESS_BUT_MAIL_NOT_SENT;
+    global $INFO_RESERVATION_SUCCESS, $ERROR_CHECK_FORM, $ERROR_TIMESLOT_GAP, $ERROR_RESERVATION_KAJAK_NOT_AVAILABLE, $ERROR_RESERVATION_KAJAK_NOT_SELECTED, $ERROR_RESERVATION_TIMESLOT_NOT_SELECTED, $ERROR_SUCCESS_BUT_MAIL_NOT_SENT;
 
     $name = clean_string($fields["name"]);
-    $fullname = $name . ' ' . clean_string($fields["surname"]);
-    $email = clean_string($fields['email']);
+    $full_name = $name . ' ' . clean_string($fields["surname"]);
+    $email = mb_strtolower(clean_string($fields['email']));
     $phone = clean_string($fields['phone']);
     $address = clean_string($fields['street'] . ' ' . $fields['plz'] . ', ' . $fields['city'] . ', ' . $fields['country']);
     $date = clean_string($fields['date']);
 
     /****** prepare timeslots ******/
-    $timeslots = clean_array($fields['timeslots'] ?? []);
-    $amount_timeslots = count($timeslots);
+    $raw_timeslots = clean_array($fields['timeslots'] ?? []);
 
+    $amount_timeslots = count($raw_timeslots);
     /* check if timeslot is selected */
-    if (count($timeslots) === 0) {
+    if ($amount_timeslots === 0) {
         return ReturnValue::error($ERROR_RESERVATION_TIMESLOT_NOT_SELECTED);
     }
 
-    global $config_timeslots;
-    $min_time_index = $timeslots[0];
-    $max_time_index = end($timeslots);
+    /* check if there is a gap in the timeslots, e.g. if at least 3 timeslots where selected */
+    if ($amount_timeslots > 1) {
+        for ($index = 0, $indexMax = count($raw_timeslots); $index < $indexMax; $index++) {
+            if ($index + 1 !== $indexMax && (int)$raw_timeslots[$index] + 1 !== (int)$raw_timeslots[$index + 1]) {
+                return ReturnValue::error($ERROR_TIMESLOT_GAP);
+            }
+        }
+    }
+
+    global $config;
+    $config_timeslots = $config->getTimeslots();
+    $min_time_index = $raw_timeslots[0];
+    $max_time_index = end($raw_timeslots);
     $min_time = $config_timeslots[$min_time_index][0];
     $max_time = $config_timeslots[$max_time_index][1];
     $timeslots = array($min_time, $max_time);
@@ -697,13 +829,19 @@ function reservate_kajak(?mysqli $conn, array $fields, bool $send_email = FALSE)
     $kajak_kinds = get_kajak_kinds($conn);
 
     /* check if more than 0 kajaks where selected */
-    $amount_kajaks = array_map(static function ($kajak_kind) {
-        if (!isset($_POST[$kajak_kind])) {
-            return 0;
-        }
-        return (int)clean_string($_POST[$kajak_kind]);
-    }, $kajak_kinds);
-    $sum_kajaks = array_sum($amount_kajaks);
+    $amount_kajaks = array_reduce($kajak_kinds, static function ($carry, $kajak_kind) {
+        $amount = (int)clean_string($_POST[$kajak_kind] ?? '0');
+        $carry[] = array(
+            'kind' => $kajak_kind,
+            'amount' => $amount
+        );
+        return $carry;
+    }, []);
+
+    /* sum up kajaks to check if any kajak was selected */
+    $sum_kajaks = array_reduce($amount_kajaks, static function ($carry, $kajak) {
+        return $carry + $kajak['amount'];
+    }, 0);
 
     /* throw error if no kajak was selected */
     if ($sum_kajaks === 0) {
@@ -730,17 +868,21 @@ function reservate_kajak(?mysqli $conn, array $fields, bool $send_email = FALSE)
     /* flatten array */
     $reserved_kajaks = array_merge(...$reserved_kajaks);
 
-    /* calculate price */
-    global $config;
-    $price = $config->calculatePrice($amount_timeslots, $sum_kajaks);
-
     /* insert reservation into database and get reservation_id back */
     $kajak_names = array_map(static function ($available_kajak) {
         return $available_kajak["kajak_name"];
     }, $reserved_kajaks);
-    $reservation_id = insert_reservation($conn, $fullname, $email, $phone, $address, $date, $timeslots, $kajak_names, $price);
+
+    /* calculate price */
+    global $config;
+    $price = $config->calculatePrice(array_map(static function () {
+        return true;
+    }, $raw_timeslots), $amount_kajaks);
+
+    /****** insert reservation ******/
+    $reservation_id = insert_reservation($conn, $full_name, $email, $phone, $address, $date, $timeslots, $kajak_names, $price);
     if ($reservation_id === '') {
-        return ReturnValue::error($ERROR_RESERVATION);
+        return ReturnValue::error($ERROR_CHECK_FORM);
     }
 
     /* send email */
@@ -773,7 +915,7 @@ function recover_reservations(?mysqli $conn, array $ids): void
 
     /* concat all strings in array to one string */
     $ids_as_string = implode(',', $ids);
-    $sql = $conn->prepare("UPDATE reservations SET cancelled = FALSE WHERE find_in_set(reservation_id, ?)");
+    $sql = $conn->prepare("UPDATE reservations SET cancelled = FALSE WHERE FIND_IN_SET(reservation_id, ?)");
     $sql->bind_param("s", $ids_as_string);
     $sql->execute();
 }
@@ -797,7 +939,7 @@ function cancel_reservations(?mysqli $conn, array $ids): void
 
     /* concat all strings in array to one string */
     $ids_as_string = implode(',', $ids);
-    $sql = $conn->prepare("UPDATE reservations SET cancelled = TRUE WHERE find_in_set(reservation_id, ?)");
+    $sql = $conn->prepare("UPDATE reservations SET cancelled = TRUE WHERE FIND_IN_SET(reservation_id, ?)");
     $sql->bind_param("s", $ids_as_string);
     $sql->execute();
 }
@@ -826,7 +968,7 @@ function cancel_reservation(?mysqli $conn, array $fields, bool $send_email = FAL
     $email = clean_string($fields['email']);
 
     /* check if reservation exists and is valid */
-    $sql = $conn->prepare("SELECT COUNT(*) as amount FROM reservations WHERE reservation_id = ? AND email = ? AND cancelled = 0");
+    $sql = $conn->prepare("SELECT COUNT(*) AS amount FROM reservations WHERE reservation_id = ? AND email = ? AND cancelled = 0");
     $sql->bind_param('ss', $reservation_id, $email);
     $sql->execute();
     $result = $sql->get_result();
@@ -855,6 +997,12 @@ function cancel_reservation(?mysqli $conn, array $fields, bool $send_email = FAL
     return $ERROR_CANCELLATION;
 }
 
+/**
+ * Get blacklist from database.
+ *
+ * @param mysqli|null $conn
+ * @return array
+ */
 function get_blacklist(?mysqli $conn): array
 {
     global $ERROR_DATABASE_CONNECTION;
@@ -871,7 +1019,6 @@ function get_blacklist(?mysqli $conn): array
             return [];
         }
     } catch (Exception $e) {
-        /** @noinspection ForgottenDebugOutputInspection */
         error_log($e);
         return [];
     }
@@ -888,7 +1035,7 @@ function get_blacklist(?mysqli $conn): array
  * @param string $email
  * @return void
  */
-function delete_bad_person(?mysqli $conn, string $name, string $email): void
+function remove_bad_person(?mysqli $conn, string $name, string $email): void
 {
     global $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY;
 
@@ -921,8 +1068,8 @@ function add_bad_person(?mysqli $conn, string $name, string $email, string $comm
         error_log($ERROR_DATABASE_CONNECTION);
         return;
     }
-    try {
 
+    try {
         $sql = $conn->prepare("INSERT INTO blacklist (name, email, comment) VALUES (?, ?, ?)");
         $sql->bind_param('sss', $name, $email, $comment);
         if ($sql->execute()) {
@@ -932,4 +1079,48 @@ function add_bad_person(?mysqli $conn, string $name, string $email, string $comm
         error_log($e);
     }
     error_log($ERROR_DATABASE_QUERY);
+}
+
+/**
+ * Update kajak in the database.
+ *
+ * @param mysqli|null $conn
+ * @param string $old_name
+ * @param string $name
+ * @param string $old_email
+ * @param string $email
+ * @param string $comment
+ * @return void
+ */
+function update_bad_person(?mysqli $conn, string $name, string $email, string $comment, string $old_name, string $old_email): void
+{
+    global $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY, $ERROR_EXECUTION;
+
+    if ($conn === null) {
+        error_log($ERROR_DATABASE_CONNECTION);
+        return;
+    }
+
+    /* add kajak to list of kajaks */
+    try {
+        $sql = $conn->prepare("
+        UPDATE blacklist
+        SET name = ?, email = ?, comment = ?
+        WHERE name = ? AND email = ?
+        ");
+
+        if ($sql === FALSE) {
+            error_log($ERROR_DATABASE_QUERY);
+            return;
+        }
+
+        $sql->bind_param('sssss', $name, $email, $comment, $old_name, $old_email);
+        if ($sql->execute()) {
+            return;
+        }
+        error_log($ERROR_EXECUTION);
+    } catch (Exception $e) {
+        error_log($e);
+        return;
+    }
 }

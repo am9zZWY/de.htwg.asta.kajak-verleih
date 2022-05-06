@@ -107,7 +107,17 @@ a:hover {
 
 /********************************* FORMS ***********************************/
 
-.kajak-form {
+/* Full-width input fields */
+input[type=text], input[type=password], input[type=email], input[type=number], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0 !important;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.custom-form {
     background-color: #fff;
     padding: 30px;
     margin-bottom: 50px;
@@ -115,12 +125,12 @@ a:hover {
     box-shadow: 0 5px 20px -5px rgba(0, 0, 0, 0.3);
 }
 
-.kajak-form .form-group {
+.custom-form .form-group {
     position: relative;
     margin-bottom: 30px;
 }
 
-.kajak-form .form-control, .kajak-form .form-select {
+.custom-form .form-control, .custom-form .form-select {
     background-color: #ebecee;
     border: none;
     -webkit-box-shadow: none;
@@ -279,16 +289,6 @@ button.custom-btn:hover, button.custom-btn:active {
 }
 
 /********************************* ADMIN LOGIN ***********************************/
-
-/* Full-width input fields */
-input[type=text], input[type=password], input[type=email], input[type=number], select {
-    width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0 !important;
-    display: inline-block;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-}
 
 /* Center the image and position the close button */
 .img-container {
