@@ -73,12 +73,24 @@ echo create_header('Dashboard');
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered table-sm table-light" id="reservations">
                             <caption>Auflistung aller Reservierungen</caption>
+                            <colgroup>
+                                <col style="width: 5%"><!-- Löschen -->
+                                <col style="width: 5%"><!-- ID -->
+                                <col style="width: 15%"><!-- Name -->
+                                <col style="width: 20%"><!-- Adresse -->
+                                <!-- <col style="width: 0"> --><!-- Handynummer -->
+                                <col style="width: 20%"><!-- E-Mail Adresse -->
+                                <col style="width: 10%"><!-- Datum -->
+                                <col style="width: 20%"><!-- Zeitslot -->
+                                <col style="width: 20%"><!-- Kajaks -->
+                                <col style="width: 5%"><!-- Preis -->
+                            </colgroup>
                             <tr>
                                 <th>Löschen</th>
                                 <th>ID</th>
                                 <th>Name</th>
                                 <th>Adresse</th>
-                                <th>Handynummer</th>
+                                <!-- <th>Handynummer</th> -->
                                 <th>E-Mail Adresse</th>
                                 <th>Datum</th>
                                 <th>Zeitslot</th>
@@ -106,7 +118,7 @@ echo create_header('Dashboard');
                                     <td><?php echo $reservation['reservation_id'] ?></td>
                                     <td><?php echo $reservation['name'] ?></td>
                                     <td><?php echo $reservation['address'] ?></td>
-                                    <td><?php echo $reservation['phone'] ?></td>
+                                    <!-- <td><?php echo $reservation['phone'] ?></td> -->
                                     <td><?php echo $reservation['email'] ?></td>
                                     <td><?php echo date_create($reservation['date'])->format('d.m.Y') ?></td>
                                     <td><?php echo $reservation['from_time'] . '–' . $reservation['to_time'] ?></td>
