@@ -14,7 +14,7 @@ if (isset($params['price'], $params['payload_price'])) {
     $timeslots = $decoded_payload['timeslots'];
     $amount_kajaks_per_kind = $decoded_payload['amount_kajaks'];
     echo calculate_price($conn, $timeslots, $amount_kajaks_per_kind);
-} else if (isset($params['available'], $params['payload_available'])) {
+} elseif (isset($params['available'], $params['payload_available'])) {
     $decoded_payload = json_decode(base64_decode(clean_string($params['payload_available']), $strict = FALSE), TRUE);
     $date = $decoded_payload['date'];
     $kajak_kinds = $decoded_payload['$kajak_kinds'];

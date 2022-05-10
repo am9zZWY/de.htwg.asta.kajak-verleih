@@ -1,5 +1,4 @@
 <?php
-/** @noinspection ForgottenDebugOutputInspection */
 
 /**
  * Create the table for the blacklist.
@@ -16,7 +15,7 @@ function add_blacklist_table(?mysqli $conn): void
         return;
     }
 
-    $sql = $conn->prepare("
+    $sql = $conn->prepare('
 CREATE TABLE IF NOT EXISTS blacklist
 (
     
@@ -24,7 +23,7 @@ CREATE TABLE IF NOT EXISTS blacklist
     email            VARCHAR(50)     NOT NULL,
     comment          VARCHAR(255)    NOT NULL,
     PRIMARY KEY(name, email)
-)");
+)');
 
     if ($sql === FALSE) {
         error('add_blacklist_table', $ERROR_DATABASE_QUERY);
@@ -54,7 +53,7 @@ function get_blacklist(?mysqli $conn): array
     }
 
     try {
-        $sql = $conn->prepare("SELECT * FROM blacklist");
+        $sql = $conn->prepare('SELECT * FROM blacklist');
         if ($sql === FALSE) {
             error('get_blacklist', $ERROR_DATABASE_QUERY);
             return [];
@@ -70,6 +69,27 @@ function get_blacklist(?mysqli $conn): array
 
     $result = $sql->get_result();
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
+
+/**
+ * Get a list of all blocked emails.
+ *
+ * @param mysqli|null $conn
+ * @return array
+ */
+function get_blacklist_emails(?mysqli $conn): array
+{
+    global $ERROR_DATABASE_CONNECTION;
+
+    if ($conn === NULL) {
+        error('get_blacklist_emails', $ERROR_DATABASE_CONNECTION);
+        return [];
+    }
+
+    $blacklist = get_blacklist($conn);
+    return array_map(static function ($entry) {
+        return $entry['email'];
+    }, $blacklist);
 }
 
 /**
@@ -89,7 +109,7 @@ function remove_bad_person(?mysqli $conn, string $name, string $email): void
         return;
     }
 
-    $sql = $conn->prepare("DELETE FROM blacklist WHERE name = ? AND email = ?");
+    $sql = $conn->prepare('DELETE FROM blacklist WHERE name = ? AND email = ?');
     if ($sql === FALSE) {
         error('remove_bad_person', $ERROR_DATABASE_QUERY);
         return;
@@ -119,7 +139,7 @@ function add_bad_person(?mysqli $conn, string $name, string $email, string $comm
     }
 
     try {
-        $sql = $conn->prepare("INSERT INTO blacklist (name, email, comment) VALUES (?, ?, ?)");
+        $sql = $conn->prepare('INSERT INTO blacklist (name, email, comment) VALUES (?, ?, ?)');
         if ($sql === FALSE) {
             error('add_bad_person', $ERROR_DATABASE_QUERY);
         }
@@ -155,11 +175,11 @@ function update_bad_person(?mysqli $conn, string $name, string $email, string $c
 
     /* add kajak to list of kajaks */
     try {
-        $sql = $conn->prepare("
+        $sql = $conn->prepare('
         UPDATE blacklist
         SET name = ?, email = ?, comment = ?
         WHERE name = ? AND email = ?
-        ");
+        ');
 
         if ($sql === FALSE) {
             error('update_bad_person', $ERROR_DATABASE_QUERY);

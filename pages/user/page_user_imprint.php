@@ -1,6 +1,4 @@
-<?php
-echo create_header('Impressum')
-?>
+<?= create_header('Impressum') ?>
 <div class="container-fluid">
     <div class="row">
         <div class="col content">
@@ -15,8 +13,8 @@ echo create_header('Impressum')
                     78462 Konstanz<br>
                     Gebäude D<br><br>
                     <strong>Kontaktaufnahme</strong><br><br>
-                    Tel.: 07531 206...<br>
-                    E-Mail: asta-kajak@htwg-konstanz.de
+                    Tel.: <a href="tel:+497531206431">07531 206-431</a><br>
+                    E-Mail: <a href='mailto:asta-kajak@htwg-konstanz.de'>asta-kajak@htwg-konstanz.de</a>
                 </p>
             </div>
         </div>

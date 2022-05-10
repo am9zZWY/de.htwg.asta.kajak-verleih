@@ -32,9 +32,9 @@ $URL = $_SERVER['REQUEST_URI'];
 $PARSED_URL = strtolower(parse_url($URL, PHP_URL_PATH));
 
 /* send headers */
-header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-header("Cache-Control: post-check=0, pre-check=0", FALSE);
-header("Pragma: no-cache");
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Cache-Control: post-check=0, pre-check=0', FALSE);
+header('Pragma: no-cache');
 
 /* set up the database connection and the tables */
 $connection = connect_to_database();
@@ -46,7 +46,7 @@ add_blacklist_table($connection);
 
 /* API */
 if ($PARSED_URL === '/api') {
-    require("pages/api/page_api.php");
+    require __DIR__ . 'pages/api/page_api.php';
     return;
 }
 ?>
@@ -65,33 +65,33 @@ if ($PARSED_URL === '/api') {
 <div class="container p-0">
     <?php
     /* navigation bar */
-    include 'components/component_navigation.php';
+    include __DIR__ . 'components/component_navigation.php';
     ?>
 </div>
 <div class="container p-0">
     <?php
-    if ($PARSED_URL === '/about' || $PARSED_URL === '/terms') {
-        require("pages/user/page_user_agb.php");
-    } else if ($PARSED_URL === '/privacy' || $PARSED_URL === '/dsgvo' || $PARSED_URL === '/datenschutz') {
-        require("pages/user/page_user_privacy.php");
-    } else if ($PARSED_URL === '/impressum') {
-        require("pages/user/page_user_impressum.php");
-    } else if ($PARSED_URL === '/login') {
-        require("pages/admin/page_admin_login.php");
-    } else if ($PARSED_URL === '/cancel') {
-        require("pages/user/page_user_cancel.php");
-    } else if ($PARSED_URL === '/') {
-        require("pages/user/page_user_reservation.php");
+    if ($PARSED_URL === '/terms') {
+        require __DIR__ . 'pages/user/page_user_agb.php';
+    } elseif ($PARSED_URL === '/privacy' || $PARSED_URL === '/dsgvo' || $PARSED_URL === '/datenschutz') {
+        require __DIR__ . 'pages/user/page_user_privacy.php';
+    } elseif ($PARSED_URL === '/imprint') {
+        require __DIR__ . 'pages/user/page_user_imprint.php';
+    } elseif ($PARSED_URL === '/login') {
+        require __DIR__ . 'pages/admin/page_admin_login.php';
+    } elseif ($PARSED_URL === '/cancel') {
+        require __DIR__ . 'pages/user/page_user_cancel.php';
+    } elseif ($PARSED_URL === '/') {
+        require __DIR__ . 'pages/user/page_user_reservation.php';
     }
 
     /* show these pages only when logged in */
     if ($PARSED_URL === '/admin' && is_logged_in()) {
-        require("pages/admin/page_admin.php");
+        require __DIR__ . 'pages/admin/page_admin.php';
     }
 
     ?>
 </div>
 <?php
-require("components/component_footer.php"); ?>
+include __DIR__ . 'components/component_footer.php'; ?>
 </body>
 </html>

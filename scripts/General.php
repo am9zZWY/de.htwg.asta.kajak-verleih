@@ -49,7 +49,7 @@ function get_env(string $key, string $default = ''): string
  * @param mixed $default
  * @return string
  */
-function get_post_field(string $field, string $default = ''): string
+function get_post_field(string $field, $default = ''): string
 {
     return clean_string($_POST[$field] ?? $default);
 }

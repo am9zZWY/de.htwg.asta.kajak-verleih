@@ -23,7 +23,7 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') && isset($_POST['logout'])) {
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/impressum">
+            <a class="nav-link" href="/imprint">
                 Impressum
             </a>
         </li>
@@ -38,7 +38,7 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') && isset($_POST['logout'])) {
             <a class="nav-link" href="/">Startseite</a>
         </li>
         <li>
-            <a class="nav-link" href="/about">Info</a>
+            <a class="nav-link" href="/terms">Nutzungsbedingungen</a>
         </li>
         <?php
         if (is_logged_in()) {

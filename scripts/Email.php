@@ -10,7 +10,7 @@ use PHPMailer\PHPMailer\PHPMailer;
  */
 function get_email_signature(): string
 {
-    return "
+    return '
 <br><br>
 Beste Grüße<br><br>
 Dein Kajak-Team<br>
@@ -25,7 +25,7 @@ Alfred-Wachtel-Straße 8<br>
 D-78462 Konstanz<br>
 <br>
 Fon: 07531 / 206 – 431<br>
-    ";
+    ';
 }
 
 /**
@@ -46,9 +46,9 @@ function send_reservation_email(string $reservation_id, string $name, string $em
     $formatted_timeslot_from = date('H:i', strtotime($timeslot[0]));
     $formatted_timeslot_to = date('H:i', strtotime($timeslot[1]));
 
-    $format_kajaks = "<ul>" . implode(array_map(static function ($kajak) {
-            return "<li>" . $kajak["kajak_name"] . " mit " . $kajak["seats"] . " Sitzen</li>";
-        }, $kajaks)) . "</ul>";
+    $format_kajaks = '<ul>' . implode(array_map(static function ($kajak) {
+            return '<li>' . $kajak['kajak_name'] . ' mit ' . $kajak['seats'] . ' Sitzen</li>';
+        }, $kajaks)) . '</ul>';
 
     return send_mail($email_address_to, "Reservierungsbestätigung Kajak am $formatted_date", "
         Hallo $name,
@@ -75,7 +75,7 @@ function send_reservation_email(string $reservation_id, string $name, string $em
  */
 function send_cancellation_email(string $reservation_id, string $email_address_to): bool
 {
-    return send_mail($email_address_to, "Stornierungsbestätigung Kajak", "
+    return send_mail($email_address_to, 'Stornierungsbestätigung Kajak', "
         Hallo,
         <p>
             Du hast deine Reservierung mit der <strong>ID $reservation_id</strong> storniert.

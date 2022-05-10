@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 echo create_header('Datenschutz');
 ?>
 <div class="container-fluid">
@@ -50,7 +51,7 @@ echo create_header('Datenschutz');
                                             Alfred-Wachtel-Str. 8<br/>
                                             78462 Konstanz<br/>
                                             Deutschland<br/>
-                                            Tel.: 07531 206-0<br/>
+                                            Tel.: <a href="tel:+4975312060">07531 206-0</a><br/>
                                             E-Mail: <a
                                                     href="mailto:kontakt@htwg-konstanz.de">kontakt@htwg-konstanz.de</a><br/>
                                             Website: <a
@@ -67,8 +68,8 @@ echo create_header('Datenschutz');
                                             Alfred-Wachtel-Str. 8<br/>
                                             78462 Konstanz<br/>
                                             Deutschland<br/>
-                                            Tel.: 07531 206-431<br/>
-                                            E-Mail: <a href="mailto:asta-kajak-datenschutz@htwg-konstanz.de">asta-kajak-datenschutz@htwg-konstanz.de</a><br/>
+                                            Tel.: <a href='tel:+497531206431'>07531 206-431</a><br/>
+                                            E-Mail: <a href="mailto:asta-kajak@htwg-konstanz.de">asta-kajak@htwg-konstanz.de</a><br/>
                                             Website: <a href="https://www.htwg-konstanz.de/asta">www.htwg-konstanz.de/asta</a><br/>
                                         </i>
                                     </p>
@@ -509,7 +510,6 @@ echo create_header('Datenschutz');
                                         <li> Das Recht gemäß Absatz 1 darf die Rechte und Freiheiten anderer Personen
                                             nicht
                                             beeinträchtigen.
-                                        </li>
                                         </li>
                                     </ol>
                                 </ol>

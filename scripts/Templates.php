@@ -20,7 +20,7 @@ function create_header(string $header, ?string $link = NULL): string
                 $header
             </h1>
         </a>
-") . "</div> ";
+") . '</div> ';
 }
 
 /**

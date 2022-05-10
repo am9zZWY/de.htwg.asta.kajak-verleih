@@ -1,6 +1,4 @@
-<?php
-echo create_header('Informationen zur Reservierung');
-?>
+<?= create_header('Informationen zur Reservierung') ?>
 <div class="container-fluid">
     <div class="row content">
         <div class="content-wrapper">

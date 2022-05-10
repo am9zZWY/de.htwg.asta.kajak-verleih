@@ -1,5 +1,4 @@
 <?php
-/** @noinspection ForgottenDebugOutputInspection */
 
 global $config;
 
@@ -52,9 +51,9 @@ function drop_all_tables(?mysqli $conn): void
         return;
     }
 
-    $sql = $conn->prepare("DROP TABLE reservations");
+    $sql = $conn->prepare('DROP TABLE reservations');
     $sql->execute();
-    $sql = $conn->prepare("DROP TABLE kajak_reservation");
+    $sql = $conn->prepare('DROP TABLE kajak_reservation');
     $sql->execute();
     send_mail('', 'Tabellen gelöscht', 'Tabellen gelöscht! Bitte überprüfen, ob diese Aktion gewollt war');
 }
@@ -120,10 +119,10 @@ function calculate_price(?mysqli $conn, $timeslots, $amount_kajaks_per_kind): in
             if ($dep_name === 'timeslot') {
                 $amount = $amount_timeslots;
                 $max = $max_timeslots;
-            } else if ($dep_name === 'seat') {
+            } elseif ($dep_name === 'seat') {
                 $amount = $amount_seats;
                 $max = $max_seats;
-            } else if ($dep_name === 'kajak') {
+            } elseif ($dep_name === 'kajak') {
                 $amount = $amount_kajaks;
                 $max = $max_kajaks;
             }
@@ -150,9 +149,9 @@ function calculate_price(?mysqli $conn, $timeslots, $amount_kajaks_per_kind): in
             $amount = 0;
             if ($dep_name === 'timeslot') {
                 $amount = $amount_timeslots;
-            } else if ($dep_name === 'seat') {
+            } elseif ($dep_name === 'seat') {
                 $amount = $amount_seats;
-            } else if ($dep_name === 'kajak') {
+            } elseif ($dep_name === 'kajak') {
                 $amount = $amount_kajaks;
             }
 

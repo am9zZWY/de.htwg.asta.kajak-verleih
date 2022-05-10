@@ -1,6 +1,4 @@
 <?php
-/** @noinspection ForgottenDebugOutputInspection */
-
 
 /**
  * Create table for kajaks.
@@ -73,10 +71,10 @@ function add_kajak(?mysqli $conn, string $name, string $kind, int $seats): void
 
     /* add kajak to list of kajaks */
     try {
-        $sql = $conn->prepare("
+        $sql = $conn->prepare('
         INSERT INTO kajaks (kajak_name, kind, seats)
             VALUES (?, ?, ?);
-        ");
+        ');
 
         if ($sql === FALSE) {
             error('add_kajak', $ERROR_DATABASE_QUERY);
@@ -132,11 +130,11 @@ function update_kajak(?mysqli $conn, string $old_name, string $name, string $kin
 
     /* add kajak to list of kajaks */
     try {
-        $sql = $conn->prepare("
+        $sql = $conn->prepare('
         UPDATE kajaks
         SET kajak_name = ?, kind = ?, seats = ?, available = ?, comment = ?
         WHERE kajak_name = ?;
-        ");
+        ');
 
         if ($sql === FALSE) {
             error('update_kajak', $ERROR_DATABASE_QUERY);
@@ -171,7 +169,7 @@ function remove_kajak(?mysqli $conn, string $kajak_name): void
     }
 
     try {
-        $sql = $conn->prepare("DELETE FROM kajaks WHERE kajak_name = ?");
+        $sql = $conn->prepare('DELETE FROM kajaks WHERE kajak_name = ?');
         $sql->bind_param('s', $kajak_name);
         if ($sql->execute()) {
             return;
@@ -200,9 +198,9 @@ function get_kajaks(?mysqli $conn, bool $exclude_not_available = FALSE): array
 
     try {
         if ($exclude_not_available) {
-            $sql = $conn->prepare("SELECT * FROM kajaks WHERE available = 1 ORDER BY seats, kajak_name");
+            $sql = $conn->prepare('SELECT * FROM kajaks WHERE available = 1 ORDER BY seats, kajak_name');
         } else {
-            $sql = $conn->prepare("SELECT * FROM kajaks ORDER BY seats, kajak_name");
+            $sql = $conn->prepare('SELECT * FROM kajaks ORDER BY seats, kajak_name');
         }
         if ($sql === FALSE) {
             error('get_kajaks', $ERROR_DATABASE_QUERY);
@@ -268,7 +266,7 @@ function get_kajak_amounts(?mysqli $conn): array
             $carry[$kajak_kind]['amount'] = 1;
         }
         return $carry;
-    }, array());
+    }, []);
 }
 
 /**
