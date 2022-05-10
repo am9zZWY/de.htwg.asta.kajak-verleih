@@ -7,7 +7,8 @@ echo create_header('Informationen zur Reservierung');
             <div>
                 <h3>Mietsachen</h3>
                 <br>
-                <p>Im Mietvertrag sind sämtliche Ausrüstungsgegenstände festgehalten, die bei einer Kajakausleihe mit eingeschlossen sind.
+                <p>Im Mietvertrag sind sämtliche Ausrüstungsgegenstände festgehalten, die bei einer Kajakausleihe mit
+                    eingeschlossen sind.
                     Diese werden für einen sicheren Betrieb der Kajaks benötigt.
                     <br><br>
                     Die mietende Person verpflichtet sich, die Mietgegenstände mit Sorgfalt zu behandeln. Schäden und

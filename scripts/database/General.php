@@ -24,12 +24,12 @@ function connect_to_database(): ?mysqli
         $conn = new mysqli($servername, $username, $password, $dbname);
         /* Check connection */
         if ($conn->connect_error) {
-            error_log($ERROR_DATABASE_CONNECTION);
-            return null;
+            error('connect_to_database', $ERROR_DATABASE_CONNECTION);
+            return NULL;
         }
     } catch (Exception $e) {
-        error_log($ERROR_DATABASE_CONNECTION);
-        return null;
+        error('connect_to_database', $e);
+        return NULL;
     }
 
     return $conn;
@@ -47,8 +47,8 @@ function connect_to_database(): ?mysqli
 function drop_all_tables(?mysqli $conn): void
 {
     global $ERROR_DATABASE_CONNECTION;
-    if ($conn === null) {
-        error_log($ERROR_DATABASE_CONNECTION);
+    if ($conn === NULL) {
+        error('drop_all_tables', $ERROR_DATABASE_CONNECTION);
         return;
     }
 
@@ -67,11 +67,11 @@ function drop_all_tables(?mysqli $conn): void
  * @param $amount_kajaks_per_kind
  * @return int
  */
-function calculatePrice(?mysqli $conn, $timeslots, $amount_kajaks_per_kind): int
+function calculate_price(?mysqli $conn, $timeslots, $amount_kajaks_per_kind): int
 {
     global $config, $ERROR_DATABASE_CONNECTION;
-    if ($conn === null) {
-        error_log($ERROR_DATABASE_CONNECTION);
+    if ($conn === NULL) {
+        error('calculate_price', $ERROR_DATABASE_CONNECTION);
         return 0;
     }
 
@@ -85,13 +85,13 @@ function calculatePrice(?mysqli $conn, $timeslots, $amount_kajaks_per_kind): int
         return $timeslot;
     }));
 
-    $seats_per_kajak = $config->getSeatsPerKajak();
+    $seats_per_kajak = $config->get_seats_per_kajak();
     $amount_seats = array_reduce($amount_kajaks_per_kind, static function ($carry, $kajak) use ($seats_per_kajak) {
         return $carry + ($seats_per_kajak[$kajak['kind']] * (int)$kajak['amount']);
     }, 0);
 
     /* max values when "all" is passed */
-    $max_timeslots = count($config->getTimeslots());
+    $max_timeslots = count($config->get_timeslots());
     $kajaks = get_kajaks($conn, TRUE);
     $max_kajaks = count($kajaks);
     $max_seats = array_reduce($kajaks, static function ($carry, $kajak) use ($seats_per_kajak) {
@@ -99,14 +99,14 @@ function calculatePrice(?mysqli $conn, $timeslots, $amount_kajaks_per_kind): int
     }, 0);
 
     /* prepare prices */
-    $prices = $config->getPrices();
+    $prices = $config->get_prices();
     $calculated_price = 0;
     foreach ($prices as $price) {
         $price_value = (int)$price['value'];
 
         $price_dependencies = $price['dependOn'];
         /* first check if requirements are met */
-        $require_check = true;
+        $require_check = TRUE;
         foreach ($price_dependencies as $dep) {
             $dep_name = $dep['name'];
             $dep_amount = $dep['amount'];

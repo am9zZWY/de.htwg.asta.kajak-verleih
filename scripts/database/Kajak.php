@@ -12,8 +12,8 @@ function add_kajak_table(?mysqli $conn): void
 {
     global $ERROR_TABLE_CREATION, $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY;
 
-    if ($conn === null) {
-        error_log($ERROR_DATABASE_CONNECTION);
+    if ($conn === NULL) {
+        error('add_kajak_table', $ERROR_DATABASE_CONNECTION);
         return;
     }
 
@@ -28,14 +28,14 @@ CREATE TABLE IF NOT EXISTS kajaks
 )");
 
     if ($sql === FALSE) {
-        error_log($ERROR_DATABASE_QUERY);
+        error('add_kajak_table', $ERROR_DATABASE_QUERY);
         return;
     }
 
     if ($sql->execute()) {
         return;
     }
-    error_log($ERROR_TABLE_CREATION);
+    error('add_kajak_table', $ERROR_TABLE_CREATION);
 }
 
 
@@ -52,22 +52,22 @@ function add_kajak(?mysqli $conn, string $name, string $kind, int $seats): void
 {
     global $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY, $ERROR_TYPE_NOT_IN_CONFIG, $ERROR_TOO_MANY_SEATS, $ERROR_EXECUTION, $config;
 
-    if ($conn === null) {
-        error_log($ERROR_DATABASE_CONNECTION);
+    if ($conn === NULL) {
+        error('add_kajak', $ERROR_DATABASE_CONNECTION);
         return;
     }
 
     /* get all kajaks and check if the kind is valid */
-    $kinds = $config->getKajakKinds();
+    $kinds = $config->get_kajak_kinds();
     if (!in_array($kind, $kinds, TRUE)) {
-        error_log($ERROR_TYPE_NOT_IN_CONFIG);
+        error('add_kajak', $ERROR_TYPE_NOT_IN_CONFIG);
         return;
     }
 
     /* get seats per kajak and check if number does not exceed config. It can be less if one seat is e.g. damaged */
-    $seats_per_kajak = $config->getSeatsPerKajak();
+    $seats_per_kajak = $config->get_seats_per_kajak();
     if ($seats_per_kajak[$kind] < $seats) {
-        error_log($ERROR_TOO_MANY_SEATS);
+        error('add_kajak', $ERROR_TOO_MANY_SEATS);
         return;
     }
 
@@ -79,7 +79,7 @@ function add_kajak(?mysqli $conn, string $name, string $kind, int $seats): void
         ");
 
         if ($sql === FALSE) {
-            error_log($ERROR_DATABASE_QUERY);
+            error('add_kajak', $ERROR_DATABASE_QUERY);
             return;
         }
 
@@ -87,9 +87,9 @@ function add_kajak(?mysqli $conn, string $name, string $kind, int $seats): void
         if ($sql->execute()) {
             return;
         }
-        error_log($ERROR_EXECUTION);
+        error('add_kajak', $ERROR_EXECUTION);
     } catch (Exception $e) {
-        error_log($e);
+        error('add_kajak', $e);
         return;
     }
 }
@@ -111,22 +111,22 @@ function update_kajak(?mysqli $conn, string $old_name, string $name, string $kin
 {
     global $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY, $ERROR_TYPE_NOT_IN_CONFIG, $ERROR_TOO_MANY_SEATS, $ERROR_EXECUTION, $config;
 
-    if ($conn === null) {
-        error_log($ERROR_DATABASE_CONNECTION);
+    if ($conn === NULL) {
+        error('update_kajak', $ERROR_DATABASE_CONNECTION);
         return;
     }
 
     /* get all kajaks and check if the kind is valid */
-    $kinds = $config->getKajakKinds();
+    $kinds = $config->get_kajak_kinds();
     if (!in_array($kind, $kinds, TRUE)) {
-        error_log($ERROR_TYPE_NOT_IN_CONFIG);
+        error('update_kajak', $ERROR_TYPE_NOT_IN_CONFIG);
         return;
     }
 
     /* get seats per kajak and check if number does not exceed config. It can be less if one seat is e.g. damaged */
-    $seats_per_kajak = $config->getSeatsPerKajak();
+    $seats_per_kajak = $config->get_seats_per_kajak();
     if ($seats_per_kajak[$kind] < $seats) {
-        error_log($ERROR_TOO_MANY_SEATS);
+        error('update_kajak', $ERROR_TOO_MANY_SEATS);
         return;
     }
 
@@ -139,7 +139,7 @@ function update_kajak(?mysqli $conn, string $old_name, string $name, string $kin
         ");
 
         if ($sql === FALSE) {
-            error_log($ERROR_DATABASE_QUERY);
+            error('update_kajak', $ERROR_DATABASE_QUERY);
             return;
         }
 
@@ -147,9 +147,9 @@ function update_kajak(?mysqli $conn, string $old_name, string $name, string $kin
         if ($sql->execute()) {
             return;
         }
-        error_log($ERROR_EXECUTION);
+        error('update_kajak', $ERROR_EXECUTION);
     } catch (Exception $e) {
-        error_log($e);
+        error('update_kajak', $e);
         return;
     }
 }
@@ -165,8 +165,8 @@ function remove_kajak(?mysqli $conn, string $kajak_name): void
 {
     global $ERROR_DATABASE_CONNECTION, $ERROR_EXECUTION;
 
-    if ($conn === null) {
-        error_log($ERROR_DATABASE_CONNECTION);
+    if ($conn === NULL) {
+        error('remove_kajak', $ERROR_DATABASE_CONNECTION);
         return;
     }
 
@@ -176,9 +176,9 @@ function remove_kajak(?mysqli $conn, string $kajak_name): void
         if ($sql->execute()) {
             return;
         }
-        error_log($ERROR_EXECUTION);
+        error('remove_kajak', $ERROR_EXECUTION);
     } catch (Exception $e) {
-        error_log($e);
+        error('remove_kajak', $e);
         return;
     }
 }
@@ -192,9 +192,9 @@ function remove_kajak(?mysqli $conn, string $kajak_name): void
  */
 function get_kajaks(?mysqli $conn, bool $exclude_not_available = FALSE): array
 {
-    global $ERROR_DATABASE_CONNECTION;
-    if ($conn === null) {
-        error_log($ERROR_DATABASE_CONNECTION);
+    global $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY;
+    if ($conn === NULL) {
+        error('get_kajaks', $ERROR_DATABASE_CONNECTION);
         return [];
     }
 
@@ -204,12 +204,17 @@ function get_kajaks(?mysqli $conn, bool $exclude_not_available = FALSE): array
         } else {
             $sql = $conn->prepare("SELECT * FROM kajaks ORDER BY seats, kajak_name");
         }
+        if ($sql === FALSE) {
+            error('get_kajaks', $ERROR_DATABASE_QUERY);
+            return [];
+        }
+
         $result_execute = $sql->execute();
         if ($result_execute === FALSE) {
             return [];
         }
     } catch (Exception $e) {
-        error_log($e);
+        error('get_kajaks', $e);
         return [];
     }
 
@@ -225,13 +230,13 @@ function get_kajaks(?mysqli $conn, bool $exclude_not_available = FALSE): array
 function get_kajak_with_real_amount(?mysqli $conn): array
 {
     global $ERROR_DATABASE_CONNECTION;
-    if ($conn === null) {
-        error_log($ERROR_DATABASE_CONNECTION);
+    if ($conn === NULL) {
+        error('get_kajak_with_real_amount', $ERROR_DATABASE_CONNECTION);
         return [];
     }
 
     global $config;
-    $kajaks = $config->getKajaks();
+    $kajaks = $config->get_kajaks();
     $kajak_amounts = get_kajak_amounts($conn);
 
     foreach ($kajaks as $kajak) {
@@ -250,8 +255,8 @@ function get_kajak_with_real_amount(?mysqli $conn): array
 function get_kajak_amounts(?mysqli $conn): array
 {
     global $ERROR_DATABASE_CONNECTION;
-    if ($conn === null) {
-        error_log($ERROR_DATABASE_CONNECTION);
+    if ($conn === NULL) {
+        error('get_kajak_amounts', $ERROR_DATABASE_CONNECTION);
         return [];
     }
 
@@ -275,8 +280,8 @@ function get_kajak_amounts(?mysqli $conn): array
 function get_kajak_kinds(?mysqli $conn): array
 {
     global $ERROR_DATABASE_CONNECTION;
-    if ($conn === null) {
-        error_log($ERROR_DATABASE_CONNECTION);
+    if ($conn === NULL) {
+        error('get_kajak_kinds', $ERROR_DATABASE_CONNECTION);
         return [];
     }
 

@@ -11,8 +11,8 @@ function add_blacklist_table(?mysqli $conn): void
 {
     global $ERROR_TABLE_CREATION, $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY;
 
-    if ($conn === null) {
-        error_log($ERROR_DATABASE_CONNECTION);
+    if ($conn === NULL) {
+        error('add_blacklist_table', $ERROR_DATABASE_CONNECTION);
         return;
     }
 
@@ -26,15 +26,15 @@ CREATE TABLE IF NOT EXISTS blacklist
     PRIMARY KEY(name, email)
 )");
 
-    if ($sql === false) {
-        error_log($ERROR_DATABASE_QUERY);
+    if ($sql === FALSE) {
+        error('add_blacklist_table', $ERROR_DATABASE_QUERY);
         return;
     }
 
     if ($sql->execute()) {
         return;
     }
-    error_log($ERROR_TABLE_CREATION);
+    error('add_blacklist_table', $ERROR_TABLE_CREATION);
 }
 
 
@@ -46,21 +46,25 @@ CREATE TABLE IF NOT EXISTS blacklist
  */
 function get_blacklist(?mysqli $conn): array
 {
-    global $ERROR_DATABASE_CONNECTION;
+    global $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY;
 
-    if ($conn === null) {
-        error_log($ERROR_DATABASE_CONNECTION);
+    if ($conn === NULL) {
+        error('get_blacklist', $ERROR_DATABASE_CONNECTION);
         return [];
     }
 
     try {
         $sql = $conn->prepare("SELECT * FROM blacklist");
+        if ($sql === FALSE) {
+            error('get_blacklist', $ERROR_DATABASE_QUERY);
+            return [];
+        }
         $result_execute = $sql->execute();
-        if ($result_execute === false) {
+        if ($result_execute === FALSE) {
             return [];
         }
     } catch (Exception $e) {
-        error_log($e);
+        error('get_blacklist', $e);
         return [];
     }
 
@@ -80,17 +84,21 @@ function remove_bad_person(?mysqli $conn, string $name, string $email): void
 {
     global $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY;
 
-    if ($conn === null) {
-        error_log($ERROR_DATABASE_CONNECTION);
+    if ($conn === NULL) {
+        error('remove_bad_person', $ERROR_DATABASE_CONNECTION);
         return;
     }
 
     $sql = $conn->prepare("DELETE FROM blacklist WHERE name = ? AND email = ?");
+    if ($sql === FALSE) {
+        error('remove_bad_person', $ERROR_DATABASE_QUERY);
+        return;
+    }
     $sql->bind_param('ss', $name, $email);
     if ($sql->execute()) {
         return;
     }
-    error_log($ERROR_DATABASE_QUERY);
+    error('remove_bad_person', $ERROR_DATABASE_QUERY);
 }
 
 /**
@@ -105,21 +113,24 @@ function add_bad_person(?mysqli $conn, string $name, string $email, string $comm
 {
     global $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY;
 
-    if ($conn === null) {
-        error_log($ERROR_DATABASE_CONNECTION);
+    if ($conn === NULL) {
+        error('add_bad_person', $ERROR_DATABASE_CONNECTION);
         return;
     }
 
     try {
         $sql = $conn->prepare("INSERT INTO blacklist (name, email, comment) VALUES (?, ?, ?)");
+        if ($sql === FALSE) {
+            error('add_bad_person', $ERROR_DATABASE_QUERY);
+        }
         $sql->bind_param('sss', $name, $email, $comment);
         if ($sql->execute()) {
             return;
         }
     } catch (Exception $e) {
-        error_log($e);
+        error('add_bad_person', $e);
     }
-    error_log($ERROR_DATABASE_QUERY);
+    error('add_bad_person', $ERROR_DATABASE_QUERY);
 }
 
 /**
@@ -137,8 +148,8 @@ function update_bad_person(?mysqli $conn, string $name, string $email, string $c
 {
     global $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY, $ERROR_EXECUTION;
 
-    if ($conn === null) {
-        error_log($ERROR_DATABASE_CONNECTION);
+    if ($conn === NULL) {
+        error('update_bad_person', $ERROR_DATABASE_CONNECTION);
         return;
     }
 
@@ -151,7 +162,7 @@ function update_bad_person(?mysqli $conn, string $name, string $email, string $c
         ");
 
         if ($sql === FALSE) {
-            error_log($ERROR_DATABASE_QUERY);
+            error('update_bad_person', $ERROR_DATABASE_QUERY);
             return;
         }
 
@@ -159,9 +170,9 @@ function update_bad_person(?mysqli $conn, string $name, string $email, string $c
         if ($sql->execute()) {
             return;
         }
-        error_log($ERROR_EXECUTION);
+        error('update_bad_person', $ERROR_EXECUTION);
     } catch (Exception $e) {
-        error_log($e);
+        error('update_bad_person', $e);
         return;
     }
 }

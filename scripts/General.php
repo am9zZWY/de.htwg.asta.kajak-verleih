@@ -9,7 +9,7 @@
  */
 function clean_string(?string $string): string
 {
-    if ($string === null) {
+    if ($string === NULL) {
         return '';
     }
     /* convert special chars to prevent sql injection and trim also all whitespaces to prevent database errors */
@@ -24,7 +24,7 @@ function clean_string(?string $string): string
  */
 function clean_array(?array $array): array
 {
-    if ($array === null) {
+    if ($array === NULL) {
         return [];
     }
     return array_map('clean_string', $array);

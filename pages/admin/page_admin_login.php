@@ -16,29 +16,37 @@ global $ERROR_LOGIN;
             <div class="content">
                 <div>
                     <form class="animate" method="post" class="needs-validation">
-                        <input type="hidden" name="<?php echo $_SESSION['token_field'] ?? '' ?>"
-                               value="<?php echo $_SESSION['token'] ?? '' ?>">
+                        <input type="hidden" name="<?php
+                        echo $_SESSION['token_field'] ?? '' ?>"
+                               value="<?php
+                               echo $_SESSION['token'] ?? '' ?>">
                         <div class="img-container">
                             <img src="/static/img/login-avatar.png" alt="Avatar" class="img-avatar">
                         </div>
 
                         <div class="form-floating mb-3">
-                            <input name="<?php echo $_SESSION['admin_username_field'] ?? '' ?>" type="text"
+                            <input name="<?php
+                            echo $_SESSION['admin_username_field'] ?? '' ?>" type="text"
                                    placeholder="Max Musterfrau"
-                                   id="<?php echo $_SESSION['admin_username_field'] ?? '' ?>"
+                                   id="<?php
+                                   echo $_SESSION['admin_username_field'] ?? '' ?>"
                                    class="form-control"
                                    required>
-                            <label for="<?php echo $_SESSION['admin_username_field'] ?? '' ?>">
+                            <label for="<?php
+                            echo $_SESSION['admin_username_field'] ?? '' ?>">
                                 Name
                             </label>
                         </div>
 
                         <div class="form-floating mb-3">
-                            <input name="<?php echo $_SESSION['admin_password_field'] ?? '' ?>" type="password"
-                                   placeholder="123" id="<?php echo $_SESSION['admin_password_field'] ?? '' ?>"
+                            <input name="<?php
+                            echo $_SESSION['admin_password_field'] ?? '' ?>" type="password"
+                                   placeholder="123" id="<?php
+                            echo $_SESSION['admin_password_field'] ?? '' ?>"
                                    class="form-control"
                                    required>
-                            <label for="<?php echo $_SESSION['admin_password_field'] ?? '' ?>">
+                            <label for="<?php
+                            echo $_SESSION['admin_password_field'] ?? '' ?>">
                                 Passwort
                             </label>
                         </div>
@@ -51,7 +59,8 @@ global $ERROR_LOGIN;
                         if (!$token || $token !== $_SESSION['token']) {
                             ?>
                             <h3>
-                                <?php echo $ERROR_LOGIN ?>
+                                <?php
+                                echo $ERROR_LOGIN ?>
                             </h3>
                         <?php
                         exit();
@@ -61,7 +70,8 @@ global $ERROR_LOGIN;
                         if (!$logged_in) {
                         ?>
                             <h3>
-                                <?php echo $ERROR_LOGIN ?>
+                                <?php
+                                echo $ERROR_LOGIN ?>
                             </h3>
                         <?php
                         exit();

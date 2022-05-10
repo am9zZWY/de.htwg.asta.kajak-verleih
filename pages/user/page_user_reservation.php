@@ -2,7 +2,7 @@
 global $config;
 echo create_header('Kajak Reservierung', '/');
 $connection = $_SESSION['connection'];
-$kajaks = $config->getKajaks();
+$kajaks = $config->get_kajaks();
 $available_kajaks = get_kajak_with_real_amount($connection);
 
 /* create csrf token */
@@ -33,12 +33,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                     foreach ($available_kajaks as $kajak) {
                         ?>
                         <div>
-                            <h4><?php echo $kajak->name ?></h4><br>
-                            Das <?php echo $kajak->name ?>
-                            hat <?php echo $kajak->seats . ((int)$kajak->seats === 1 ? ' Sitz' : ' Sitze') ?>. Insgesamt
-                            <?php echo((int)$kajak->amount === 1 ? ' ist' : ' sind') ?>
-                            derzeit <?php echo $kajak->amount ?? 0 ?> Stück dieses Modells verfügbar.<br>
-                            <img alt="Bild von <?php echo $kajak->name ?>" src="<?php echo $kajak->img ?>"
+                            <h4><?php
+                                echo $kajak->name ?></h4><br>
+                            Das <?php
+                            echo $kajak->name ?>
+                            hat <?php
+                            echo $kajak->seats . ((int)$kajak->seats === 1 ? ' Sitz' : ' Sitze') ?>. Insgesamt
+                            <?php
+                            echo((int)$kajak->amount === 1 ? ' ist' : ' sind') ?>
+                            derzeit <?php
+                            echo $kajak->amount ?? 0 ?> Stück dieses Modells verfügbar.<br>
+                            <img alt="Bild von <?php
+                            echo $kajak->name ?>" src="<?php
+                            echo $kajak->img ?>"
                                  class="img-fluid" style="width: 300px; height: 200px;"/>
                         </div>
                         <?php
@@ -53,13 +60,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 <div class="custom-form">
                     <form action="/" method="post" class="needs-validation">
                         <input type="hidden"
-                               name="<?php echo $_SESSION['token_field'] ?? '' ?>"
-                               value="<?php echo $_SESSION['token'] ?? '' ?>">
+                               name="<?php
+                               echo $_SESSION['token_field'] ?? '' ?>"
+                               value="<?php
+                               echo $_SESSION['token'] ?? '' ?>">
                         <div class="row my-2">
                             <div class="col-sm-6">
                                 <div class="mb-3 form-floating">
                                     <input name="name" type="text" placeholder="Max"
-                                           value="<?php echo get_post_field('name') ?>"
+                                           value="<?php
+                                           echo get_post_field('name') ?>"
                                            id="name"
                                            class="form-control"
                                            required>
@@ -72,7 +82,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                             <div class="col-sm-6">
                                 <div class="mb-3 form-floating">
                                     <input name="surname" type="text" placeholder="Mustermann"
-                                           value="<?php echo get_post_field('surname') ?>"
+                                           value="<?php
+                                           echo get_post_field('surname') ?>"
                                            id="surname"
                                            class="form-control"
                                            required>
@@ -87,7 +98,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                             <div class="col-sm-6">
                                 <div class="mb-3 form-floating">
                                     <input name="email" type="email" placeholder="ma391mus@htwg-konstanz.de"
-                                           value="<?php echo get_post_field('email') ?>"
+                                           value="<?php
+                                           echo get_post_field('email') ?>"
                                            id="email"
                                            class="form-control"
                                            required>
@@ -100,7 +112,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                             <!-- <div class="col-sm-6">
                                 <div class="mb-3 form-floating">
                                     <input name="phone" type="tel" placeholder="+49 (0) 123 456789"
-                                           value="<?php echo get_post_field('phone') ?>"
+                                           value="<?php
+                            echo get_post_field('phone') ?>"
                                            id="phone"
                                            class="form-control"
                                            required>
@@ -115,7 +128,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                             <div class="col-sm-6">
                                 <div class="mb-3 form-floating">
                                     <input name="street" type="text" placeholder="Straße, Hausnummer"
-                                           value="<?php echo get_post_field('street') ?>"
+                                           value="<?php
+                                           echo get_post_field('street') ?>"
                                            id="street"
                                            class="form-control"
                                            required>
@@ -128,7 +142,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                             <div class="col-sm-6">
                                 <div class="mb-3 form-floating">
                                     <input name="plz" type="text" placeholder="PLZ" id="plz"
-                                           value="<?php echo get_post_field('plz') ?>"
+                                           value="<?php
+                                           echo get_post_field('plz') ?>"
                                            class="form-control"
                                            required>
                                     <label for="plz">
@@ -142,7 +157,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                             <div class="col-sm-6">
                                 <div class="form-group form-floating">
                                     <input name="city" type="text" placeholder="Stadt"
-                                           value="<?php echo get_post_field('city') ?>"
+                                           value="<?php
+                                           echo get_post_field('city') ?>"
                                            id="city"
                                            class="form-control"
                                            required>
@@ -163,7 +179,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                         <?php
                                         foreach ($countries as $country) {
                                             ?>
-                                            <option <?php echo $country === $selected_country ? 'selected' : '' ?>><?php echo $country ?></option>
+                                            <option <?php
+                                            echo $country === $selected_country ? 'selected' : '' ?>><?php
+                                                echo $country ?></option>
                                             <?php
                                         }
                                         ?>
@@ -182,7 +200,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                 <div class="form-group form-floating">
                                     <?php
                                     /* is put here for better debug, better NOT move it further down */
-                                    $days = $config->getFormattedDays();
+                                    $days = $config->get_formatted_days();
                                     $selected_date = get_post_field('date');
                                     ?>
                                     <select name="date" class="form-select" id="date" autocomplete="on"
@@ -190,10 +208,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                         <?php
                                         foreach ($days as $day) {
                                             ?>
-                                            <option value="<?php echo $day[1] ?>" <?php echo $day[1] === $selected_date ? 'selected' : '' ?>>
-                                                <?php echo $day[0] ?>
+                                            <option class="day" value="<?php
+                                            echo $day[1] ?>" <?php
+                                            echo $day[1] === $selected_date ? 'selected' : '' ?>>
+                                                <?php
+                                                echo $day[0] ?>
                                             </option>
-                                        <?php } ?>
+                                            <?php
+                                        } ?>
                                     </select>
                                     <label for="date">
                                         Datum
@@ -207,20 +229,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                     <!-- select time slots -->
                                     <?php
                                     $selected_timeslots = get_post_fields('timeslots');
-                                    foreach ($config->getFormattedTimeslots() as $index => $timeslot) { ?>
+                                    foreach ($config->get_formatted_timeslots() as $index => $timeslot) { ?>
                                         <span class="form-check-label">
                                                 <input type="checkbox" name="timeslots[]"
-                                                       value="<?php echo $index ?>"
-                                                       <?php echo in_array((string)($index), $selected_timeslots, true) ? 'checked' : '' ?>
+                                                       value="<?php
+                                                       echo $index ?>"
+                                                       <?php
+                                                       echo in_array((string)($index), $selected_timeslots, TRUE) ? 'checked' : '' ?>
                                                        class="form-check-input timeslot">
-                                                <?php echo $timeslot ?>
+                                                <?php
+                                                echo $timeslot ?>
                                             </span>
                                         <br>
-                                    <?php } ?>
+                                        <?php
+                                    } ?>
                                     <div class="row mt-2">
                                         <p>
                                             <?php
-                                            foreach ($config->getPrices() as $price) {
+                                            foreach ($config->get_prices() as $price) {
                                                 echo $price["description"] . ": <strong>" . $price["value"] . "€</strong>";
                                                 ?>
                                                 <br>
@@ -238,13 +264,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                     ?>
                                     <div class="col-md-6">
                                         <div class="form-group form-floating">
-                                            <input type="number" max="<?php echo $kajak->amount ?? 0 ?>"
-                                                   min="0" id="<?php echo $kajak->kind ?>"
-                                                   value="<?php echo get_post_field($kajak->kind, 0) ?>"
-                                                   name="<?php echo $kajak->kind ?>"
+                                            <input type="number" max="<?php
+                                            echo $kajak->amount ?? 0 ?>"
+                                                   min="0" id="<?php
+                                            echo $kajak->kind ?>"
+                                                   value="<?php
+                                                   echo get_post_field($kajak->kind, 0) ?>"
+                                                   name="<?php
+                                                   echo $kajak->kind ?>"
                                                    class="amount-kajak form-control"/>
-                                            <label class="form-check-label" for="<?php echo $kajak->kind ?>">
-                                                Anzahl der <?php echo $kajak->name ?>s
+                                            <label class="form-check-label" for="<?php
+                                            echo $kajak->kind ?>">
+                                                Anzahl der <?php
+                                                echo $kajak->name ?>s
                                             </label>
                                         </div>
                                     </div>
@@ -257,7 +289,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                 <div class="col-md-6">
                                     <label>
                                         <input type="checkbox" name="is_studi" value="1"
-                                               required <?php echo get_post_field('is_studi') === '1' ? 'checked' : '' ?>
+                                               required <?php
+                                        echo get_post_field('is_studi') === '1' ? 'checked' : '' ?>
                                                class="form-check-input">
                                         Hiermit bestätige ich, dass ich Angehörige*r an der HTWG
                                         Konstanz oder der Universität Konstanz bin.
@@ -266,9 +299,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                 <div class="col-md-6">
                                     <label>
                                         <input type="checkbox" name="terms" value="1"
-                                               required <?php echo get_post_field('terms') === '1' ? 'checked' : '' ?>
+                                               required <?php
+                                        echo get_post_field('terms') === '1' ? 'checked' : '' ?>
                                                class="form-check-input">
-                                        Ich habe die <a href="/about" class="text-danger" target="_blank"><strong>Nutzungsbedingungen</strong></a>
+                                        Ich habe
+                                        die <a href="/about" class="text-danger" target="_blank"><strong>Nutzungsbedingungen</strong></a>
+                                        und
+                                        die <a href="/privacy" class="text-danger" target="_blank"><strong>Datenschutzerklärung</strong></a>
                                         gelesen
                                         und akzeptiere sie.
                                     </label>
@@ -287,6 +324,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         </div>
                     </form>
                     <script>
+                        /* script to calculate the price */
+                        /* don't event think about modifying this script to lower the price, it won't work :) */
                         const calculated_price_element = document.getElementById('calculated-price');
                         const calculate_price = () => {
                             /* get necessary fields and information */
@@ -298,7 +337,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                 }
                             ]), []);
                             const timeslots = Array.from(document.getElementsByClassName('timeslot')).map(timeslot => timeslot.checked);
-                            /* encode everything :) */
+                            /* encode everything and send some magic :) */
                             const encoded = btoa(JSON.stringify({
                                 amount_kajaks: amount_kajaks_by_kind,
                                 timeslots
@@ -318,6 +357,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         Array.from(document.getElementsByClassName('amount-kajak')).forEach(kajak => kajak.addEventListener('change', calculate_price))
                         Array.from(document.getElementsByClassName('timeslot')).forEach(timeslot => timeslot.addEventListener('change', calculate_price))
                     </script>
+                    <script>
+                        const days = document.getElementsByClassName('day');
+
+                        const encoded = btoa(JSON.stringify({
+                            amount_kajaks: amount_kajaks_by_kind,
+                            timeslots
+                        }))
+
+                        const xmlhttp = new XMLHttpRequest();
+                        xmlhttp.onreadystatechange = function () {
+                            if (this.readyState === 4 && this.status === 200) {
+                                calculated_price_element.innerHTML = '<strong>Bitte bringe ' + this.responseText + '€ in Bar mit.</strong>';
+                            }
+                        };
+                        /* send request to own api to calculate price */
+                        xmlhttp.open('GET', '/api?available&payload_price=' + encoded, true);
+                        xmlhttp.send();
+
+                    </script>
                     <?php
                     global $ERROR_RESERVATION;
 
@@ -328,7 +386,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                     if (!$token || $token !== $_SESSION['token']) {
                         ?>
                         <h3>
-                            <?php echo $ERROR_RESERVATION ?>
+                            <?php
+                            echo $ERROR_RESERVATION ?>
                         </h3>
                     <?php
                     exit();
@@ -337,7 +396,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                     $ret_val = reservate_kajak($connection, $_POST, TRUE);
                     ?>
                         <h3>
-                            <?php echo $ret_val->statusMessage; ?>
+                            <?php
+                            echo $ret_val->statusMessage; ?>
                         </h3>
                     <?php
                     if ($ret_val->status) {
@@ -347,7 +407,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                 window.location = '/';
                             }, 2000);
                         </script>
-                    <?php }
+                        <?php
+                    }
                     } ?>
                 </div>
             </div>

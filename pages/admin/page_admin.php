@@ -48,7 +48,7 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') && isset($_POST['confirm']) && is_lo
 global $config;
 $reservations = get_reservations($conn);
 $kajaks_by_reservation_id = get_reserved_kajaks_by_id($conn);
-$kajak_kinds = $config->getKajakKinds();
+$kajak_kinds = $config->get_kajak_kinds();
 $kajaks = get_kajaks($conn);
 
 echo create_header('Dashboard');
@@ -102,7 +102,8 @@ echo create_header('Dashboard');
                             foreach ($reservations as $reservation) {
                                 $is_cancelled = $reservation['cancelled'] === 1;
                                 ?>
-                                <tr class="reservation reservation-row <?php echo $is_cancelled ? 'cancelled' : '' ?>">
+                                <tr class="reservation reservation-row <?php
+                                echo $is_cancelled ? 'cancelled' : '' ?>">
                                     <td class="text-center">
                                         <?php
                                         if ($is_cancelled) { ?>
@@ -110,20 +111,32 @@ echo create_header('Dashboard');
                                             <?php
                                         } ?>
                                         <input class="form-check-input" type="checkbox"
-                                               id="reservation-checkbox-<?php echo $reservation['reservation_id'] ?>"
-                                               value="<?php echo $reservation['reservation_id'] ?>"
+                                               id="reservation-checkbox-<?php
+                                               echo $reservation['reservation_id'] ?>"
+                                               value="<?php
+                                               echo $reservation['reservation_id'] ?>"
                                                name="id[]">
 
                                     </td>
-                                    <td><?php echo $reservation['reservation_id'] ?></td>
-                                    <td><?php echo $reservation['name'] ?></td>
-                                    <td><?php echo $reservation['address'] ?></td>
-                                    <!-- <td><?php echo $reservation['phone'] ?></td> -->
-                                    <td><?php echo $reservation['email'] ?></td>
-                                    <td><?php echo date_create($reservation['date'])->format('d.m.Y') ?></td>
-                                    <td><?php echo $reservation['from_time'] . '–' . $reservation['to_time'] ?></td>
-                                    <td><?php echo implode(', ', $kajaks_by_reservation_id[$reservation['reservation_id']] ?? []) ?></td>
-                                    <td><?php echo $reservation['price'] ?>€</td>
+                                    <td><?php
+                                        echo $reservation['reservation_id'] ?></td>
+                                    <td><?php
+                                        echo $reservation['name'] ?></td>
+                                    <td><?php
+                                        echo $reservation['address'] ?></td>
+                                    <!-- <td><?php
+                                    echo $reservation['phone'] ?></td> -->
+                                    <td><?php
+                                        echo $reservation['email'] ?></td>
+                                    <td><?php
+                                        echo date_create($reservation['date'])->format('d.m.Y') ?></td>
+                                    <td><?php
+                                        echo $reservation['from_time'] . '–' . $reservation['to_time'] ?></td>
+                                    <td><?php
+                                        echo implode(', ', $kajaks_by_reservation_id[$reservation['reservation_id']] ?? []) ?></td>
+                                    <td><?php
+                                        echo $reservation['price'] ?>€
+                                    </td>
                                 </tr>
                                 <?php
                             }
@@ -170,28 +183,39 @@ echo create_header('Dashboard');
                 <div class="table-responsive">
                     <table class="table table-striped table-bordered table-sm table-light" id="reservations">
                         <caption>Auflistung aller Kajaks</caption>
+                        <colgroup>
+                            <col style="width: 20%"><!-- Name -->
+                            <col style="width: 15%"><!-- Typ -->
+                            <col style="width: 10%"><!-- Sitze -->
+                            <col style="width: 10%"><!-- Verfügbar -->
+                            <col style="width: 25%"><!-- Kommentar -->
+                            <col style="width: 20%"><!-- Aktionen -->
+                        </colgroup>
                         <tr>
                             <th>Name</th>
                             <th>Typ</th>
-                            <th>Anzahl der Sitze</th>
+                            <th>Sitze</th>
                             <th>Verfügbar</th>
                             <th>Kommentar</th>
                             <th>Aktionen</th>
                         </tr>
                         <?php
-                        $seats_per_kajak = $config->getSeatsPerKajak();
+                        $seats_per_kajak = $config->get_seats_per_kajak();
                         foreach ($kajaks as $kajak) {
                             $is_unavailable = $kajak['available'] === 0;
                             $kajak_name = $kajak['kajak_name'];
                             ?>
-                            <tr class="kajak kajak-row <?php echo $is_unavailable ? 'unavailable' : '' ?>">
+                            <tr class="kajak kajak-row <?php
+                            echo $is_unavailable ? 'unavailable' : '' ?>">
                                 <form method="post">
-                                    <input type="hidden" value="<?php echo $kajak_name ?>"
+                                    <input type="hidden" value="<?php
+                                    echo $kajak_name ?>"
                                            name="kajak_old_name"/>
                                     <input type="hidden" name="confirm" value="1">
                                     <td>
                                         <input class="form-control" name="kajak_name" type="text"
-                                               value="<?php echo $kajak_name ?>"/>
+                                               value="<?php
+                                               echo $kajak_name ?>"/>
                                     </td>
                                     <td>
                                         <select autocomplete="on" class="form-select" class="form-select" id="kind"
@@ -199,29 +223,36 @@ echo create_header('Dashboard');
                                             <?php
                                             foreach ($kajak_kinds as $kajak_kind) {
                                                 ?>
-                                                <option value="<?php echo $kajak_kind ?>"
-                                                    <?php if ($kajak['kind'] === $kajak_kind) {
+                                                <option value="<?php
+                                                echo $kajak_kind ?>"
+                                                    <?php
+                                                    if ($kajak['kind'] === $kajak_kind) {
                                                         echo 'selected';
                                                     } ?>>
-                                                    <?php echo $kajak_kind ?>
+                                                    <?php
+                                                    echo $kajak_kind ?>
                                                 </option>
-                                            <?php } ?>
+                                                <?php
+                                            } ?>
                                         </select>
                                     </td>
                                     <td>
                                         <input class="form-control" min="1"
                                                name="kajak_seats"
                                                type="number"
-                                               value="<?php echo $kajak['seats'] ?>"/>
+                                               value="<?php
+                                               echo $kajak['seats'] ?>"/>
                                     </td>
                                     <td>
                                         <select name="kajak_available" class="form-select">
-                                            <option value="1" <?php if (!$is_unavailable) {
+                                            <option value="1" <?php
+                                            if (!$is_unavailable) {
                                                 echo 'selected';
                                             } ?>>
                                                 Ja
                                             </option>
-                                            <option value="0" <?php if ($is_unavailable) {
+                                            <option value="0" <?php
+                                            if ($is_unavailable) {
                                                 echo 'selected';
                                             } ?>>
                                                 Nein
@@ -230,7 +261,8 @@ echo create_header('Dashboard');
                                     </td>
                                     <td>
                                         <input class="form-control" name="kajak_comment" type="text"
-                                               value="<?php echo $kajak['comment'] ?>"/>
+                                               value="<?php
+                                               echo $kajak['comment'] ?>"/>
                                     </td>
                                     <td>
                                         <div class="btn-group d-flex">
@@ -260,10 +292,13 @@ echo create_header('Dashboard');
                                         <?php
                                         foreach ($kajak_kinds as $kajak_kind) {
                                             ?>
-                                            <option value="<?php echo $kajak_kind ?>">
-                                                <?php echo $kajak_kind ?>
+                                            <option value="<?php
+                                            echo $kajak_kind ?>">
+                                                <?php
+                                                echo $kajak_kind ?>
                                             </option>
-                                        <?php } ?>
+                                            <?php
+                                        } ?>
                                     </select>
                                 </td>
                                 <td>
@@ -327,22 +362,27 @@ echo create_header('Dashboard');
                                 ?>
                                 <tr class="blacklist blacklist-row">
                                     <form method="post">
-                                        <input type="hidden" value="<?php echo $name ?>"
+                                        <input type="hidden" value="<?php
+                                        echo $name ?>"
                                                name="old_name"/>
-                                        <input type="hidden" value="<?php echo $email ?>"
+                                        <input type="hidden" value="<?php
+                                        echo $email ?>"
                                                name="old_email"/>
                                         <input type="hidden" name="confirm" value="1">
                                         <td>
                                             <input class="form-control" name="name" type="text"
-                                                   value="<?php echo $name ?>"/>
+                                                   value="<?php
+                                                   echo $name ?>"/>
                                         </td>
                                         <td>
                                             <input class="form-control" name="email" type="email"
-                                                   value="<?php echo $email ?>"/>
+                                                   value="<?php
+                                                   echo $email ?>"/>
                                         </td>
                                         <td>
                                             <input class="form-control" name="comment" type="text"
-                                                   value="<?php echo $person['comment'] ?>"/>
+                                                   value="<?php
+                                                   echo $person['comment'] ?>"/>
                                         </td>
                                         <td>
                                             <div class="btn-group d-flex">
@@ -398,10 +438,12 @@ echo create_header('Dashboard');
                         <strong>Preise:</strong>
                         <ul>
                             <?php
-                            foreach ($config->getPrices() as $price) {
+                            foreach ($config->get_prices() as $price) {
                                 ?>
                                 <li>
-                                    <?php echo $price["description"] ?>: <?php echo $price["value"] ?>
+                                    <?php
+                                    echo $price["description"] ?>: <?php
+                                    echo $price["value"] ?>
                                 </li>
                                 <?php
                             }
@@ -414,20 +456,24 @@ echo create_header('Dashboard');
                         <strong>Kajaks:</strong>
                         <ul>
                             <?php
-                            foreach ($config->getKajaks() as $kajak) {
+                            foreach ($config->get_kajaks() as $kajak) {
                                 ?>
                                 <li>
-                                    <?php echo $kajak->name ?>:
+                                    <?php
+                                    echo $kajak->name ?>:
                                     <ul>
                                         <li>
-                                            Typ: <?php echo $kajak->kind ?>
+                                            Typ: <?php
+                                            echo $kajak->kind ?>
                                         </li>
                                         <li>
-                                            Sitze: <?php echo $kajak->seats ?>
+                                            Sitze: <?php
+                                            echo $kajak->seats ?>
                                         </li>
                                     </ul>
                                 </li>
-                            <?php } ?>
+                                <?php
+                            } ?>
                         </ul>
                     </li>
 
@@ -436,12 +482,15 @@ echo create_header('Dashboard');
                         <strong>Timeslots:</strong>
                         <ul>
                             <?php
-                            foreach ($config->getTimeslots() as $timeslot) {
+                            foreach ($config->get_timeslots() as $timeslot) {
                                 ?>
                                 <li>
-                                    <?php echo $timeslot["name"] ?>: <?php echo $config->formatTimeslot($timeslot) ?>
+                                    <?php
+                                    echo $timeslot["name"] ?>: <?php
+                                    echo $config->format_timeslots($timeslot) ?>
                                 </li>
-                            <?php } ?>
+                                <?php
+                            } ?>
                         </ul>
                     </li>
 
@@ -450,8 +499,10 @@ echo create_header('Dashboard');
                         <strong>Unsortiert:</strong>
                         <ul>
                             <li>
-                                <?php $days = $config->getDays(); ?>
-                                Reservierungszeitraum: <?php echo $days["min_days"] . ' - ' . $days["max_days"] ?> Tage
+                                <?php
+                                $days = $config->get_days(); ?>
+                                Reservierungszeitraum: <?php
+                                echo $days["min_days"] . ' - ' . $days["max_days"] ?> Tage
                             </li>
                         </ul>
                     </li>

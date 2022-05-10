@@ -91,6 +91,7 @@ if ($PARSED_URL === '/api') {
 
     ?>
 </div>
-<?php require("components/component_footer.php"); ?>
+<?php
+require("components/component_footer.php"); ?>
 </body>
 </html>

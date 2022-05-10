@@ -21,7 +21,8 @@ $reservation_id = clean_string($params['id'] ?? '');
                                    id="id"
                                    class="form-control"
                                    readonly
-                                   value="<?php echo $reservation_id; ?>"
+                                   value="<?php
+                                   echo $reservation_id; ?>"
                                    required>
                             <label for="id">
                                 Reservierungsnummer
@@ -45,9 +46,11 @@ $reservation_id = clean_string($params['id'] ?? '');
                 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ?>
                     <h2>
-                        <?php echo cancel_reservation($connection, $_POST, TRUE) ?>
+                        <?php
+                        echo cancel_reservation($connection, $_POST, TRUE) ?>
                     </h2>
-                <?php }
+                    <?php
+                }
                 ?>
             </div>
         </div>

@@ -37,3 +37,15 @@ $ERROR_KAJAK_NOT_CREATED = "Kajak konnte nicht erstellt werden.";
 
 /* Login */
 $ERROR_LOGIN = "YOU SHALL NOT PASS!";
+
+/**
+ * Log error.
+ * @param $where
+ * @param $error_log_message
+ * @return void
+ */
+function error($where, $error_log_message)
+{
+    /** @noinspection ForgottenDebugOutputInspection */
+    error_log('ERROR in ' . $where . ': ' . $error_log_message);
+}

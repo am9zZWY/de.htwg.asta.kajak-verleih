@@ -107,7 +107,9 @@ WHERE kajak_name NOT IN (SELECT kajak_reservation.kajak_name
                          FROM kajak_reservation
                                   INNER JOIN reservations
                                              ON reservations.reservation_id = kajak_reservation.reservation_id
-                         WHERE reservations.date = '2019-01-01'
+                         WHERE reservations.date = '2022-04-23'
+                           AND reservations.cancelled = '0'
                            AND (reservations.from_time BETWEEN '9:00:00' AND '17:59:59'
                              OR reservations.to_time BETWEEN '9:00:00' AND '17:59:59'))
-  AND kajaks.kind = 'single_kajak';
+  AND kajaks.kind = 'double_kajak'
+  AND kajaks.available = 1;
