@@ -108,7 +108,7 @@ a:hover {
 /********************************* FORMS ***********************************/
 
 /* Full-width input fields */
-input[type=text], input[type=password], input[type=email], input[type=number], select {
+input[type=text], input[type=tel], input[type=password], input[type=email], input[type=number], select {
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0 !important;

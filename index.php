@@ -46,7 +46,7 @@ add_blacklist_table($connection);
 
 /* API */
 if ($PARSED_URL === '/api') {
-    require __DIR__ . 'pages/api/page_api.php';
+    require __DIR__ . '/pages/api/page_api.php';
     return;
 }
 ?>
@@ -65,33 +65,33 @@ if ($PARSED_URL === '/api') {
 <div class="container p-0">
     <?php
     /* navigation bar */
-    include __DIR__ . 'components/component_navigation.php';
+    include __DIR__ . '/components/component_navigation.php';
     ?>
 </div>
 <div class="container p-0">
     <?php
     if ($PARSED_URL === '/terms') {
-        require __DIR__ . 'pages/user/page_user_agb.php';
+        require __DIR__ . '/pages/user/page_user_agb.php';
     } elseif ($PARSED_URL === '/privacy' || $PARSED_URL === '/dsgvo' || $PARSED_URL === '/datenschutz') {
-        require __DIR__ . 'pages/user/page_user_privacy.php';
+        require __DIR__ . '/pages/user/page_user_privacy.php';
     } elseif ($PARSED_URL === '/imprint') {
-        require __DIR__ . 'pages/user/page_user_imprint.php';
+        require __DIR__ . '/pages/user/page_user_imprint.php';
     } elseif ($PARSED_URL === '/login') {
-        require __DIR__ . 'pages/admin/page_admin_login.php';
+        require __DIR__ . '/pages/admin/page_admin_login.php';
     } elseif ($PARSED_URL === '/cancel') {
-        require __DIR__ . 'pages/user/page_user_cancel.php';
+        require __DIR__ . '/pages/user/page_user_cancel.php';
     } elseif ($PARSED_URL === '/') {
-        require __DIR__ . 'pages/user/page_user_reservation.php';
+        require __DIR__ . '/pages/user/page_user_reservation.php';
     }
 
     /* show these pages only when logged in */
     if ($PARSED_URL === '/admin' && is_logged_in()) {
-        require __DIR__ . 'pages/admin/page_admin.php';
+        require __DIR__ . '/pages/admin/page_admin.php';
     }
 
     ?>
 </div>
 <?php
-include __DIR__ . 'components/component_footer.php'; ?>
+include __DIR__ . '/components/component_footer.php'; ?>
 </body>
 </html>

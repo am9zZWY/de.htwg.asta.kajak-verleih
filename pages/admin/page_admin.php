@@ -78,11 +78,11 @@ echo create_header('Dashboard');
                                 <col style="width: 5%"><!-- ID -->
                                 <col style="width: 15%"><!-- Name -->
                                 <col style="width: 20%"><!-- Adresse -->
-                                <!-- <col style="width: 0"> --><!-- Handynummer -->
-                                <col style="width: 20%"><!-- E-Mail Adresse -->
+                                <col style="width: 15%"><!-- Telefonnummer -->
+                                <col style="width: 15%"><!-- E-Mail Adresse -->
                                 <col style="width: 10%"><!-- Datum -->
-                                <col style="width: 20%"><!-- Zeitslot -->
-                                <col style="width: 20%"><!-- Kajaks -->
+                                <col style="width: 15%"><!-- Zeitslot -->
+                                <col style="width: 15%"><!-- Kajaks -->
                                 <col style="width: 5%"><!-- Preis -->
                             </colgroup>
                             <tr>
@@ -90,7 +90,7 @@ echo create_header('Dashboard');
                                 <th>ID</th>
                                 <th>Name</th>
                                 <th>Adresse</th>
-                                <!-- <th>Handynummer</th> -->
+                                <th>Telefonnummer</th>
                                 <th>E-Mail Adresse</th>
                                 <th>Datum</th>
                                 <th>Zeitslot</th>

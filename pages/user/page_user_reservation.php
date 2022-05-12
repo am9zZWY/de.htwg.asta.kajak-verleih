@@ -99,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                 </div>
                             </div>
 
-                            <!-- <div class="col-sm-6">
+                            <div class="col-sm-6">
                                 <div class="mb-3 form-floating">
                                     <input name="phone" type="tel" placeholder="+49 (0) 123 456789"
                                            value="<?= get_post_field('phone') ?>"
@@ -107,10 +107,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                            class="form-control"
                                            required>
                                     <label for="phone">
-                                        Telefonnummer nicht gerade !
+                                        Telefonnummer
                                     </label>
                                 </div>
-                            </div> -->
+                            </div>
                         </div>
 
                         <div class="row my-2">
