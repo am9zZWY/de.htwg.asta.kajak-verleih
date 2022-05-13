@@ -1,19 +1,19 @@
 <?php
 /* Connect to database */
-$conn = connect_to_database();
+$connection = connect_to_database();
 
 if (($_SERVER['REQUEST_METHOD'] === 'POST') && isset($_POST['confirm']) && is_logged_in() && clean_string($_POST['confirm']) === '1') {
     if (isset($_POST['archive_items'], $_POST['id'])) {
         $ids = clean_array($_POST['id']);
-        cancel_reservations($conn, $ids);
+        cancel_reservations($connection, $ids);
     } elseif (isset($_POST['recover_items'], $_POST['id'])) {
         $ids = clean_array($_POST['id']);
-        recover_reservations($conn, $ids);
+        recover_reservations($connection, $ids);
     } elseif (isset($_POST['drop_all'])) {
-        drop_all_tables($conn);
+        drop_all_tables($connection);
     } elseif (isset($_POST['remove_kajak'])) {
         $name = clean_string($_POST['kajak_name']);
-        remove_kajak($conn, $name);
+        remove_kajak($connection, $name);
     } elseif (isset($_POST['update_kajak']) || isset($_POST['add_kajak'])) {
         $name = clean_string($_POST['kajak_name']);
         $old_name = clean_string($_POST['kajak_old_name']) ?? $name;
@@ -22,14 +22,14 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') && isset($_POST['confirm']) && is_lo
         $available = (int)clean_string($_POST['kajak_available']);
         $comment = clean_string($_POST['kajak_comment']);
         if (isset($_POST['update_kajak'])) {
-            update_kajak($conn, $old_name, $name, $kind, $seats, $available, $comment);
+            update_kajak($connection, $old_name, $name, $kind, $seats, $available, $comment);
         } else {
-            add_kajak($conn, $name, $kind, $seats);
+            add_kajak($connection, $name, $kind, $seats);
         }
     } elseif (isset($_POST['remove_bad_person'])) {
         $name = clean_string($_POST['name']);
         $email = clean_string($_POST['email']);
-        remove_bad_person($conn, $name, $email);
+        remove_bad_person($connection, $name, $email);
     } elseif (isset($_POST['update_bad_person']) || isset($_POST['add_bad_person'])) {
         $name = clean_string($_POST['name']);
         $old_name = clean_string($_POST['old_name']) ?? $name;
@@ -37,19 +37,19 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') && isset($_POST['confirm']) && is_lo
         $old_email = clean_string($_POST['old_email']) ?? $email;
         $comment = clean_string($_POST['comment']);
         if (isset($_POST['update_bad_person'])) {
-            update_bad_person($conn, $name, $email, $comment, $old_name, $old_email);
+            update_bad_person($connection, $name, $email, $comment, $old_name, $old_email);
         } else {
-            add_bad_person($conn, $name, $email, $comment);
+            add_bad_person($connection, $name, $email, $comment);
         }
     }
 }
 
 /* Get all reservations from database */
 global $config;
-$reservations = get_reservations($conn);
-$kajaks_by_reservation_id = get_reserved_kajaks_by_id($conn);
+$reservations = get_reservations($connection);
+$kajaks_by_reservation_id = get_reserved_kajaks_by_id($connection);
 $kajak_kinds = $config->get_kajak_kinds();
-$kajaks = get_kajaks($conn);
+$kajaks = get_kajaks($connection);
 
 echo create_header('Dashboard');
 ?>
@@ -335,7 +335,7 @@ echo create_header('Dashboard');
                                 <th>Aktionen</th>
                             </tr>
                             <?php
-                            $blacklist = get_blacklist($conn);
+                            $blacklist = get_blacklist($connection);
                             foreach ($blacklist as $person) {
                                 $name = $person['name'];
                                 $email = $person['email'];

@@ -317,35 +317,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                             const xmlhttp = new XMLHttpRequest();
                             xmlhttp.onreadystatechange = function () {
                                 if (this.readyState === 4 && this.status === 200) {
-                                    calculated_price_element.innerHTML = '<strong>Bitte bringe ' + this.responseText + '€ in Bar mit.</strong>';
+                                    calculated_price_element.innerHTML = '<strong>Bitte bringe ' + this.responseText + ' in Bar mit.</strong>';
                                 }
                             };
                             /* send request to own api to calculate price */
-                            xmlhttp.open("GET", "/api?price&payload_price=" + encoded, true);
+                            xmlhttp.open('GET', '/api?price&payload_price=' + encoded, true);
                             xmlhttp.send();
                         }
 
                         Array.from(document.getElementsByClassName('amount-kajak')).forEach(kajak => kajak.addEventListener('change', calculate_price))
                         Array.from(document.getElementsByClassName('timeslot')).forEach(timeslot => timeslot.addEventListener('change', calculate_price))
-                    </script>
-                    <script>
-                        const days = document.getElementsByClassName('day');
-
-                        const encoded = btoa(JSON.stringify({
-                            amount_kajaks: amount_kajaks_by_kind,
-                            timeslots
-                        }))
-
-                        const xmlhttp = new XMLHttpRequest();
-                        xmlhttp.onreadystatechange = function () {
-                            if (this.readyState === 4 && this.status === 200) {
-                                calculated_price_element.innerHTML = '<strong>Bitte bringe ' + this.responseText + '€ in Bar mit.</strong>';
-                            }
-                        };
-                        /* send request to own api to calculate price */
-                        xmlhttp.open('GET', '/api?available&payload_price=' + encoded, true);
-                        xmlhttp.send();
-
                     </script>
                     <?php
                     global $ERROR_RESERVATION;
