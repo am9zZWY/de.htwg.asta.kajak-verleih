@@ -268,7 +268,7 @@ INSERT INTO kajak_reservation (kajak_name, reservation_id)
  * @param bool $send_email
  * @return ReturnValue
  */
-function reservate_kajak(?mysqli $conn, array $fields, bool $send_email = FALSE): ReturnValue
+function user_reservate_kajak(?mysqli $conn, array $fields, bool $send_email = FALSE): ReturnValue
 {
     global $ERROR_DATABASE_CONNECTION;
     if ($conn === NULL) {
@@ -315,7 +315,7 @@ function reservate_kajak(?mysqli $conn, array $fields, bool $send_email = FALSE)
     $max_time_index = end($raw_timeslots);
     $min_time = $config_timeslots[$min_time_index][0];
     $max_time = $config_timeslots[$max_time_index][1];
-    $timeslots = array($min_time, $max_time);
+    $timeslots = [$min_time, $max_time];
 
     /* get all kajak kinds */
     $kajak_kinds = get_kajak_kinds($conn);
@@ -379,7 +379,7 @@ function reservate_kajak(?mysqli $conn, array $fields, bool $send_email = FALSE)
  * @param array<string> $ids
  * @return void
  */
-function recover_reservations(?mysqli $conn, array $ids): void
+function admin_recover_reservations(?mysqli $conn, array $ids): void
 {
     global $ERROR_DATABASE_CONNECTION;
 
@@ -403,7 +403,7 @@ function recover_reservations(?mysqli $conn, array $ids): void
  * @param array<string> $ids
  * @return void
  */
-function cancel_reservations(?mysqli $conn, array $ids): void
+function admin_cancel_reservations(?mysqli $conn, array $ids): void
 {
     global $ERROR_DATABASE_CONNECTION;
 
@@ -427,7 +427,7 @@ function cancel_reservations(?mysqli $conn, array $ids): void
  * @param bool $send_email
  * @return string
  */
-function cancel_reservation(?mysqli $conn, array $fields, bool $send_email = FALSE): string
+function user_cancel_reservation(?mysqli $conn, array $fields, bool $send_email = FALSE): string
 {
     global $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY;
 
@@ -553,9 +553,9 @@ function get_reserved_kajaks_by_id(?mysqli $conn): array
     $kajak_reservation_list = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
     $kajaks_by_reservation_id = [];
-    foreach ($kajak_reservation_list as $item) {
-        $kajak_name = $item['kajak_name'];
-        $reservation_id = $item['reservation_id'];
+    foreach ($kajak_reservation_list as $kajak_reservation) {
+        $kajak_name = $kajak_reservation['kajak_name'];
+        $reservation_id = $kajak_reservation['reservation_id'];
         if (!array_key_exists($reservation_id, $kajaks_by_reservation_id)) {
             $kajaks_by_reservation_id[$reservation_id] = [];
         }

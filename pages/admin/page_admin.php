@@ -5,10 +5,10 @@ $connection = connect_to_database();
 if (($_SERVER['REQUEST_METHOD'] === 'POST') && isset($_POST['confirm']) && is_logged_in() && clean_string($_POST['confirm']) === '1') {
     if (isset($_POST['archive_items'], $_POST['id'])) {
         $ids = clean_array($_POST['id']);
-        cancel_reservations($connection, $ids);
+        admin_cancel_reservations($connection, $ids);
     } elseif (isset($_POST['recover_items'], $_POST['id'])) {
         $ids = clean_array($_POST['id']);
-        recover_reservations($connection, $ids);
+        admin_recover_reservations($connection, $ids);
     } elseif (isset($_POST['drop_all'])) {
         drop_all_tables($connection);
     } elseif (isset($_POST['remove_kajak'])) {

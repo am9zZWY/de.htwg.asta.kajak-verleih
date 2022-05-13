@@ -311,6 +311,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                             /* encode everything and send some magic :) */
                             const encoded = btoa(JSON.stringify({
                                 amount_kajaks: amount_kajaks_by_kind,
+                                "<?= $_SESSION['token_field'] ?>": "<?= $_SESSION['token'] ?>",
                                 timeslots
                             }))
 
@@ -344,7 +345,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                     exit();
                     }
 
-                    $ret_val = reservate_kajak($connection, $_POST, TRUE);
+                    $ret_val = user_reservate_kajak($connection, $_POST, TRUE);
                     ?>
                         <h3>
                             <?= $ret_val->statusMessage ?>
