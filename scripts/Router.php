@@ -42,10 +42,8 @@ function route($route, $print)
     if (array_key_exists($route, $routes)) {
         /* is valid route */
         $route_in_dict = $routes[$route];
-        if ($route_in_dict['auth'] === TRUE && !is_logged_in()) {
+        if (array_key_exists('auth', $route_in_dict) && $route_in_dict['auth'] === TRUE && !is_logged_in()) {
             /* 403 */
-            header('403 Restricted', TRUE, 403);
-            /* hehe */
             echo '<title>No!</title>';
             exit();
         }
@@ -60,7 +58,6 @@ function route($route, $print)
         }
     } else {
         /* 404 */
-        header('404 Not found', TRUE, 404);
         exit();
     }
 }
