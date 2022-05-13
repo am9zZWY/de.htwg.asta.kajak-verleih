@@ -1,7 +1,7 @@
 <?php
 /********************************* Error messages *********************************/
 /* General */
-$ERROR_EXECUTION = 'Ein Fehler ist aufgetreten.';
+$ERROR_EXECUTION = 'Ein Fehler ist aufgetreten. Bitte versuche es erneut.';
 
 /* Database */
 $ERROR_DATABASE_CONNECTION = 'Konnte keine Verbindung zur Datenbank herstellen. Läuft diese überhaupt?';
