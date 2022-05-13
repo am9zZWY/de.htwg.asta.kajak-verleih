@@ -15,6 +15,12 @@ if (isset($params['price'], $params['payload_price'])) {
         header('400 Bad Request', TRUE, 400);
         exit(1);
     }
+    $token = clean_string($decoded_payload[$_SESSION['token_field'] ?? ''] ?? '');
+    if (!$token || $token !== $_SESSION['token']) {
+        header('400 Bad Request', TRUE, 400);
+        exit(1);
+    }
+
     $timeslots = $decoded_payload['timeslots'];
     $amount_kajaks_per_kind = $decoded_payload['amount_kajaks'];
     echo calculate_price($conn, $timeslots, $amount_kajaks_per_kind) . '€';
