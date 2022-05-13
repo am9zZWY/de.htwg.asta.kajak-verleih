@@ -118,7 +118,7 @@ echo create_header('Dashboard');
                                     <td><?= $reservation['reservation_id'] ?></td>
                                     <td><?= $reservation['name'] ?></td>
                                     <td><?= $reservation['address'] ?></td>
-                                    <!-- <td><?= $reservation['phone'] ?></td> -->
+                                    <td><?= $reservation['phone'] ?></td>
                                     <td><?= $reservation['email'] ?></td>
                                     <td><?= date_create($reservation['date'])->format('d.m.Y') ?></td>
                                     <td><?= $reservation['from_time'] . '–' . $reservation['to_time'] ?></td>
