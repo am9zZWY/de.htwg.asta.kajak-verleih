@@ -52,6 +52,7 @@
     <days>
         <prop name="min">3</prop>
         <prop name="max">14</prop>
+        <!-- 0 = Sonntag, 1 = Montag, ... 6 = Samstag -->
         <prop name="exclude">0,6</prop>
     </days>
 </config>
