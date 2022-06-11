@@ -465,8 +465,8 @@ echo create_header('Dashboard');
                         <ul>
                             <li>
                                 <?php
-                                $days = $config->get_days(); ?>
-                                Reservierungszeitraum: <?= $days['min_days'] . ' - ' . $days['max_days'] ?> Tage
+                                $days = $config->get_days_config(); ?>
+                                Reservierungszeitraum: <?= $days['min'] . ' - ' . $days['max'] ?> Tage
                             </li>
                         </ul>
                     </li>

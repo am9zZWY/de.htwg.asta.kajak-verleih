@@ -50,7 +50,8 @@
     </timeslots>
     <!-- DAYS -->
     <days>
-        <min>3</min>
-        <max>14</max>
+        <prop name="min">3</prop>
+        <prop name="max">14</prop>
+        <prop name="exclude">0,6</prop>
     </days>
 </config>
