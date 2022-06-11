@@ -157,7 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                             <div class="col-sm-6">
                                 <div class="form-group form-floating">
                                     <?php
-                                    $countries = array('Deutschland', 'Schweiz', 'Österreich');
+                                    $countries = ['Deutschland', 'Schweiz', 'Österreich'];
                                     $selected_country = get_post_field('country')
                                     ?>
                                     <select name="country" class="form-select" id="country" autocomplete="on"
