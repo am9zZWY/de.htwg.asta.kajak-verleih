@@ -33,11 +33,18 @@ $routes = [
  *
  * @param $route
  * @param $print
+ *
  * @return void
  */
 function route($route, $print)
 {
     global $routes;
+
+    /* when ONLINE = FALSE then don't show the system*/
+    if (isset($_ENV['ONLINE']) && $_ENV['ONLINE'] === 'FALSE') {
+        include __DIR__ . '/../pages/page_down.html';
+        exit(0);
+    }
 
     if (array_key_exists($route, $routes)) {
         /* is valid route */

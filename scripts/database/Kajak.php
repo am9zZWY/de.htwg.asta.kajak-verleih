@@ -4,13 +4,14 @@
  * Create table for kajaks.
  *
  * @param mysqli|null $conn
+ *
  * @return void
  */
 function add_kajak_table(?mysqli $conn): void
 {
     global $ERROR_TABLE_CREATION, $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY;
 
-    if ($conn === NULL) {
+    if (!check_connection($conn)) {
         error('add_kajak_table', $ERROR_DATABASE_CONNECTION);
         return;
     }
@@ -41,16 +42,17 @@ CREATE TABLE IF NOT EXISTS kajaks
  * Add a kajak to the database.
  *
  * @param mysqli|null $conn
- * @param string $name
- * @param string $kind
- * @param int $seats
+ * @param string      $name
+ * @param string      $kind
+ * @param int         $seats
+ *
  * @return void
  */
 function add_kajak(?mysqli $conn, string $name, string $kind, int $seats): void
 {
     global $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY, $ERROR_TYPE_NOT_IN_CONFIG, $ERROR_TOO_MANY_SEATS, $ERROR_EXECUTION, $config;
 
-    if ($conn === NULL) {
+    if (!check_connection($conn)) {
         error('add_kajak', $ERROR_DATABASE_CONNECTION);
         return;
     }
@@ -97,19 +99,20 @@ function add_kajak(?mysqli $conn, string $name, string $kind, int $seats): void
  * Update kajak in the database.
  *
  * @param mysqli|null $conn
- * @param string $old_name
- * @param string $name
- * @param string $kind
- * @param int $seats
- * @param int $available
- * @param string $comment
+ * @param string      $old_name
+ * @param string      $name
+ * @param string      $kind
+ * @param int         $seats
+ * @param int         $available
+ * @param string      $comment
+ *
  * @return void
  */
 function update_kajak(?mysqli $conn, string $old_name, string $name, string $kind, int $seats, int $available, string $comment): void
 {
     global $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY, $ERROR_TYPE_NOT_IN_CONFIG, $ERROR_TOO_MANY_SEATS, $ERROR_EXECUTION, $config;
 
-    if ($conn === NULL) {
+    if (!check_connection($conn)) {
         error('update_kajak', $ERROR_DATABASE_CONNECTION);
         return;
     }
@@ -156,14 +159,15 @@ function update_kajak(?mysqli $conn, string $old_name, string $name, string $kin
  * Remove kajak from database by name.
  *
  * @param mysqli|null $conn
- * @param string $kajak_name
+ * @param string      $kajak_name
+ *
  * @return void
  */
 function remove_kajak(?mysqli $conn, string $kajak_name): void
 {
     global $ERROR_DATABASE_CONNECTION, $ERROR_EXECUTION;
 
-    if ($conn === NULL) {
+    if (!check_connection($conn)) {
         error('remove_kajak', $ERROR_DATABASE_CONNECTION);
         return;
     }
@@ -185,14 +189,14 @@ function remove_kajak(?mysqli $conn, string $kajak_name): void
  * Get all kajak.
  *
  * @param mysqli|null $conn
- * @param bool $exclude_not_available
+ * @param bool        $exclude_not_available
+ *
  * @return array
  */
 function get_kajaks(?mysqli $conn, bool $exclude_not_available = FALSE): array
 {
     global $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY;
-    if ($conn === NULL) {
-        error('get_kajaks', $ERROR_DATABASE_CONNECTION);
+    if (!check_connection($conn)) {
         return [];
     }
 
@@ -228,8 +232,7 @@ function get_kajaks(?mysqli $conn, bool $exclude_not_available = FALSE): array
 function get_kajak_with_real_amount(?mysqli $conn): array
 {
     global $ERROR_DATABASE_CONNECTION;
-    if ($conn === NULL) {
-        error('get_kajak_with_real_amount', $ERROR_DATABASE_CONNECTION);
+    if (!check_connection($conn)) {
         return [];
     }
 
@@ -248,13 +251,13 @@ function get_kajak_with_real_amount(?mysqli $conn): array
  * Get all kajak amounts by kind.
  *
  * @param mysqli|null $conn
+ *
  * @return array
  */
 function get_kajak_amounts(?mysqli $conn): array
 {
     global $ERROR_DATABASE_CONNECTION;
-    if ($conn === NULL) {
-        error('get_kajak_amounts', $ERROR_DATABASE_CONNECTION);
+    if (!check_connection($conn)) {
         return [];
     }
 
@@ -273,13 +276,13 @@ function get_kajak_amounts(?mysqli $conn): array
  * Get all kajak kinds.
  *
  * @param mysqli|null $conn
+ *
  * @return array
  */
 function get_kajak_kinds(?mysqli $conn): array
 {
     global $ERROR_DATABASE_CONNECTION;
-    if ($conn === NULL) {
-        error('get_kajak_kinds', $ERROR_DATABASE_CONNECTION);
+    if (!check_connection($conn)) {
         return [];
     }
 

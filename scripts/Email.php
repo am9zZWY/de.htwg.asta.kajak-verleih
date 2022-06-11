@@ -31,13 +31,14 @@ Fon: 07531 / 206 – 431<br>
 /**
  * Send email for kajak reservation.
  *
- * @param string $reservation_id
- * @param string $name
- * @param string $email_address_to
- * @param array $kajaks
+ * @param string        $reservation_id
+ * @param string        $name
+ * @param string        $email_address_to
+ * @param array         $kajaks
  * @param array<string> $timeslot
- * @param string $date
- * @param int $price
+ * @param string        $date
+ * @param int           $price
+ *
  * @return bool
  */
 function send_reservation_email(string $reservation_id, string $name, string $email_address_to, array $kajaks, array $timeslot, string $date, int $price): bool
@@ -71,6 +72,7 @@ function send_reservation_email(string $reservation_id, string $name, string $em
  *
  * @param string $reservation_id
  * @param string $email_address_to
+ *
  * @return bool
  */
 function send_cancellation_email(string $reservation_id, string $email_address_to): bool
@@ -92,6 +94,7 @@ function send_cancellation_email(string $reservation_id, string $email_address_t
  * @param string $email_address_to
  * @param string $subject
  * @param string $body
+ *
  * @return bool
  */
 function send_mail(string $email_address_to, string $subject, string $body): bool
@@ -110,13 +113,13 @@ function send_mail(string $email_address_to, string $subject, string $body): boo
         $mail->SMTPAuth = TRUE;
         $mail->SMTPKeepAlive = TRUE;
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->SMTPOptions = array(
-            'ssl' => array(
+        $mail->SMTPOptions = [
+            'ssl' => [
                 'verify_peer' => FALSE,
                 'verify_peer_name' => FALSE,
                 'allow_self_signed' => TRUE
-            )
-        );
+            ]
+        ];
         $mail->Host = get_env('MAIL_HOST');
         $mail->Port = get_env('MAIL_PORT');
         $mail->Username = get_env('MAIL_USERNAME');
@@ -131,7 +134,8 @@ function send_mail(string $email_address_to, string $subject, string $body): boo
 
         $mail->send();
         return TRUE;
-    } catch (Exception $e) {
+    } catch (Exception $exception) {
+        error('send_mail', $exception);
         return FALSE;
     }
 }

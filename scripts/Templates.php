@@ -3,8 +3,9 @@
 /**
  * Helper function to create header.
  *
- * @param string $header
+ * @param string      $header
  * @param string|null $link
+ *
  * @return string
  */
 function create_header(string $header, ?string $link = NULL): string

@@ -43,8 +43,10 @@ $ERROR_USER_BLOCKED = 'Reservierung nicht erlaubt.';
 
 /**
  * Log error.
+ *
  * @param $where
  * @param $error_log_message
+ *
  * @return void
  */
 function error($where, $error_log_message)

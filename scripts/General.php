@@ -5,6 +5,7 @@
  * Escape all html characters.
  *
  * @param string|null $string |null $string $string
+ *
  * @return string
  */
 function clean_string(?string $string): string
@@ -20,6 +21,7 @@ function clean_string(?string $string): string
  * Escape all html characters in array.
  *
  * @param array|null $array
+ *
  * @return array
  */
 function clean_array(?array $array): array
@@ -35,6 +37,7 @@ function clean_array(?array $array): array
  *
  * @param string $key
  * @param string $default
+ *
  * @return string
  */
 function get_env(string $key, string $default = ''): string
@@ -46,7 +49,8 @@ function get_env(string $key, string $default = ''): string
  * Get field from POST request.
  *
  * @param string $field
- * @param mixed $default
+ * @param mixed  $default
+ *
  * @return string
  */
 function get_post_field(string $field, $default = ''): string
@@ -58,7 +62,8 @@ function get_post_field(string $field, $default = ''): string
  * Get array fields from POST request.
  *
  * @param string $field
- * @param mixed $default
+ * @param mixed  $default
+ *
  * @return array
  */
 function get_post_fields(string $field, array $default = []): array

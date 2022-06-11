@@ -5,6 +5,7 @@
  *
  * @param string $username
  * @param string $password
+ *
  * @return bool
  */
 function login(string $username, string $password): bool

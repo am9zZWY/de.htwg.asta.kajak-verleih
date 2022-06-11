@@ -35,19 +35,35 @@ function connect_to_database(): ?mysqli
 }
 
 /**
+ * Checks connection to database.
+ *
+ * @param mysqli|null $conn
+ *
+ * @return bool
+ */
+function check_connection(?mysqli $conn): bool
+{
+    global $ERROR_DATABASE_CONNECTION;
+    if ($conn === NULL) {
+        error('check_connection', $ERROR_DATABASE_CONNECTION);
+        return FALSE;
+    }
+    return TRUE;
+}
+
+/**
  * USE WITH CAUTION!
  * USED BY ADMIN.
  *
  * Drops all tables.
  *
  * @param mysqli|null $conn
+ *
  * @return void
  */
-function drop_all_tables(?mysqli $conn): void
+function drop_all_tables(mysqli $conn): void
 {
-    global $ERROR_DATABASE_CONNECTION;
-    if ($conn === NULL) {
-        error('drop_all_tables', $ERROR_DATABASE_CONNECTION);
+    if (!check_connection($conn)) {
         return;
     }
 
@@ -62,15 +78,15 @@ function drop_all_tables(?mysqli $conn): void
  * Calculate price.
  *
  * @param mysqli|null $conn
- * @param $timeslots
- * @param $amount_kajaks_per_kind
+ * @param             $timeslots
+ * @param             $amount_kajaks_per_kind
+ *
  * @return int
  */
 function calculate_price(?mysqli $conn, $timeslots, $amount_kajaks_per_kind): int
 {
-    global $config, $ERROR_DATABASE_CONNECTION;
-    if ($conn === NULL) {
-        error('calculate_price', $ERROR_DATABASE_CONNECTION);
+    global $config;
+    if (!check_connection($conn)) {
         return 0;
     }
 

@@ -4,13 +4,14 @@
  * Create the table for the blacklist.
  *
  * @param mysqli|null $conn
+ *
  * @return void
  */
 function add_blacklist_table(?mysqli $conn): void
 {
     global $ERROR_TABLE_CREATION, $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY;
 
-    if ($conn === NULL) {
+    if (!check_connection($conn)) {
         error('add_blacklist_table', $ERROR_DATABASE_CONNECTION);
         return;
     }
@@ -41,14 +42,14 @@ CREATE TABLE IF NOT EXISTS blacklist
  * Get blacklist from database.
  *
  * @param mysqli|null $conn
+ *
  * @return array
  */
 function get_blacklist(?mysqli $conn): array
 {
     global $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY;
 
-    if ($conn === NULL) {
-        error('get_blacklist', $ERROR_DATABASE_CONNECTION);
+    if (!check_connection($conn)) {
         return [];
     }
 
@@ -62,8 +63,8 @@ function get_blacklist(?mysqli $conn): array
         if ($result_execute === FALSE) {
             return [];
         }
-    } catch (Exception $e) {
-        error('get_blacklist', $e);
+    } catch (Exception $exception) {
+        error('get_blacklist', $exception);
         return [];
     }
 
@@ -75,14 +76,14 @@ function get_blacklist(?mysqli $conn): array
  * Get a list of all blocked emails.
  *
  * @param mysqli|null $conn
+ *
  * @return array
  */
 function get_blacklist_emails(?mysqli $conn): array
 {
     global $ERROR_DATABASE_CONNECTION;
 
-    if ($conn === NULL) {
-        error('get_blacklist_emails', $ERROR_DATABASE_CONNECTION);
+    if (!check_connection($conn)) {
         return [];
     }
 
@@ -96,15 +97,16 @@ function get_blacklist_emails(?mysqli $conn): array
  * Remove a bad person who really nice though e.g. Marcel Geiss.
  *
  * @param mysqli|null $conn
- * @param string $name
- * @param string $email
+ * @param string      $name
+ * @param string      $email
+ *
  * @return void
  */
 function remove_bad_person(?mysqli $conn, string $name, string $email): void
 {
     global $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY;
 
-    if ($conn === NULL) {
+    if (!check_connection($conn)) {
         error('remove_bad_person', $ERROR_DATABASE_CONNECTION);
         return;
     }
@@ -123,17 +125,19 @@ function remove_bad_person(?mysqli $conn, string $name, string $email): void
 
 /**
  * Add a bad bad person e.g. Matthias Asche.
+ *
  * @param mysqli|null $conn
- * @param string $name
- * @param string $email
- * @param string $comment
+ * @param string      $name
+ * @param string      $email
+ * @param string      $comment
+ *
  * @return void
  */
 function add_bad_person(?mysqli $conn, string $name, string $email, string $comment): void
 {
     global $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY;
 
-    if ($conn === NULL) {
+    if (!check_connection($conn)) {
         error('add_bad_person', $ERROR_DATABASE_CONNECTION);
         return;
     }
@@ -157,18 +161,19 @@ function add_bad_person(?mysqli $conn, string $name, string $email, string $comm
  * Update kajak in the database.
  *
  * @param mysqli|null $conn
- * @param string $old_name
- * @param string $name
- * @param string $old_email
- * @param string $email
- * @param string $comment
+ * @param string      $old_name
+ * @param string      $name
+ * @param string      $old_email
+ * @param string      $email
+ * @param string      $comment
+ *
  * @return void
  */
 function update_bad_person(?mysqli $conn, string $name, string $email, string $comment, string $old_name, string $old_email): void
 {
     global $ERROR_DATABASE_CONNECTION, $ERROR_DATABASE_QUERY, $ERROR_EXECUTION;
 
-    if ($conn === NULL) {
+    if (!check_connection($conn)) {
         error('update_bad_person', $ERROR_DATABASE_CONNECTION);
         return;
     }
