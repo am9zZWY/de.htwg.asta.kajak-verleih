@@ -4,16 +4,13 @@ $connection = connect_to_database();
 
 if (($_SERVER['REQUEST_METHOD'] === 'POST') && isset($_POST['confirm']) && is_logged_in() && clean_string($_POST['confirm']) === '1') {
     if (isset($_POST['archive_items'], $_POST['id'])) {
-        $ids = clean_array($_POST['id']);
-        admin_cancel_reservations($connection, $ids);
+        admin_cancel_reservations($connection, clean_array($_POST['id']));
     } elseif (isset($_POST['recover_items'], $_POST['id'])) {
-        $ids = clean_array($_POST['id']);
-        admin_recover_reservations($connection, $ids);
+        admin_recover_reservations($connection, clean_array($_POST['id']));
     } elseif (isset($_POST['drop_all'])) {
         drop_all_tables($connection);
     } elseif (isset($_POST['remove_kajak'])) {
-        $name = clean_string($_POST['kajak_name']);
-        remove_kajak($connection, $name);
+        remove_kajak($connection, clean_string($_POST['kajak_name']));
     } elseif (isset($_POST['update_kajak']) || isset($_POST['add_kajak'])) {
         $name = clean_string($_POST['kajak_name']);
         $old_name = clean_string($_POST['kajak_old_name']) ?? $name;
