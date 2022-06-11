@@ -35,6 +35,9 @@ via [MySQL Workbench](https://dev.mysql.com/downloads/workbench/).
 Fill in the `.env` file with the following values:
 
 ```
+ONLINE=TRUE
+ENVIRONMENT=DEV
+
 MYSQL_SERVER=mysql-test-service:3306
 MYSQL_DATABASE=db
 MYSQL_USERNAME=user
