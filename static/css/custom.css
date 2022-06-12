@@ -177,7 +177,7 @@ button.custom-btn:hover, button.custom-btn:active {
     left: 0;
     background-color: #111;
     overflow: hidden;
-    transition: 0.5s;
+    transition: all 250ms ease-in-out;
     padding-top: 60px;
 }
 

@@ -20,9 +20,9 @@ function connect_to_database(): ?mysqli
 
     /* Create connection */
     try {
-        $conn = new mysqli($servername, $username, $password, $dbname);
+        $connection = new mysqli($servername, $username, $password, $dbname);
         /* Check connection */
-        if ($conn->connect_error) {
+        if ($connection->connect_error) {
             error('connect_to_database', $ERROR_DATABASE_CONNECTION);
             return NULL;
         }
@@ -31,20 +31,20 @@ function connect_to_database(): ?mysqli
         return NULL;
     }
 
-    return $conn;
+    return $connection;
 }
 
 /**
  * Checks connection to database.
  *
- * @param mysqli|null $conn
+ * @param mysqli|null $connection
  *
  * @return bool
  */
-function check_connection(?mysqli $conn): bool
+function check_connection(?mysqli $connection): bool
 {
     global $ERROR_DATABASE_CONNECTION;
-    if ($conn === NULL) {
+    if ($connection === NULL) {
         error('check_connection', $ERROR_DATABASE_CONNECTION);
         return FALSE;
     }
@@ -57,19 +57,19 @@ function check_connection(?mysqli $conn): bool
  *
  * Drops all tables.
  *
- * @param mysqli|null $conn
+ * @param mysqli|null $connection
  *
  * @return void
  */
-function drop_all_tables(mysqli $conn): void
+function drop_all_tables(mysqli $connection): void
 {
-    if (!check_connection($conn)) {
+    if (!check_connection($connection)) {
         return;
     }
 
-    $sql = $conn->prepare('DROP TABLE reservations');
+    $sql = $connection->prepare('DROP TABLE reservations');
     $sql->execute();
-    $sql = $conn->prepare('DROP TABLE kajak_reservation');
+    $sql = $connection->prepare('DROP TABLE kajak_reservation');
     $sql->execute();
     send_mail('', 'Tabellen gelöscht', 'Tabellen gelöscht! Bitte überprüfen, ob diese Aktion gewollt war');
 }
@@ -77,16 +77,16 @@ function drop_all_tables(mysqli $conn): void
 /**
  * Calculate price.
  *
- * @param mysqli|null $conn
+ * @param mysqli|null $connection
  * @param             $timeslots
  * @param             $amount_kajaks_per_kind
  *
  * @return int
  */
-function calculate_price(?mysqli $conn, $timeslots, $amount_kajaks_per_kind): int
+function calculate_price(mysqli $connection, $timeslots, $amount_kajaks_per_kind): int
 {
     global $config;
-    if (!check_connection($conn)) {
+    if (!check_connection($connection)) {
         return 0;
     }
 
@@ -105,9 +105,9 @@ function calculate_price(?mysqli $conn, $timeslots, $amount_kajaks_per_kind): in
         return $carry + ($seats_per_kajak[$kajak['kind']] * (int)$kajak['amount']);
     }, 0);
 
-    /* max values when "all" is passed */
+    /* max values when “all” is passed */
     $max_timeslots = count($config->get_timeslots());
-    $kajaks = get_kajaks($conn, TRUE);
+    $kajaks = get_kajaks($connection, TRUE);
     $max_kajaks = count($kajaks);
     $max_seats = array_reduce($kajaks, static function ($carry, $kajak) use ($seats_per_kajak) {
         return $carry + $seats_per_kajak[$kajak['kind']];

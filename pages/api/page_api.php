@@ -1,7 +1,7 @@
 <?php
 global $config, $URL;
 
-$conn = connect_to_database();
+$connection = connect_to_database();
 
 $PARSED_URL = parse_url($URL, PHP_URL_QUERY);
 if ($PARSED_URL !== NULL) {
@@ -23,7 +23,7 @@ if (isset($params['price'], $params['payload_price'])) {
 
     $timeslots = $decoded_payload['timeslots'];
     $amount_kajaks_per_kind = $decoded_payload['amount_kajaks'];
-    echo calculate_price($conn, $timeslots, $amount_kajaks_per_kind) . '€';
+    echo calculate_price($connection, $timeslots, $amount_kajaks_per_kind) . '€';
 } else {
     header('400 Bad Request', TRUE, 400);
     exit(1);

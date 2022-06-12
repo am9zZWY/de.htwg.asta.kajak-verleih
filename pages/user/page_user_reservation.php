@@ -315,15 +315,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                 timeslots
                             }))
 
-                            const xmlhttp = new XMLHttpRequest();
-                            xmlhttp.onreadystatechange = function () {
+                            const XMLHttpReq = new XMLHttpRequest();
+                            XMLHttpReq.onreadystatechange = function () {
                                 if (this.readyState === 4 && this.status === 200) {
                                     calculated_price_element.innerHTML = '<strong>Bitte bringe ' + this.responseText + ' in Bar mit.</strong>';
                                 }
                             };
                             /* send request to own api to calculate price */
-                            xmlhttp.open('GET', '/api?price&payload_price=' + encoded, true);
-                            xmlhttp.send();
+                            XMLHttpReq.open('GET', '/api?price&payload_price=' + encoded, true);
+                            XMLHttpReq.send();
                         }
 
                         Array.from(document.getElementsByClassName('amount-kajak')).forEach(kajak => kajak.addEventListener('change', calculate_price))

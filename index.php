@@ -8,7 +8,7 @@ use Dotenv\Dotenv;
 $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->safeLoad();
 
-$ENVIRONMENT = isset($_ENV['ENVIRONMENT']) ? $_ENV['ENVIRONMENT'] : 'PROD';
+$ENVIRONMENT = $_ENV['ENVIRONMENT'] ?? 'PROD';
 error_reporting($ENVIRONMENT === 'DEV' ? E_ALL : 0);
 ini_set('display_errors', $ENVIRONMENT === 'DEV');
 

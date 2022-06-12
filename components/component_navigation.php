@@ -58,8 +58,8 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') && isset($_POST['logout'])) {
 </div>
 <script lang="javascript">
     function openNav() {
-        document.getElementById("sidenav").style.width = "250px";
-        document.getElementById("burger").style.marginLeft = "250px";
+        document.getElementById("sidenav").style.width = "300px";
+        document.getElementById("burger").style.marginLeft = "300px";
         document.getElementById("navbar").style.display = "none";
         document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
     }

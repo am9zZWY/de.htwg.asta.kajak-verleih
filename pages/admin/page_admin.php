@@ -13,10 +13,10 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') && isset($_POST['confirm']) && is_lo
         remove_kajak($connection, clean_string($_POST['kajak_name']));
     } elseif (isset($_POST['update_kajak']) || isset($_POST['add_kajak'])) {
         $name = clean_string($_POST['kajak_name']);
-        $old_name = clean_string($_POST['kajak_old_name']) ?? $name;
+        $old_name = clean_string($_POST['kajak_old_name'] ?? $name);
         $kind = clean_string($_POST['kajak_kind']);
         $seats = (int)clean_string($_POST['kajak_seats']);
-        $available = (int)clean_string($_POST['kajak_available']);
+        $available = (int)clean_string($_POST['kajak_available'] ?? 1);
         $comment = clean_string($_POST['kajak_comment']);
         if (isset($_POST['update_kajak'])) {
             update_kajak($connection, $old_name, $name, $kind, $seats, $available, $comment);

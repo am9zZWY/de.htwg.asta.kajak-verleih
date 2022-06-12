@@ -21,7 +21,7 @@
         <div class="col content">
             <div class="content-wrapper">
                 <h4>Rechtliches</h4>
-                <p>test ipsum..</p>
+                <p></p>
             </div>
         </div>
         <div class="col content">
