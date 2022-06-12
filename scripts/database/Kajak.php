@@ -9,31 +9,18 @@
  */
 function add_kajak_table(mysqli $connection): void
 {
-    global $ERROR_TABLE_CREATION, $ERROR_DATABASE_QUERY;
-
-    if (!check_connection($connection)) {
-        return;
-    }
-
-    $sql = $connection->prepare("
+    $query = "
 CREATE TABLE IF NOT EXISTS kajaks
 (
     kajak_name       VARCHAR(30)     NOT NULL PRIMARY KEY,
     kind             VARCHAR(30)     NOT NULL,
     seats            INT             NOT NULL DEFAULT 0,
     available        BOOLEAN         NOT NULL DEFAULT TRUE,
-    comment          VARCHAR(200)    NOT NULL DEFAULT ''
-)");
-
-    if ($sql === FALSE) {
-        error('add_kajak_table', $ERROR_DATABASE_QUERY);
-        return;
-    }
-
-    if ($sql->execute()) {
-        return;
-    }
-    error('add_kajak_table', $ERROR_TABLE_CREATION);
+    comment          VARCHAR(200)    NOT NULL DEFAULT '',
+    UNIQUE INDEX index_available_kajak_name (available, kajak_name),
+    UNIQUE INDEX index_kajak_name_seats (seats, kajak_name)
+)";
+    prep_exec_sql($connection, $query, 'add_kajak_table');
 }
 
 
@@ -49,7 +36,7 @@ CREATE TABLE IF NOT EXISTS kajaks
  */
 function add_kajak(mysqli $connection, string $name, string $kind, int $seats): void
 {
-    global $ERROR_DATABASE_QUERY, $ERROR_TYPE_NOT_IN_CONFIG, $ERROR_TOO_MANY_SEATS, $ERROR_EXECUTION, $config;
+    global $ERROR_TYPE_NOT_IN_CONFIG, $ERROR_TOO_MANY_SEATS, $config;
 
     if (!check_connection($connection)) {
         return;
@@ -68,28 +55,7 @@ function add_kajak(mysqli $connection, string $name, string $kind, int $seats): 
         error('add_kajak', $ERROR_TOO_MANY_SEATS);
         return;
     }
-
-    /* add kajak to list of kajaks */
-    try {
-        $sql = $connection->prepare('
-        INSERT INTO kajaks (kajak_name, kind, seats)
-            VALUES (?, ?, ?);
-        ');
-
-        if ($sql === FALSE) {
-            error('add_kajak', $ERROR_DATABASE_QUERY);
-            return;
-        }
-
-        $sql->bind_param('sss', $name, $kind, $seats);
-        if ($sql->execute()) {
-            return;
-        }
-        error('add_kajak', $ERROR_EXECUTION);
-    } catch (Exception $e) {
-        error('add_kajak', $e);
-        return;
-    }
+    prep_exec_sql($connection, 'INSERT INTO kajaks (kajak_name, kind, seats) VALUES (?, ?, ?)', 'add_kajak', [$name, $kind, $seats], FALSE);
 }
 
 
@@ -108,7 +74,7 @@ function add_kajak(mysqli $connection, string $name, string $kind, int $seats): 
  */
 function update_kajak(mysqli $connection, string $old_name, string $name, string $kind, int $seats, int $available, string $comment): void
 {
-    global $ERROR_DATABASE_QUERY, $ERROR_TYPE_NOT_IN_CONFIG, $ERROR_TOO_MANY_SEATS, $ERROR_EXECUTION, $config;
+    global $ERROR_TYPE_NOT_IN_CONFIG, $ERROR_TOO_MANY_SEATS, $config;
 
     if (!check_connection($connection)) {
         return;
@@ -128,28 +94,12 @@ function update_kajak(mysqli $connection, string $old_name, string $name, string
         return;
     }
 
-    /* add kajak to list of kajaks */
-    try {
-        $sql = $connection->prepare('
+    $query = '
         UPDATE kajaks
         SET kajak_name = ?, kind = ?, seats = ?, available = ?, comment = ?
         WHERE kajak_name = ?;
-        ');
-
-        if ($sql === FALSE) {
-            error('update_kajak', $ERROR_DATABASE_QUERY);
-            return;
-        }
-
-        $sql->bind_param('ssssss', $name, $kind, $seats, $available, $comment, $old_name);
-        if ($sql->execute()) {
-            return;
-        }
-        error('update_kajak', $ERROR_EXECUTION);
-    } catch (Exception $e) {
-        error('update_kajak', $e);
-        return;
-    }
+        ';
+    prep_exec_sql($connection, $query, 'update_kajak', [$name, $kind, $seats, $available, $comment, $old_name], FALSE);
 }
 
 /**
@@ -162,23 +112,7 @@ function update_kajak(mysqli $connection, string $old_name, string $name, string
  */
 function remove_kajak(mysqli $connection, string $kajak_name): void
 {
-    global $ERROR_EXECUTION;
-
-    if (!check_connection($connection)) {
-        return;
-    }
-
-    try {
-        $sql = $connection->prepare('DELETE FROM kajaks WHERE kajak_name = ?');
-        $sql->bind_param('s', $kajak_name);
-        if ($sql->execute()) {
-            return;
-        }
-        error('remove_kajak', $ERROR_EXECUTION);
-    } catch (Exception $e) {
-        error('remove_kajak', $e);
-        return;
-    }
+    prep_exec_sql($connection, 'DELETE FROM kajaks WHERE kajak_name = ?', 'add_kajak', [$kajak_name]);
 }
 
 /**
@@ -191,33 +125,17 @@ function remove_kajak(mysqli $connection, string $kajak_name): void
  */
 function get_kajaks(mysqli $connection, bool $exclude_not_available = FALSE): array
 {
-    global $ERROR_DATABASE_QUERY;
     if (!check_connection($connection)) {
         return [];
     }
 
-    try {
-        if ($exclude_not_available) {
-            $sql = $connection->prepare('SELECT * FROM kajaks WHERE available = 1 ORDER BY seats, kajak_name');
-        } else {
-            $sql = $connection->prepare('SELECT * FROM kajaks ORDER BY seats, kajak_name');
-        }
-        if ($sql === FALSE) {
-            error('get_kajaks', $ERROR_DATABASE_QUERY);
-            return [];
-        }
-
-        $result_execute = $sql->execute();
-        if ($result_execute === FALSE) {
-            return [];
-        }
-    } catch (Exception $e) {
-        error('get_kajaks', $e);
-        return [];
+    if ($exclude_not_available) {
+        $sql_statement = 'SELECT * FROM kajaks WHERE available = 1 ORDER BY seats, kajak_name';
+    } else {
+        $sql_statement = 'SELECT * FROM kajaks ORDER BY seats, kajak_name';
     }
-
-    $result = $sql->get_result();
-    return mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $sql_ret = prep_exec_sql($connection, $sql_statement, 'get_kajaks');
+    return $sql_ret === FALSE ? [] : mysqli_fetch_all($sql_ret->get_result(), MYSQLI_ASSOC);
 }
 
 /**

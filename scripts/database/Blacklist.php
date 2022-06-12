@@ -9,31 +9,18 @@
  */
 function add_blacklist_table(mysqli $connection): void
 {
-    global $ERROR_TABLE_CREATION, $ERROR_DATABASE_QUERY;
-
-    if (!check_connection($connection)) {
-        return;
-    }
-
-    $sql = $connection->prepare('
+    /* create table and index to speed up searching */
+    $query = '
 CREATE TABLE IF NOT EXISTS blacklist
 (
     
     name             VARCHAR(40)     NOT NULL,
     email            VARCHAR(50)     NOT NULL,
     comment          VARCHAR(255)    NOT NULL,
-    PRIMARY KEY(name, email)
-)');
-
-    if ($sql === FALSE) {
-        error('add_blacklist_table', $ERROR_DATABASE_QUERY);
-        return;
-    }
-
-    if ($sql->execute()) {
-        return;
-    }
-    error('add_blacklist_table', $ERROR_TABLE_CREATION);
+    PRIMARY KEY(name, email),
+    UNIQUE INDEX index_blacklist_name_email (name, email)
+)';
+    prep_exec_sql($connection, $query, 'add_blacklist_table');
 }
 
 
@@ -46,29 +33,8 @@ CREATE TABLE IF NOT EXISTS blacklist
  */
 function get_blacklist(mysqli $connection): array
 {
-    global $ERROR_DATABASE_QUERY;
-
-    if (!check_connection($connection)) {
-        return [];
-    }
-
-    try {
-        $sql = $connection->prepare('SELECT * FROM blacklist');
-        if ($sql === FALSE) {
-            error('get_blacklist', $ERROR_DATABASE_QUERY);
-            return [];
-        }
-        $result_execute = $sql->execute();
-        if ($result_execute === FALSE) {
-            return [];
-        }
-    } catch (Exception $exception) {
-        error('get_blacklist', $exception);
-        return [];
-    }
-
-    $result = $sql->get_result();
-    return mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $sql_ret = prep_exec_sql($connection, 'SELECT * FROM blacklist', 'get_blacklist');
+    return !$sql_ret ? [] : mysqli_fetch_all($sql_ret->get_result(), MYSQLI_ASSOC);
 }
 
 /**
@@ -80,14 +46,9 @@ function get_blacklist(mysqli $connection): array
  */
 function get_blacklist_emails(mysqli $connection): array
 {
-    if (!check_connection($connection)) {
-        return [];
-    }
-
-    $blacklist = get_blacklist($connection);
     return array_map(static function ($entry) {
         return $entry['email'];
-    }, $blacklist);
+    }, get_blacklist($connection));
 }
 
 /**
@@ -101,22 +62,7 @@ function get_blacklist_emails(mysqli $connection): array
  */
 function remove_bad_person(mysqli $connection, string $name, string $email): void
 {
-    global $ERROR_DATABASE_QUERY;
-
-    if (!check_connection($connection)) {
-        return;
-    }
-
-    $sql = $connection->prepare('DELETE FROM blacklist WHERE name = ? AND email = ?');
-    if ($sql === FALSE) {
-        error('remove_bad_person', $ERROR_DATABASE_QUERY);
-        return;
-    }
-    $sql->bind_param('ss', $name, $email);
-    if ($sql->execute()) {
-        return;
-    }
-    error('remove_bad_person', $ERROR_DATABASE_QUERY);
+    prep_exec_sql($connection, 'DELETE FROM blacklist WHERE name = ? AND email = ?', 'remove_bad_person', [$name, $email]);
 }
 
 /**
@@ -131,25 +77,7 @@ function remove_bad_person(mysqli $connection, string $name, string $email): voi
  */
 function add_bad_person(mysqli $connection, string $name, string $email, string $comment): void
 {
-    global $ERROR_DATABASE_QUERY;
-
-    if (!check_connection($connection)) {
-        return;
-    }
-
-    try {
-        $sql = $connection->prepare('INSERT INTO blacklist (name, email, comment) VALUES (?, ?, ?)');
-        if ($sql === FALSE) {
-            error('add_bad_person', $ERROR_DATABASE_QUERY);
-        }
-        $sql->bind_param('sss', $name, $email, $comment);
-        if ($sql->execute()) {
-            return;
-        }
-    } catch (Exception $e) {
-        error('add_bad_person', $e);
-    }
-    error('add_bad_person', $ERROR_DATABASE_QUERY);
+    prep_exec_sql($connection, 'INSERT INTO blacklist (name, email, comment) VALUES (?, ?, ?)', 'add_bad_person', [$name, $email, $comment]);
 }
 
 /**
@@ -166,32 +94,10 @@ function add_bad_person(mysqli $connection, string $name, string $email, string 
  */
 function update_bad_person(mysqli $connection, string $name, string $email, string $comment, string $old_name, string $old_email): void
 {
-    global $ERROR_DATABASE_QUERY, $ERROR_EXECUTION;
-
-    if (!check_connection($connection)) {
-        return;
-    }
-
-    /* add kajak to list of kajaks */
-    try {
-        $sql = $connection->prepare('
+    $query = '
         UPDATE blacklist
         SET name = ?, email = ?, comment = ?
         WHERE name = ? AND email = ?
-        ');
-
-        if ($sql === FALSE) {
-            error('update_bad_person', $ERROR_DATABASE_QUERY);
-            return;
-        }
-
-        $sql->bind_param('sssss', $name, $email, $comment, $old_name, $old_email);
-        if ($sql->execute()) {
-            return;
-        }
-        error('update_bad_person', $ERROR_EXECUTION);
-    } catch (Exception $e) {
-        error('update_bad_person', $e);
-        return;
-    }
+        ';
+    prep_exec_sql($connection, $query, 'update_bad_person', [$name, $email, $comment, $old_name, $old_email]);
 }

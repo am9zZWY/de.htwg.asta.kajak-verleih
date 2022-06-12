@@ -3,6 +3,13 @@ declare(strict_types=1);
 global $config;
 echo create_header('Kajak Reservierung', '/');
 $connection = $_SESSION['connection'];
+
+/* prepare tables */
+add_reservation_table($connection);
+add_kajak_table($connection);
+add_reservation_kajak_table($connection);
+add_blacklist_table($connection);
+
 $kajaks = $config->get_kajaks();
 $available_kajaks = get_kajak_with_real_amount($connection);
 
@@ -274,7 +281,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                                required <?= get_post_field('terms') === '1' ? 'checked' : '' ?>
                                                class="form-check-input">
                                         Ich habe
-                                        die <a href="/about" class="text-danger" target="_blank"><strong>Nutzungsbedingungen</strong></a>
+                                        die <a href="/terms" class="text-danger" target="_blank"><strong>Nutzungsbedingungen</strong></a>
                                         und
                                         die <a href="/privacy" class="text-danger" target="_blank"><strong>Datenschutzerklärung</strong></a>
                                         gelesen

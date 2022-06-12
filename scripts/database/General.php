@@ -26,8 +26,9 @@ function connect_to_database(): ?mysqli
             error('connect_to_database', $ERROR_DATABASE_CONNECTION);
             return NULL;
         }
-    } catch (Exception $e) {
-        error('connect_to_database', $e);
+        // mysqli_report(MYSQLI_REPORT_OFF);
+    } catch (Exception $exception) {
+        error('connect_to_database', $exception);
         return NULL;
     }
 
@@ -52,26 +53,77 @@ function check_connection(?mysqli $connection): bool
 }
 
 /**
+ * Execute query and catch any errors that might occur.
+ *
+ * @param mysqli             $connection
+ * @param string|mysqli_stmt $query
+ * @param string             $fct_name
+ * @param array|null         $params
+ * @param bool               $check_connection
+ *
+ * @return false|mysqli_stmt
+ */
+function prep_exec_sql(mysqli $connection, $query, string $fct_name, array $params = NULL, bool $check_connection = TRUE)
+{
+    if ($check_connection && !check_connection($connection)) {
+        return FALSE;
+    }
+    if (is_string($query)) {
+        $sql_statement = $connection->prepare($query);
+
+        if (!$sql_statement) {
+            error($fct_name ?? 'execute_query', $connection->error);
+            return FALSE;
+        }
+
+        if ($params !== NULL) {
+            $types = '';
+            $array = [];
+            foreach ($params as $param) {
+                $types .= is_int($param) ? 'i' : 's';
+                $array[] = $param;
+            }
+            $sql_statement->bind_param($types, ...$array);
+        }
+    } else {
+        /* query is already prepared and bound */
+        $sql_statement = $query;
+    }
+
+    try {
+        $result_execute = $sql_statement->execute();
+    } catch (Exception $exception) {
+        error($fct_name ?? 'execute_query', $exception);
+        return FALSE;
+    }
+
+    return $result_execute ? $sql_statement : FALSE;
+}
+
+/**
  * USE WITH CAUTION!
  * USED BY ADMIN.
  *
  * Drops all tables.
  *
  * @param mysqli|null $connection
+ * @param bool        $send_mail
  *
  * @return void
  */
-function drop_all_tables(mysqli $connection): void
+function drop_all_tables(mysqli $connection, bool $send_mail = FALSE): void
 {
     if (!check_connection($connection)) {
         return;
     }
 
-    $sql = $connection->prepare('DROP TABLE reservations');
-    $sql->execute();
-    $sql = $connection->prepare('DROP TABLE kajak_reservation');
-    $sql->execute();
-    send_mail('', 'Tabellen gelöscht', 'Tabellen gelöscht! Bitte überprüfen, ob diese Aktion gewollt war');
+    prep_exec_sql($connection, 'DROP TABLE IF EXISTS kajaks', 'drop_all_tables');
+    prep_exec_sql($connection, 'DROP TABLE IF EXISTS reservations', 'drop_all_tables');
+    prep_exec_sql($connection, 'DROP TABLE IF EXISTS kajak_reservation', 'drop_all_tables');
+    prep_exec_sql($connection, 'DROP TABLE IF EXISTS blacklist', 'drop_all_tables');
+    if ($send_mail) {
+        send_mail('', 'Tabellen gelöscht', 'Tabellen gelöscht! Bitte überprüfen, ob diese Aktion gewollt war');
+    }
 }
 
 /**
@@ -122,9 +174,9 @@ function calculate_price(mysqli $connection, $timeslots, $amount_kajaks_per_kind
         $price_dependencies = $price['dependOn'];
         /* first check if requirements are met */
         $require_check = TRUE;
-        foreach ($price_dependencies as $dep) {
-            $dep_name = $dep['name'];
-            $dep_amount = $dep['amount'];
+        foreach ($price_dependencies as $dependency) {
+            $dep_name = $dependency['name'];
+            $dep_amount = $dependency['amount'];
 
             if ($dep_amount === 'per') {
                 continue;
@@ -154,9 +206,9 @@ function calculate_price(mysqli $connection, $timeslots, $amount_kajaks_per_kind
         }
 
         /* calculate price */
-        foreach ($price_dependencies as $dep) {
-            $dep_name = $dep['name'];
-            $dep_amount = $dep['amount'];
+        foreach ($price_dependencies as $dependency) {
+            $dep_name = $dependency['name'];
+            $dep_amount = $dependency['amount'];
 
             if ($dep_amount !== 'per') {
                 continue;

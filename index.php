@@ -39,10 +39,6 @@ $PARSED_URL = strtolower(parse_url($URL, PHP_URL_PATH));
 /* set up the database connection and the tables */
 $connection = connect_to_database();
 $_SESSION['connection'] = $connection;
-add_reservation_table($connection);
-add_kajak_table($connection);
-add_reservation_kajak_table($connection);
-add_blacklist_table($connection);
 
 route($PARSED_URL, FALSE);
 ?>
