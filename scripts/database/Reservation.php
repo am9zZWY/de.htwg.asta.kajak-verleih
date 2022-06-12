@@ -136,7 +136,7 @@ function get_reservations(mysqli $connection): array
  */
 function get_available_kajaks(mysqli $connection, string $date, array $timeslots, string $kajak_kind): array
 {
-    if (!check_connection($connection) || count($timeslots)) {
+    if (!check_connection($connection) || count($timeslots) === 0) {
         return [];
     }
 
