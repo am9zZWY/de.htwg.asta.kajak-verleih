@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ddda53adf8a0d7cbb550dd5065cd5b5a",
+    "content-hash": "ab24a1a5f908bfe128492dadee184a5e",
     "packages": [
         {
             "name": "graham-campbell/result-type",
@@ -549,16 +549,16 @@
     "packages-dev": [
         {
             "name": "phpstan/phpstan",
-            "version": "1.7.10",
+            "version": "1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "25e069474cf00215b0f64c60a26230908ef3eefa"
+                "reference": "b7648d4ee9321665acaf112e49da9fd93df8fbd5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/25e069474cf00215b0f64c60a26230908ef3eefa",
-                "reference": "25e069474cf00215b0f64c60a26230908ef3eefa",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/b7648d4ee9321665acaf112e49da9fd93df8fbd5",
+                "reference": "b7648d4ee9321665acaf112e49da9fd93df8fbd5",
                 "shasum": ""
             },
             "require": {
@@ -584,7 +584,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/1.7.10"
+                "source": "https://github.com/phpstan/phpstan/tree/1.8.0"
             },
             "funding": [
                 {
@@ -604,28 +604,28 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-06-03T14:12:23+00:00"
+            "time": "2022-06-29T08:53:31+00:00"
         },
         {
             "name": "rector/rector",
-            "version": "0.13.4",
+            "version": "0.13.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "60b4f87a94e7ed17d4494982ba0cfb5a3f2845fd"
+                "reference": "3574bf6399ae3951e31f3a9481e22ddb2f2f08b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/60b4f87a94e7ed17d4494982ba0cfb5a3f2845fd",
-                "reference": "60b4f87a94e7ed17d4494982ba0cfb5a3f2845fd",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/3574bf6399ae3951e31f3a9481e22ddb2f2f08b2",
+                "reference": "3574bf6399ae3951e31f3a9481e22ddb2f2f08b2",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2|^8.0",
-                "phpstan/phpstan": "^1.7.10"
+                "phpstan/phpstan": "^1.8"
             },
             "conflict": {
-                "phpstan/phpdoc-parser": "<1.2",
+                "phpstan/phpdoc-parser": "<1.6.2",
                 "rector/rector-cakephp": "*",
                 "rector/rector-doctrine": "*",
                 "rector/rector-laravel": "*",
@@ -656,7 +656,7 @@
             "description": "Instant Upgrade and Automated Refactoring of any PHP code",
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/0.13.4"
+                "source": "https://github.com/rectorphp/rector/tree/0.13.7"
             },
             "funding": [
                 {
@@ -664,7 +664,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-06-04T08:19:56+00:00"
+            "time": "2022-06-29T12:00:57+00:00"
         },
         {
             "name": "roave/security-advisories",
