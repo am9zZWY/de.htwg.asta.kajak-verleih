@@ -196,13 +196,13 @@ $kajaks = $config->get_kajaks();
                 ?>
                 <div class="col-md-6">
                     <div class="form-group form-floating">
-                        <input type="number" max="<?= $kajak->amount ?? 0 ?>"
-                               min="0" id="<?= $kajak->kind ?>"
-                               value="<?= get_post_field($kajak->kind, 0) ?>"
-                               name="<?= $kajak->kind ?>"
+                        <input type="number" max="<?= $kajak['amount'] ?? 0 ?>"
+                               min="0" id="<?= $kajak['kind'] ?>"
+                               value="<?= get_post_field($kajak['kind'], 0) ?>"
+                               name="<?= $kajak['kind'] ?>"
                                class="amount-kajak form-control"/>
-                        <label class="form-check-label" for="<?= $kajak->kind ?>">
-                            Anzahl der <?= $kajak->name ?>s
+                        <label class="form-check-label" for="<?= $kajak['kind'] ?>">
+                            Anzahl der <?= $kajak['name'] ?>s
                         </label>
                     </div>
                 </div>

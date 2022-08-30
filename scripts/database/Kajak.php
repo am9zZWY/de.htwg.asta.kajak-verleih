@@ -152,13 +152,15 @@ function get_kajak_with_real_amount(mysqli $connection): array
     global $config;
     $kajaks = $config->get_kajaks();
     $kajak_amounts = get_kajak_amounts($connection);
+    $kajaks_with_amount = [];
 
     foreach ($kajaks as $kajak) {
         /* if kajak is not available, set amount to 0 */
-        $kajak->amount = ($kajak_amounts[$kajak->kind] ?? [])['amount'] ?? 0;
+        $kajak['amount'] = ($kajak_amounts[$kajak['kind']] ?? [])['amount'] ?? 0;
+        $kajaks_with_amount[] = $kajak;
     }
 
-    return $kajaks;
+    return $kajaks_with_amount;
 }
 
 /**

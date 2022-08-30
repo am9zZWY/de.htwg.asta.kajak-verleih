@@ -429,13 +429,13 @@ echo create_header('Dashboard');
                             foreach ($config->get_kajaks() as $kajak) {
                                 ?>
                                 <li>
-                                    <?= $kajak->name ?>:
+                                    <?= $kajak['name'] ?>:
                                     <ul>
                                         <li>
-                                            Typ: <?= $kajak->kind ?>
+                                            Typ: <?= $kajak['kind'] ?>
                                         </li>
                                         <li>
-                                            Sitze: <?= $kajak->seats ?>
+                                            Sitze: <?= $kajak['seats'] ?>
                                         </li>
                                     </ul>
                                 </li>
