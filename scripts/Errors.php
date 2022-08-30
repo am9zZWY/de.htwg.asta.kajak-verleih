@@ -36,7 +36,7 @@ $ERROR_TOO_MANY_SEATS = 'Kajak hat zu viele Sitze.';
 $ERROR_KAJAK_NOT_CREATED = 'Kajak konnte nicht erstellt werden.';
 
 /* Login */
-$ERROR_LOGIN = 'YOU SHALL NOT PASS!';
+$ERROR_LOGIN = 'Zugriff verweigert!';
 
 /* Blacklist */
 $ERROR_USER_BLOCKED = 'Reservierung nicht erlaubt.';
