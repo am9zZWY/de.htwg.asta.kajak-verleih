@@ -37,6 +37,7 @@ $ERROR_KAJAK_NOT_CREATED = 'Kajak konnte nicht erstellt werden.';
 
 /* Login */
 $ERROR_LOGIN = 'Zugriff verweigert!';
+$SUCCESS_LOGIN = 'Einloggen erfolgreich!';
 
 /* Blacklist */
 $ERROR_USER_BLOCKED = 'Reservierung nicht erlaubt.';

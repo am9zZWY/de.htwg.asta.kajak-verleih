@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $_SESSION['admin_username_field'] = get_random_token();
     $_SESSION['admin_password_field'] = get_random_token();
 }
-global $ERROR_LOGIN;
+global $ERROR_LOGIN, $SUCCESS_LOGIN;
 
 ?>
 <div class="container">
@@ -24,14 +24,14 @@ global $ERROR_LOGIN;
 
                         <div class="form-floating mb-3">
                             <input name="<?=
-                            $_SESSION['admin_username_field'] ?? '' ?>" type="text"
+                                $_SESSION['admin_username_field'] ?? '' ?>" type="text"
                                    placeholder="Max Musterfrau"
                                    id="<?=
-                                   $_SESSION['admin_username_field'] ?? '' ?>"
+                                       $_SESSION['admin_username_field'] ?? '' ?>"
                                    class="form-control"
                                    required>
                             <label for="<?=
-                            $_SESSION['admin_username_field'] ?? '' ?>">
+                                $_SESSION['admin_username_field'] ?? '' ?>">
                                 Name
                             </label>
                         </div>
@@ -51,35 +51,24 @@ global $ERROR_LOGIN;
                             /* check if csrf token match */
                             $token = clean_string($_POST[$_SESSION['token_field'] ?? ''] ?? '');
 
-                        if (!$token || $token !== $_SESSION['token']) {
-                            ?>
-                            <h3>
-                                <?=
-                                $ERROR_LOGIN ?>
-                            </h3>
-                        <?php
-                        exit();
-                        }
-
-                        $logged_in = login(clean_string($_POST[$_SESSION['admin_username_field']] ?? ''), clean_string($_POST[$_SESSION['admin_password_field']] ?? ''));
-                        if (!$logged_in) {
-                        ?>
-                            <h3>
-                                <?=
-                                $ERROR_LOGIN ?>
-                            </h3>
-                        <?php
-                        exit();
-                        }
-
-                        ?>
-                            <h3>Einloggen erfolgreich</h3>
-                            <script>
-                                window.location.href = "/admin";
-                            </script>
+                            if ($token && $token === $_SESSION['token'] && login(clean_string($_POST[$_SESSION['admin_username_field']] ?? ''), clean_string($_POST[$_SESSION['admin_password_field']] ?? ''))) {
+                                ?>
+                                <h3><?= $SUCCESS_LOGIN ?></h3>
+                                <script>
+                                    window.location.href = '/admin';
+                                </script>
                             <?php
-                        }
-                        ?>
+                            } else {
+                            ?>
+                                <h3>
+                                    <?= $ERROR_LOGIN ?>
+                                </h3>
+                                <script>
+                                    setTimeout(() => window.location.href = '/login', 3000)
+                                </script>
+                                <?php
+                            }
+                        } ?>
                     </form>
                 </div>
             </div>
