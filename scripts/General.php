@@ -80,3 +80,17 @@ function get_random_token(): string
 {
     return md5(uniqid(mt_rand(), TRUE));
 }
+
+/**
+ * Include file and pass variables to it.
+ *
+ * @param $filename
+ * @param $variables
+ *
+ * @return void
+ */
+function includeFileWithVariables($filename, $variables)
+{
+    extract($variables);
+    include($filename);
+}
