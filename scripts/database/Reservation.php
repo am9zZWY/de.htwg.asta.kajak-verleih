@@ -332,7 +332,7 @@ function user_reservate_kajak(mysqli $connection, array $fields, bool $send_emai
     if ($send_email) {
         $send_mail_status = send_reservation_email($reservation_id, $name, $email, $reserved_kajaks, $timeslots, $date, $price);
         if ($send_mail_status === FALSE) {
-            return ReturnValue::error($ERROR_SUCCESS_BUT_MAIL_NOT_SENT);
+            return ReturnValue::success($ERROR_SUCCESS_BUT_MAIL_NOT_SENT);
         }
     }
     return ReturnValue::success($INFO_RESERVATION_SUCCESS);
