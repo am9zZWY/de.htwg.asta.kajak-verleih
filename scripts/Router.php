@@ -42,8 +42,8 @@ function route($route, $print)
 
     /* when ONLINE = FALSE then don't show the system*/
     if (isset($_ENV['ONLINE']) && $_ENV['ONLINE'] === 'FALSE') {
-        echo '<h1>Das System ist nicht verfügbar.</h1>';
         header('503 Service Unavailable', TRUE, 503);
+        echo '<h1>Das System ist nicht verfügbar.</h1>';
         exit(0);
     }
 
