@@ -39,6 +39,11 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') && isset($_POST['confirm']) && is_lo
             add_bad_person($connection, $name, $email, $comment);
         }
     }
+    ?>
+    <script>
+        window.location.href = '/admin'
+    </script>
+    <?php
 }
 
 /* Get all reservations from database */

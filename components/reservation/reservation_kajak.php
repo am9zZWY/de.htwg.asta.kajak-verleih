@@ -276,7 +276,7 @@ $kajaks = $config->get_kajaks();
             }
         };
         /* send request to own api to calculate price */
-        XMLHttpReq.open('GET', '/api?price&payload_price=' + encoded, true);
+        XMLHttpReq.open('GET', '/api?price&payload=' + encoded, true);
         XMLHttpReq.send();
     }
 
