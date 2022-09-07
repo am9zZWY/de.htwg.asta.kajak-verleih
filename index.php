@@ -41,6 +41,12 @@ $connection = connect_to_database();
 $_SESSION['connection'] = $connection;
 
 route($PARSED_URL, FALSE);
+
+/* prepare tables */
+add_reservation_table($connection);
+add_kajak_table($connection);
+add_reservation_kajak_table($connection);
+add_blacklist_table($connection);
 ?>
 <!DOCTYPE html>
 <html lang='de' xmlns='http://www.w3.org/1999/html'>

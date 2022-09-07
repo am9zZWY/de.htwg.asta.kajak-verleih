@@ -4,12 +4,6 @@ global $config;
 echo create_header('Kajak Reservierung', '/');
 $connection = $_SESSION['connection'];
 
-/* prepare tables */
-add_reservation_table($connection);
-add_kajak_table($connection);
-add_reservation_kajak_table($connection);
-add_blacklist_table($connection);
-
 /* create csrf token */
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $_SESSION['token'] = get_random_token();
