@@ -5,7 +5,7 @@
   "require": {
     "ext-mysqli": "*",
     "vlucas/phpdotenv": "^5.4",
-    "phpmailer/phpmailer": "^6.6",
+    "phpmailer/phpmailer": "^6.7",
     "ext-simplexml": "*",
     "ext-json": "*"
   },
